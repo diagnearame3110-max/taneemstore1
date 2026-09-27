@@ -1,8 +1,19 @@
+import { useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useProducts } from '../../store/ProductsContext';
 
 export default function DashboardPage() {
-  const { products, categories } = useProducts();
+  const { products, categories, isSupabaseActive, syncSeedToSupabase } = useProducts();
+  const [syncing, setSyncing] = useState(false);
+  const [syncSuccess, setSyncSuccess] = useState(false);
+
+  const handleSync = async () => {
+    setSyncing(true);
+    await syncSeedToSupabase();
+    setSyncing(false);
+    setSyncSuccess(true);
+    setTimeout(() => setSyncSuccess(false), 4000);
+  };
 
   const totalProducts = products.length;
   const totalCategories = categories.length;
@@ -29,6 +40,55 @@ export default function DashboardPage() {
 
   return (
     <AdminLayout title="Tableau de bord">
+      {/* Supabase Status Banner */}
+      <div
+        style={{
+          background: isSupabaseActive ? '#ECFDF5' : '#FFFBEB',
+          border: `1px solid ${isSupabaseActive ? '#A7F3D0' : '#FDE68A'}`,
+          borderRadius: '12px',
+          padding: '14px 20px',
+          marginBottom: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '1.2rem' }}>{isSupabaseActive ? '⚡' : '⚙️'}</span>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: '0.88rem', color: isSupabaseActive ? '#065F46' : '#92400E' }}>
+              {isSupabaseActive ? 'Supabase connecté & synchronisé' : 'Base de données Supabase non configurée (Mode Local)'}
+            </div>
+            <div style={{ fontSize: '0.8rem', color: isSupabaseActive ? '#047857' : '#B45309' }}>
+              {isSupabaseActive
+                ? 'Les produits et catégories sont synchronisés en temps réel avec Supabase.'
+                : 'Ajoutez VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY dans votre fichier .env pour activer la synchronisation.'}
+            </div>
+          </div>
+        </div>
+
+        {isSupabaseActive && (
+          <button
+            onClick={handleSync}
+            disabled={syncing}
+            style={{
+              background: '#059669',
+              color: '#FFFFFF',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '8px 16px',
+              fontSize: '0.82rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              opacity: syncing ? 0.7 : 1,
+            }}
+          >
+            {syncing ? 'Synchronisation...' : syncSuccess ? '✅ Synchronisé !' : '🔄 Push Seed vers Supabase'}
+          </button>
+        )}
+      </div>
       {/* Top Stat Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '36px' }}>
         {stats.map(stat => (
