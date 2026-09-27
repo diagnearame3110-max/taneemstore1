@@ -84,9 +84,7 @@ export default function EditorialDualBanner() {
                   Un espace dédié aux essentiels de beauté et de bien-être pour vous sublimer jour après jour.
                 </p>
               </div>
-            </div>
 
-            <div>
               <div
                 style={{
                   fontFamily: "'Cormorant Garamond', serif",
@@ -96,14 +94,40 @@ export default function EditorialDualBanner() {
                   textTransform: 'uppercase',
                   color: 'var(--text)',
                   lineHeight: 1.3,
+                  marginBottom: '20px',
                 }}
               >
                 BIENVENUE CHEZ TANEEM'STORE. L'ÈRE DES CLEAN GIRLS.
               </div>
             </div>
+
+            {/* Left Photo: Aesthetic Skincare Image */}
+            <div
+              style={{
+                borderRadius: '0px',
+                overflow: 'hidden',
+                border: '1px solid var(--line)',
+                marginTop: 'auto',
+              }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&auto=format&fit=crop&q=80"
+                alt="Taneem'Store — Notre Histoire Self Care"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = editorialMoodboard || '/editorial-moodboard.jpg';
+                }}
+                style={{
+                  width: '100%',
+                  height: '210px',
+                  objectFit: 'cover',
+                  borderRadius: '0px',
+                  display: 'block',
+                }}
+              />
+            </div>
           </div>
 
-          {/* Right Column: SUIVEZ L'ÈRE with Image 1 Moodboard */}
+          {/* Right Column: SUIVEZ L'ÈRE with Moodboard Collage */}
           <div
             style={{
               display: 'flex',
@@ -154,7 +178,7 @@ export default function EditorialDualBanner() {
               </div>
             </div>
 
-            {/* Image 1: Lumière Moodboard Collage */}
+            {/* Right Photo: Image 1 Lumière Moodboard Collage */}
             <div
               style={{
                 borderRadius: '0px',
@@ -164,8 +188,11 @@ export default function EditorialDualBanner() {
               }}
             >
               <img
-                src={editorialMoodboard}
+                src={editorialMoodboard || '/editorial-moodboard.jpg'}
                 alt="Taneem'Store — Lumière Moodboard Collection"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = '/editorial-moodboard.jpg';
+                }}
                 style={{
                   width: '100%',
                   height: '210px',

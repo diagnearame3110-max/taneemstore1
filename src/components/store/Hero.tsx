@@ -12,13 +12,16 @@ export default function Hero() {
         padding: '96px 24px',
         borderBottom: '1px solid var(--line)',
         overflow: 'hidden',
-        background: '#1B1420',
+        background: '#1B1420 url("/hero-banner-back.png") center 40% / cover no-repeat',
       }}
     >
-      {/* Background Image - Guaranteed display on Vercel & Production */}
+      {/* Background Image - Absolute Fail-Safe Dual Fallback */}
       <img
-        src={heroBannerBack}
+        src={heroBannerBack || '/hero-banner-back.png'}
         alt="Taneem'Store Hero Banner"
+        onError={(e) => {
+          (e.currentTarget as HTMLImageElement).src = '/hero-banner-back.png';
+        }}
         style={{
           position: 'absolute',
           top: 0,
@@ -39,7 +42,7 @@ export default function Hero() {
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.38) 100%)',
+          background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.42) 100%)',
           zIndex: 2,
           pointerEvents: 'none',
         }}
