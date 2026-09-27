@@ -1,0 +1,10 @@
+{
+  "description": "Creates customized websites quickly and easily, enabling users to build professional online presence without coding skills.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

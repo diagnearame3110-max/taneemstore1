@@ -1,0 +1,53 @@
+import React, { useState } from 'react';
+import { useProducts } from '../store/ProductsContext';
+import Header from '../components/store/Header';
+import Hero from '../components/store/Hero';
+import BeautyManifesto from '../components/store/BeautyManifesto';
+import EditorialDualBanner from '../components/store/EditorialDualBanner';
+import ExploreCategories from '../components/store/ExploreCategories';
+import TrustStrip from '../components/store/TrustStrip';
+import CategorySection from '../components/store/CategorySection';
+import CTABand from '../components/store/CTABand';
+import Footer from '../components/store/Footer';
+import WhatsAppFloatButton from '../components/store/WhatsAppFloatButton';
+import CartDrawer from '../components/store/CartDrawer';
+import ToastContainer from '../components/store/ToastContainer';
+import ProductQuickViewModal from '../components/store/ProductQuickViewModal';
+import type { Product } from '../data/types';
+
+export default function StorePage() {
+  const { products, categories } = useProducts();
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const sorted = [...categories].sort((a, b) => a.order - b.order);
+
+  return (
+    <div style={{ background: 'var(--bg)' }}>
+      <Header />
+      <main>
+        <Hero />
+        <BeautyManifesto />
+        <TrustStrip />
+        {sorted.map(cat => (
+          <React.Fragment key={cat.slug}>
+            {cat.slug === 'bienetre' && <ExploreCategories />}
+            <CategorySection
+              category={cat}
+              products={products}
+              onOpenQuickView={prod => setQuickViewProduct(prod)}
+            />
+          </React.Fragment>
+        ))}
+        <EditorialDualBanner />
+        <CTABand />
+      </main>
+      <Footer />
+      <WhatsAppFloatButton />
+      <CartDrawer />
+      <ToastContainer />
+      <ProductQuickViewModal
+        product={quickViewProduct}
+        onClose={() => setQuickViewProduct(null)}
+      />
+    </div>
+  );
+}
