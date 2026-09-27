@@ -9,18 +9,53 @@ export default function Hero() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundImage: `linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.28) 100%), url(${heroBannerBack})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center 40%',
-        backgroundRepeat: 'no-repeat',
         padding: '96px 24px',
         borderBottom: '1px solid var(--line)',
-        imageRendering: '-webkit-optimize-contrast',
-        WebkitBackfaceVisibility: 'hidden',
-        transform: 'translateZ(0)',
+        overflow: 'hidden',
+        background: '#1B1420',
       }}
     >
-      <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center', color: '#FFFFFF', zIndex: 2 }}>
+      {/* Background Image - Guaranteed display on Vercel & Production */}
+      <img
+        src={heroBannerBack}
+        alt="Taneem'Store Hero Banner"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center 40%',
+          zIndex: 1,
+        }}
+      />
+
+      {/* Dark Overlay Gradient */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.38) 100%)',
+          zIndex: 2,
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Hero Content */}
+      <div
+        style={{
+          maxWidth: '820px',
+          margin: '0 auto',
+          textAlign: 'center',
+          color: '#FFFFFF',
+          position: 'relative',
+          zIndex: 3,
+        }}
+      >
         <div
           style={{
             fontFamily: "'Montserrat', sans-serif",
@@ -35,6 +70,7 @@ export default function Hero() {
         >
           PRENEZ SOIN DE CE QUI VOUS REND UNIQUE
         </div>
+
         <h1
           style={{
             fontFamily: "'Cormorant Garamond', serif",
@@ -49,6 +85,7 @@ export default function Hero() {
         >
           The clean girl era commence ici.
         </h1>
+
         <p
           style={{
             fontFamily: "'Montserrat', sans-serif",
@@ -62,6 +99,7 @@ export default function Hero() {
         >
           Taneem'Store — <em>Prenez soin de ce qui vous rend unique.</em> Découvrez notre sélection exclusive d'essentiels beauté et bien-être importés — soins du corps, du visage, accessoires et compléments.
         </p>
+
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <a
             className="btn-primary"
