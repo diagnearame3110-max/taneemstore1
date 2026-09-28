@@ -1,26 +1,26 @@
-import heroBannerBack from '../../assets/hero-banner-back.png';
+import heroBannerBack from '../../assets/hero-banner-back.jpg';
 
 export default function Hero() {
   return (
     <section
       style={{
         position: 'relative',
-        minHeight: '600px',
+        minHeight: '620px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '96px 24px',
         borderBottom: '1px solid var(--line)',
         overflow: 'hidden',
-        background: '#1B1420 url("/hero-banner-back.png") center 40% / cover no-repeat',
+        background: '#1B1420 url("/hero-banner-back.jpg") center center / cover no-repeat',
       }}
     >
-      {/* Background Image - Absolute Fail-Safe Dual Fallback */}
+      {/* Background Image Tag - New Aesthetic Spa Bathrobe Image */}
       <img
-        src={heroBannerBack || '/hero-banner-back.png'}
+        src={heroBannerBack || '/hero-banner-back.jpg'}
         alt="Taneem'Store Hero Banner"
         onError={(e) => {
-          (e.currentTarget as HTMLImageElement).src = '/hero-banner-back.png';
+          (e.currentTarget as HTMLImageElement).src = '/hero-banner-back.jpg';
         }}
         style={{
           position: 'absolute',
@@ -34,7 +34,7 @@ export default function Hero() {
         }}
       />
 
-      {/* Dark Overlay Gradient */}
+      {/* Subtle Overlay Gradient for perfect text contrast */}
       <div
         style={{
           position: 'absolute',
@@ -42,7 +42,7 @@ export default function Hero() {
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.42) 100%)',
+          background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.44) 100%)',
           zIndex: 2,
           pointerEvents: 'none',
         }}
@@ -68,7 +68,7 @@ export default function Hero() {
             color: '#F9EBEF',
             textTransform: 'uppercase',
             marginBottom: '16px',
-            textShadow: '0 2px 8px rgba(0,0,0,0.35)',
+            textShadow: '0 2px 8px rgba(0,0,0,0.4)',
           }}
         >
           PRENEZ SOIN DE CE QUI VOUS REND UNIQUE
@@ -83,7 +83,7 @@ export default function Hero() {
             lineHeight: 1.15,
             color: '#FFFFFF',
             marginBottom: '20px',
-            textShadow: '0 4px 16px rgba(0,0,0,0.45)',
+            textShadow: '0 4px 16px rgba(0,0,0,0.5)',
           }}
         >
           The clean girl era commence ici.
@@ -94,10 +94,10 @@ export default function Hero() {
             fontFamily: "'Montserrat', sans-serif",
             fontSize: '1.05rem',
             lineHeight: 1.65,
-            color: 'rgba(255, 255, 255, 0.94)',
+            color: 'rgba(255, 255, 255, 0.95)',
             maxWidth: '680px',
             margin: '0 auto 34px auto',
-            textShadow: '0 2px 10px rgba(0,0,0,0.4)',
+            textShadow: '0 2px 10px rgba(0,0,0,0.45)',
           }}
         >
           Taneem'Store — <em>Prenez soin de ce qui vous rend unique.</em> Découvrez notre sélection exclusive d'essentiels beauté et bien-être importés — soins du corps, du visage, accessoires et compléments.
