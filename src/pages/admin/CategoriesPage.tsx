@@ -6,7 +6,7 @@ import { useToast } from '../../store/ToastContext';
 import type { Category, CategorySlug } from '../../data/types';
 
 const CAT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  corps: { bg: '#FDF8F5', text: '#8F776C', border: '#EFE8E3' },
+  corps: { bg: '#FAF5F2', text: '#8F776C', border: '#EFE8E3' },
   visage: { bg: '#F0F9FF', text: '#0369A1', border: '#BAE6FD' },
   maquillage: { bg: '#FEFCE8', text: '#854D0E', border: '#FEF08A' },
   accessoires: { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
@@ -46,12 +46,12 @@ export default function CategoriesPage() {
   return (
     <AdminLayout title="Gestion des Catégories">
       {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '28px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '28px' }}>
         {/* Total Categories */}
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 24px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -64,12 +64,12 @@ export default function CategoriesPage() {
             <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', marginBottom: '4px' }}>
               Catégories Principales
             </p>
-            <p style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text)', fontFamily: "'Cormorant Garamond', serif" }}>
+            <p style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text)' }}>
               {categories.length}
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#F5EFEA', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon icon="lucide:tags" style={{ fontSize: '1.4rem' }} />
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#F5EFEA', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:tags" style={{ fontSize: '1.3rem' }} />
           </div>
         </div>
 
@@ -77,7 +77,7 @@ export default function CategoriesPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 24px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -90,12 +90,12 @@ export default function CategoriesPage() {
             <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', marginBottom: '4px' }}>
               Produits Répartis
             </p>
-            <p style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--pink-deep)', fontFamily: "'Cormorant Garamond', serif" }}>
+            <p style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--pink-deep)' }}>
               {totalAssignedProducts}
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#FAF7F5', color: 'var(--pink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon icon="lucide:package" style={{ fontSize: '1.4rem' }} />
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#FAF7F5', color: 'var(--pink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:package" style={{ fontSize: '1.3rem' }} />
           </div>
         </div>
 
@@ -103,7 +103,7 @@ export default function CategoriesPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 24px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -116,17 +116,17 @@ export default function CategoriesPage() {
             <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', marginBottom: '4px' }}>
               Ordre d'Affichage
             </p>
-            <p style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text)' }}>
-              Utilisez les flèches pour réorganiser
+            <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text)' }}>
+              Réorganisation par flèches
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#E0F2FE', color: '#0369A1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon icon="lucide:arrow-up-down" style={{ fontSize: '1.4rem' }} />
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#E0F2FE', color: '#0369A1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:arrow-up-down" style={{ fontSize: '1.3rem' }} />
           </div>
         </div>
       </div>
 
-      {/* Main Categories List Container */}
+      {/* Categories Table Card */}
       <div
         style={{
           background: '#FFFFFF',
@@ -136,12 +136,12 @@ export default function CategoriesPage() {
           overflow: 'hidden',
         }}
       >
-        <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--line)', background: '#FAF7F5', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.4rem', fontWeight: 700, color: 'var(--text)' }}>
-            Ordre et Réglages des Catégories
+        <div style={{ padding: '18px 24px', borderBottom: '1px solid var(--line)', background: '#FAF7F5', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)' }}>
+            Liste des Catégories du Catalogue
           </h3>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>
-            {categories.length} catégories configurées
+          <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-soft)' }}>
+            {categories.length} catégories répertoriées
           </span>
         </div>
 
@@ -156,32 +156,31 @@ export default function CategoriesPage() {
                 key={cat.slug}
                 style={{
                   display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '20px',
-                  padding: '24px',
+                  alignItems: 'center',
+                  gap: '16px',
+                  padding: '20px 24px',
                   borderBottom: idx < sorted.length - 1 ? '1px solid var(--line)' : 'none',
                   transition: 'background 0.15s ease',
                   background: isEditing ? '#FAF8F4' : '#FFFFFF',
                 }}
               >
-                {/* Reorder Arrows */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '4px' }}>
+                {/* Order Up/Down Buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <button
                     onClick={() => move(cat.slug, -1)}
                     disabled={idx === 0}
                     style={{
-                      width: '32px',
-                      height: '32px',
+                      width: '30px',
+                      height: '30px',
                       borderRadius: '8px',
                       border: '1px solid var(--line)',
-                      background: idx === 0 ? '#F5F5F5' : '#FFFFFF',
+                      background: idx === 0 ? '#F9F9F9' : '#FFFFFF',
                       color: idx === 0 ? '#CCCCCC' : 'var(--text)',
                       cursor: idx === 0 ? 'not-allowed' : 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: '0.85rem',
-                      fontWeight: 700,
                       transition: 'all 0.15s ease',
                     }}
                     title="Monter dans l'ordre"
@@ -192,18 +191,17 @@ export default function CategoriesPage() {
                     onClick={() => move(cat.slug, 1)}
                     disabled={idx === sorted.length - 1}
                     style={{
-                      width: '32px',
-                      height: '32px',
+                      width: '30px',
+                      height: '30px',
                       borderRadius: '8px',
                       border: '1px solid var(--line)',
-                      background: idx === sorted.length - 1 ? '#F5F5F5' : '#FFFFFF',
+                      background: idx === sorted.length - 1 ? '#F9F9F9' : '#FFFFFF',
                       color: idx === sorted.length - 1 ? '#CCCCCC' : 'var(--text)',
                       cursor: idx === sorted.length - 1 ? 'not-allowed' : 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: '0.85rem',
-                      fontWeight: 700,
                       transition: 'all 0.15s ease',
                     }}
                     title="Descendre dans l'ordre"
@@ -212,58 +210,53 @@ export default function CategoriesPage() {
                   </button>
                 </div>
 
-                {/* Number Pill Badge */}
+                {/* Number Badge */}
                 <div
                   style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: '1.25rem',
+                    fontSize: '0.9rem',
                     fontWeight: 700,
                     color: badge.text,
                     background: badge.bg,
                     border: `1px solid ${badge.border}`,
-                    width: '42px',
-                    height: '42px',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    padding: '6px 12px',
+                    borderRadius: '8px',
                     flexShrink: 0,
                   }}
                 >
                   {cat.number}
                 </div>
 
-                {/* Category Information / Edit Inputs */}
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
+                {/* Content Area */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
                     {isEditing ? (
                       <input
                         type="text"
                         value={editData.title ?? ''}
                         onChange={e => setEditData(d => ({ ...d, title: e.target.value }))}
                         style={{
-                          padding: '8px 14px',
-                          borderRadius: '10px',
+                          padding: '6px 12px',
+                          borderRadius: '8px',
                           border: '1.5px solid var(--pink)',
-                          fontSize: '0.95rem',
+                          fontSize: '0.92rem',
                           fontWeight: 700,
                           outline: 'none',
                           color: 'var(--text)',
                           background: '#FFFFFF',
-                          minWidth: '240px',
+                          width: '260px',
                         }}
                       />
                     ) : (
-                      <h4 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.35rem', fontWeight: 700, color: 'var(--text)' }}>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
                         {cat.title}
                       </h4>
                     )}
 
                     <span
                       style={{
-                        padding: '4px 12px',
+                        padding: '3px 10px',
                         borderRadius: '100px',
-                        fontSize: '0.78rem',
+                        fontSize: '0.75rem',
                         fontWeight: 600,
                         background: badge.bg,
                         color: badge.text,
@@ -273,7 +266,7 @@ export default function CategoriesPage() {
                         gap: '4px',
                       }}
                     >
-                      <Icon icon="lucide:package" /> {count} produit{count > 1 ? 's' : ''}
+                      <Icon icon="lucide:package" style={{ fontSize: '0.8rem' }} /> {count} produit{count > 1 ? 's' : ''}
                     </span>
                   </div>
 
@@ -284,35 +277,36 @@ export default function CategoriesPage() {
                       rows={2}
                       style={{
                         width: '100%',
-                        padding: '10px 14px',
-                        borderRadius: '100px',
+                        padding: '8px 12px',
+                        borderRadius: '10px',
                         border: '1.5px solid var(--line)',
-                        fontSize: '0.88rem',
+                        fontSize: '0.85rem',
                         outline: 'none',
-                        color: 'var(--text-soft)',
+                        color: 'var(--text)',
                         background: '#FFFFFF',
                         resize: 'vertical',
                         marginTop: '6px',
                         boxSizing: 'border-box',
+                        fontFamily: 'inherit',
                       }}
                     />
                   ) : (
-                    <p style={{ fontSize: '0.88rem', color: 'var(--text-soft)', lineHeight: 1.5 }}>
+                    <p style={{ fontSize: '0.84rem', color: 'var(--text-soft)', margin: 0, lineHeight: 1.4 }}>
                       {cat.description}
                     </p>
                   )}
                 </div>
 
-                {/* Actions Button */}
-                <div style={{ display: 'flex', gap: '8px', flexShrink: 0, paddingTop: '4px' }}>
+                {/* Actions */}
+                <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
                   {isEditing ? (
                     <>
                       <button
                         onClick={() => setEditing(null)}
                         style={{
-                          padding: '8px 16px',
-                          borderRadius: '100px',
-                          fontSize: '0.82rem',
+                          padding: '7px 14px',
+                          borderRadius: '8px',
+                          fontSize: '0.8rem',
                           fontWeight: 600,
                           border: '1px solid var(--line)',
                           background: '#FFFFFF',
@@ -325,15 +319,14 @@ export default function CategoriesPage() {
                       <button
                         onClick={() => saveEdit(cat.slug)}
                         style={{
-                          padding: '8px 18px',
-                          borderRadius: '100px',
-                          fontSize: '0.82rem',
+                          padding: '7px 16px',
+                          borderRadius: '8px',
+                          fontSize: '0.8rem',
                           fontWeight: 700,
                           background: 'linear-gradient(90deg, #A99084 0%, #8F776C 100%)',
                           color: '#FFFFFF',
                           border: 'none',
                           cursor: 'pointer',
-                          boxShadow: '0 3px 10px rgba(169, 144, 132, 0.3)',
                         }}
                       >
                         Sauvegarder
@@ -343,9 +336,9 @@ export default function CategoriesPage() {
                     <button
                       onClick={() => startEdit(cat)}
                       style={{
-                        padding: '8px 18px',
-                        borderRadius: '100px',
-                        fontSize: '0.82rem',
+                        padding: '7px 14px',
+                        borderRadius: '8px',
+                        fontSize: '0.8rem',
                         fontWeight: 600,
                         color: 'var(--text)',
                         background: '#FFFFFF',
