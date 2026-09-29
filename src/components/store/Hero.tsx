@@ -100,7 +100,7 @@ export default function Hero() {
             textShadow: '0 2px 10px rgba(0,0,0,0.45)',
           }}
         >
-          Taneem'Store — <em>Prenez soin de ce qui vous rend unique.</em> Découvrez notre sélection exclusive d'essentiels beauté et bien-être importés — soins du corps, du visage, accessoires et compléments.
+          Taneem'Store — <em>Prenez soin de ce qui vous rend unique.</em>
         </p>
 
         <div style={{ display: 'flex', justifyContent: 'center' }}>
