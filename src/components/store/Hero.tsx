@@ -12,15 +12,15 @@ export default function Hero() {
         padding: '96px 24px',
         borderBottom: '1px solid var(--line)',
         overflow: 'hidden',
-        background: '#1B1420 url("/hero-banner-back.jpg") center center / cover no-repeat',
+        background: '#1B1420 url("/banier.jpg") center center / cover no-repeat',
       }}
     >
-      {/* Background Image Tag - New Aesthetic Spa Bathrobe Image */}
+      {/* Background Image Tag - public/banier.jpg */}
       <img
-        src={heroBannerBack || '/hero-banner-back.jpg'}
+        src={heroBannerBack || '/banier.jpg'}
         alt="Taneem'Store Hero Banner"
         onError={(e) => {
-          (e.currentTarget as HTMLImageElement).src = '/hero-banner-back.jpg';
+          (e.currentTarget as HTMLImageElement).src = '/banier.jpg';
         }}
         style={{
           position: 'absolute',
@@ -34,7 +34,7 @@ export default function Hero() {
         }}
       />
 
-      {/* Subtle Overlay Gradient for perfect text contrast */}
+      {/* Subtle Overlay Gradient for optimal text contrast */}
       <div
         style={{
           position: 'absolute',
