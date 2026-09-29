@@ -14,7 +14,7 @@ const CAT_COLORS: Record<string, { bg: string; text: string; border: string }> =
 };
 
 export default function CategoriesPage() {
-  const { categories, products, updateCategory, reorderCategories } = useProducts();
+  const { categories, products, updateCategory } = useProducts();
   const { showToast } = useToast();
   const sorted = [...categories].sort((a, b) => a.order - b.order);
   const [editing, setEditing] = useState<CategorySlug | null>(null);
@@ -31,22 +31,12 @@ export default function CategoriesPage() {
     setEditing(null);
   }
 
-  async function move(slug: CategorySlug, dir: -1 | 1) {
-    const slugs = sorted.map(c => c.slug);
-    const i = slugs.indexOf(slug);
-    const j = i + dir;
-    if (j < 0 || j >= slugs.length) return;
-    [slugs[i], slugs[j]] = [slugs[j], slugs[i]];
-    await reorderCategories(slugs);
-    showToast('Ordre des catégories mis à jour.');
-  }
-
   const totalAssignedProducts = products.length;
 
   return (
     <AdminLayout title="Gestion des Catégories">
       {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '28px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '28px' }}>
         {/* Total Categories */}
         <div
           style={{
@@ -98,32 +88,6 @@ export default function CategoriesPage() {
             <Icon icon="lucide:package" style={{ fontSize: '1.3rem' }} />
           </div>
         </div>
-
-        {/* Order Info */}
-        <div
-          style={{
-            background: '#FFFFFF',
-            borderRadius: '16px',
-            padding: '20px 24px',
-            border: '1px solid var(--line)',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div>
-            <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', marginBottom: '4px' }}>
-              Ordre d'Affichage
-            </p>
-            <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text)' }}>
-              Réorganisation par flèches
-            </p>
-          </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#E0F2FE', color: '#0369A1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon icon="lucide:arrow-up-down" style={{ fontSize: '1.3rem' }} />
-          </div>
-        </div>
       </div>
 
       {/* Categories Table Card */}
@@ -164,52 +128,6 @@ export default function CategoriesPage() {
                   background: isEditing ? '#FAF8F4' : '#FFFFFF',
                 }}
               >
-                {/* Order Up/Down Buttons */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <button
-                    onClick={() => move(cat.slug, -1)}
-                    disabled={idx === 0}
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      borderRadius: '8px',
-                      border: '1px solid var(--line)',
-                      background: idx === 0 ? '#F9F9F9' : '#FFFFFF',
-                      color: idx === 0 ? '#CCCCCC' : 'var(--text)',
-                      cursor: idx === 0 ? 'not-allowed' : 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.85rem',
-                      transition: 'all 0.15s ease',
-                    }}
-                    title="Monter dans l'ordre"
-                  >
-                    <Icon icon="lucide:arrow-up" />
-                  </button>
-                  <button
-                    onClick={() => move(cat.slug, 1)}
-                    disabled={idx === sorted.length - 1}
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      borderRadius: '8px',
-                      border: '1px solid var(--line)',
-                      background: idx === sorted.length - 1 ? '#F9F9F9' : '#FFFFFF',
-                      color: idx === sorted.length - 1 ? '#CCCCCC' : 'var(--text)',
-                      cursor: idx === sorted.length - 1 ? 'not-allowed' : 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.85rem',
-                      transition: 'all 0.15s ease',
-                    }}
-                    title="Descendre dans l'ordre"
-                  >
-                    <Icon icon="lucide:arrow-down" />
-                  </button>
-                </div>
-
                 {/* Number Badge */}
                 <div
                   style={{
