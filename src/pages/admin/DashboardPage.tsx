@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Icon } from '@iconify/react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useProducts } from '../../store/ProductsContext';
 
@@ -26,16 +27,27 @@ export default function DashboardPage() {
     .slice(0, 6);
 
   const stats = [
-    { label: 'Total Produits', value: totalProducts, icon: '🛍️' },
-    { label: 'Catégories', value: totalCategories, icon: '🏷️' },
-    { label: 'Ruptures de Stock', value: outOfStock, icon: '⚠️', alert: outOfStock > 0 },
-    { label: 'Prix Élevé', value: mostExpensive.toLocaleString('fr-FR') + ' FCFA', icon: '💎' },
-    { label: 'Prix Bas', value: cheapest.toLocaleString('fr-FR') + ' FCFA', icon: '✨' },
+    { label: 'Total Produits', value: totalProducts, icon: 'lucide:package' },
+    { label: 'Catégories', value: totalCategories, icon: 'lucide:tags' },
+    { label: 'Ruptures de Stock', value: outOfStock, icon: 'lucide:alert-triangle', alert: outOfStock > 0 },
+    { label: 'Prix Élevé', value: mostExpensive.toLocaleString('fr-FR') + ' FCFA', icon: 'lucide:gem' },
+    { label: 'Prix Bas', value: cheapest.toLocaleString('fr-FR') + ' FCFA', icon: 'lucide:sparkles' },
   ];
 
   const catLabel: Record<string, string> = {
-    corps: 'Corps', visage: 'Visage', maquillage: 'Maquillage',
-    accessoires: 'Accessoires', bienetre: 'Bien-être',
+    corps: 'Soins du Corps',
+    visage: 'Soins du Visage',
+    maquillage: 'Maquillage',
+    accessoires: 'Accessoires',
+    bienetre: 'Bien-être',
+  };
+
+  const CAT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
+    corps: { bg: '#FAF5F2', text: '#8F776C', border: '#EFE8E3' },
+    visage: { bg: '#F0F9FF', text: '#0369A1', border: '#BAE6FD' },
+    maquillage: { bg: '#FEFCE8', text: '#854D0E', border: '#FEF08A' },
+    accessoires: { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
+    bienetre: { bg: '#F5F3FF', text: '#5B21B6', border: '#DDD6FE' },
   };
 
   return (
@@ -45,8 +57,8 @@ export default function DashboardPage() {
         style={{
           background: isSupabaseActive ? '#ECFDF5' : '#FFFBEB',
           border: `1px solid ${isSupabaseActive ? '#A7F3D0' : '#FDE68A'}`,
-          borderRadius: '12px',
-          padding: '14px 20px',
+          borderRadius: '16px',
+          padding: '16px 22px',
           marginBottom: '24px',
           display: 'flex',
           alignItems: 'center',
@@ -55,13 +67,15 @@ export default function DashboardPage() {
           gap: '12px',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '1.2rem' }}>{isSupabaseActive ? '⚡' : '⚙️'}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: isSupabaseActive ? '#D1FAE5' : '#FEF3C7', color: isSupabaseActive ? '#059669' : '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon={isSupabaseActive ? "lucide:database-zap" : "lucide:database"} style={{ fontSize: '1.2rem' }} />
+          </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: '0.88rem', color: isSupabaseActive ? '#065F46' : '#92400E' }}>
+            <div style={{ fontWeight: 700, fontSize: '0.9rem', color: isSupabaseActive ? '#065F46' : '#92400E' }}>
               {isSupabaseActive ? 'Supabase connecté & synchronisé' : 'Base de données Supabase non configurée (Mode Local)'}
             </div>
-            <div style={{ fontSize: '0.8rem', color: isSupabaseActive ? '#047857' : '#B45309' }}>
+            <div style={{ fontSize: '0.8rem', color: isSupabaseActive ? '#047857' : '#B45309', marginTop: '2px' }}>
               {isSupabaseActive
                 ? 'Les produits et catégories sont synchronisés en temps réel avec Supabase.'
                 : 'Ajoutez VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY dans votre fichier .env pour activer la synchronisation.'}
@@ -83,21 +97,26 @@ export default function DashboardPage() {
               fontWeight: 600,
               cursor: 'pointer',
               opacity: syncing ? 0.7 : 1,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
             }}
           >
-            {syncing ? 'Synchronisation...' : syncSuccess ? '✅ Synchronisé !' : '🔄 Push Seed vers Supabase'}
+            <Icon icon={syncing ? "lucide:loader" : syncSuccess ? "lucide:check" : "lucide:refresh-cw"} />
+            {syncing ? 'Synchronisation...' : syncSuccess ? 'Synchronisé !' : 'Push Seed vers Supabase'}
           </button>
         )}
       </div>
+
       {/* Top Stat Cards Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '36px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '28px' }}>
         {stats.map(stat => (
           <div
             key={stat.label}
             style={{
               background: '#FFFFFF',
               borderRadius: '16px',
-              padding: '24px 24px',
+              padding: '20px 22px',
               border: '1px solid var(--line)',
               boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
               display: 'flex',
@@ -105,100 +124,138 @@ export default function DashboardPage() {
               justifyContent: 'space-between',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-              <span style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <span style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
                 {stat.label}
               </span>
-              <span style={{ fontSize: '1.2rem', padding: '6px', borderRadius: '10px', background: 'var(--blush-soft)' }}>
-                {stat.icon}
-              </span>
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--blush-soft)', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon icon={stat.icon} style={{ fontSize: '1.15rem' }} />
+              </div>
             </div>
-            <p style={{ fontSize: '1.65rem', fontWeight: 700, color: stat.alert ? '#DC2626' : 'var(--text)', lineHeight: 1.1 }}>
+            <p style={{ fontSize: '1.5rem', fontWeight: 800, color: stat.alert ? '#DC2626' : 'var(--text)', lineHeight: 1.1 }}>
               {stat.value}
             </p>
           </div>
         ))}
       </div>
 
-      {/* Recent Products Table Container */}
+      {/* Recent Products Table Container - Fixed Static Layout, No Overflow */}
       <div style={{ background: '#FFFFFF', borderRadius: '20px', border: '1px solid var(--line)', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', overflow: 'hidden' }}>
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.4rem', fontWeight: 700, color: 'var(--text)' }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
               Derniers produits ajoutés ou modifiés
-            </h2>
-            <p style={{ fontSize: '0.84rem', color: 'var(--text-soft)', marginTop: '2px' }}>
+            </h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-soft)', marginTop: '2px', margin: 0 }}>
               Aperçu en temps réel du catalogue produit
             </p>
           </div>
           <a
             href="/admin/products"
             style={{
-              fontSize: '0.84rem',
+              fontSize: '0.82rem',
               fontWeight: 600,
               color: 'var(--pink-deep)',
-              background: 'var(--blush-soft)',
-              padding: '8px 18px',
+              background: '#FAF5F2',
+              padding: '7px 16px',
               borderRadius: '100px',
               textDecoration: 'none',
               border: '1px solid var(--line)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
             }}
           >
-            Voir tous les produits →
+            <span>Voir tous les produits</span>
+            <Icon icon="lucide:arrow-right" style={{ fontSize: '0.9rem' }} />
           </a>
         </div>
 
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
+        <div style={{ width: '100%', overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem', tableLayout: 'fixed' }}>
             <thead>
-              <tr style={{ background: 'var(--blush-soft)', borderBottom: '1px solid var(--line)' }}>
-                {['Produit', 'Catégorie', 'Prix', 'Statut Stock', 'Dernière modif.'].map(h => (
-                  <th key={h} style={{ padding: '16px 28px', fontSize: '0.76rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
-                    {h}
-                  </th>
-                ))}
+              <tr style={{ background: '#FAF7F5', borderBottom: '1px solid var(--line)' }}>
+                <th style={{ width: '36%', padding: '14px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                  Produit
+                </th>
+                <th style={{ width: '20%', padding: '14px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                  Catégorie
+                </th>
+                <th style={{ width: '16%', padding: '14px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                  Prix
+                </th>
+                <th style={{ width: '14%', padding: '14px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                  Statut Stock
+                </th>
+                <th style={{ width: '14%', padding: '14px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', textAlign: 'right' }}>
+                  Dernière modif.
+                </th>
               </tr>
             </thead>
             <tbody>
-              {recent.map(p => (
-                <tr key={p.id} style={{ borderBottom: '1px solid var(--line)', transition: 'background 0.15s ease' }}>
-                  <td style={{ padding: '18px 28px', fontWeight: 600, color: 'var(--text)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      <img
-                        src={p.image}
-                        alt={p.name}
-                        style={{ width: '42px', height: '42px', borderRadius: '10px', objectFit: 'cover', border: '1px solid var(--line)' }}
-                      />
-                      <span>{p.name}</span>
-                    </div>
-                  </td>
-                  <td style={{ padding: '18px 28px' }}>
-                    <span style={{ padding: '6px 14px', borderRadius: '100px', fontSize: '0.78rem', fontWeight: 600, background: 'var(--blush)', color: 'var(--pink-deep)' }}>
-                      {catLabel[p.categorySlug] || p.categorySlug}
-                    </span>
-                  </td>
-                  <td style={{ padding: '18px 28px', fontWeight: 600, color: 'var(--text)' }}>
-                    {p.priceFormatted}
-                  </td>
-                  <td style={{ padding: '18px 28px' }}>
-                    <span
-                      style={{
-                        padding: '6px 14px',
-                        borderRadius: '100px',
-                        fontSize: '0.78rem',
-                        fontWeight: 700,
-                        background: p.inStock ? '#DCFCE7' : '#FEE2E2',
-                        color: p.inStock ? '#166534' : '#991B1B',
-                      }}
-                    >
-                      {p.inStock ? '● En stock' : '○ Rupture'}
-                    </span>
-                  </td>
-                  <td style={{ padding: '18px 28px', fontSize: '0.84rem', color: 'var(--text-soft)' }}>
-                    {new Date(p.updatedAt).toLocaleDateString('fr-FR')}
-                  </td>
-                </tr>
-              ))}
+              {recent.map(p => {
+                const cat = CAT_COLORS[p.categorySlug] ?? CAT_COLORS.corps;
+                return (
+                  <tr key={p.id} style={{ borderBottom: '1px solid var(--line)', transition: 'background 0.15s ease' }}>
+                    <td style={{ padding: '14px 20px', verticalAlign: 'middle', fontWeight: 600, color: 'var(--text)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <img
+                          src={p.image}
+                          alt={p.name}
+                          style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover', border: '1px solid var(--line)', flexShrink: 0 }}
+                          onError={e => {
+                            (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=200';
+                          }}
+                        />
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</span>
+                      </div>
+                    </td>
+                    <td style={{ padding: '14px 20px', verticalAlign: 'middle' }}>
+                      <span
+                        style={{
+                          padding: '3px 10px',
+                          borderRadius: '6px',
+                          fontSize: '0.74rem',
+                          fontWeight: 600,
+                          background: cat.bg,
+                          color: cat.text,
+                          border: `1px solid ${cat.border}`,
+                          display: 'inline-block',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {catLabel[p.categorySlug] || p.categorySlug}
+                      </span>
+                    </td>
+                    <td style={{ padding: '14px 20px', verticalAlign: 'middle', fontWeight: 800, color: 'var(--pink-deep)', fontSize: '0.92rem' }}>
+                      {p.priceFormatted}
+                    </td>
+                    <td style={{ padding: '14px 20px', verticalAlign: 'middle' }}>
+                      <span
+                        style={{
+                          padding: '3px 10px',
+                          borderRadius: '6px',
+                          fontSize: '0.74rem',
+                          fontWeight: 600,
+                          background: p.inStock ? '#DCFCE7' : '#FEE2E2',
+                          color: p.inStock ? '#166534' : '#991B1B',
+                          border: `1px solid ${p.inStock ? '#BBF7D0' : '#FCA5A5'}`,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        <span style={{ fontSize: '0.45rem', lineHeight: 1 }}>●</span>
+                        {p.inStock ? 'En stock' : 'Rupture'}
+                      </span>
+                    </td>
+                    <td style={{ padding: '14px 20px', verticalAlign: 'middle', fontSize: '0.82rem', color: 'var(--text-soft)', textAlign: 'right' }}>
+                      {new Date(p.updatedAt).toLocaleDateString('fr-FR')}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
