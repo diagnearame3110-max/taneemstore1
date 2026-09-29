@@ -477,9 +477,9 @@ export default function ProductsPage() {
                     <td style={{ padding: '14px 20px' }}>
                       <span
                         style={{
-                          padding: '5px 12px',
-                          borderRadius: '100px',
-                          fontSize: '0.78rem',
+                          padding: '3px 10px',
+                          borderRadius: '6px',
+                          fontSize: '0.74rem',
                           fontWeight: 600,
                           background: cat.bg,
                           color: cat.text,
@@ -496,7 +496,7 @@ export default function ProductsPage() {
                       {p.priceFormatted}
                     </td>
 
-                    {/* Stock Status Switch Pill */}
+                    {/* Stock Status Switch Badge */}
                     <td style={{ padding: '14px 20px' }}>
                       <button
                         onClick={() => {
@@ -504,10 +504,10 @@ export default function ProductsPage() {
                           showToast(p.inStock ? `Produit "${p.name}" passé en rupture.` : `Produit "${p.name}" remis en stock.`);
                         }}
                         style={{
-                          padding: '6px 14px',
-                          borderRadius: '100px',
-                          fontSize: '0.78rem',
-                          fontWeight: 700,
+                          padding: '3px 10px',
+                          borderRadius: '6px',
+                          fontSize: '0.74rem',
+                          fontWeight: 600,
                           background: p.inStock ? '#DCFCE7' : '#FEE2E2',
                           color: p.inStock ? '#166534' : '#991B1B',
                           border: `1px solid ${p.inStock ? '#BBF7D0' : '#FCA5A5'}`,
@@ -515,10 +515,10 @@ export default function ProductsPage() {
                           transition: 'all 0.2s ease',
                           display: 'inline-flex',
                           alignItems: 'center',
-                          gap: '6px',
+                          gap: '5px',
                         }}
                       >
-                        <span style={{ fontSize: '0.65rem' }}>{p.inStock ? '●' : '○'}</span>
+                        <span style={{ fontSize: '0.45rem', lineHeight: 1 }}>●</span>
                         {p.inStock ? 'En stock' : 'Rupture'}
                       </button>
                     </td>
