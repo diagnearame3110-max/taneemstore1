@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useProducts } from '../../store/ProductsContext';
 import { useToast } from '../../store/ToastContext';
@@ -108,8 +109,8 @@ export default function ProductsPage() {
               {totalCount}
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#F5EFEA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem' }}>
-            📦
+          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#F5EFEA', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:package" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
 
@@ -134,8 +135,8 @@ export default function ProductsPage() {
               {inStockCount}
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#DCFCE7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem' }}>
-            ✅
+          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#DCFCE7', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:check-circle-2" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
 
@@ -160,8 +161,8 @@ export default function ProductsPage() {
               {outStockCount}
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#FEE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem' }}>
-            ⚠️
+          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#FEE2E2', color: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:alert-triangle" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
 
@@ -186,8 +187,8 @@ export default function ProductsPage() {
               {categoriesCount}
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#FAF7F5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem' }}>
-            🏷️
+          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#FAF7F5', color: 'var(--pink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:tags" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
       </div>
@@ -209,8 +210,8 @@ export default function ProductsPage() {
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
           {/* Search Box */}
           <div style={{ position: 'relative', flex: 1, minWidth: '280px' }}>
-            <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '0.95rem', color: 'var(--text-soft)' }}>
-              🔍
+            <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-soft)', display: 'flex', alignItems: 'center' }}>
+              <Icon icon="lucide:search" style={{ fontSize: '1.1rem' }} />
             </span>
             <input
               type="text"
@@ -244,10 +245,11 @@ export default function ProductsPage() {
                   border: 'none',
                   color: 'var(--text-soft)',
                   cursor: 'pointer',
-                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
-                ✕
+                <Icon icon="lucide:x" style={{ fontSize: '1rem' }} />
               </button>
             )}
           </div>
@@ -299,13 +301,13 @@ export default function ProductsPage() {
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.92')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
           >
-            <span style={{ fontSize: '1.05rem' }}>✨</span> Ajouter un Produit
+            <Icon icon="lucide:plus" style={{ fontSize: '1.1rem' }} /> Ajouter un Produit
           </button>
         </div>
 
         {/* Stock Status Pills Row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderTop: '1px solid var(--line)', paddingTop: '14px' }}>
-          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-soft)', uppercase: true, letterSpacing: '0.05em', marginRight: '8px' }}>
+          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-soft)', textTransform: 'uppercase', letterSpacing: '0.05em', marginRight: '8px' }}>
             Filtre Stock:
           </span>
           <button
@@ -538,11 +540,14 @@ export default function ProductsPage() {
                             border: '1px solid var(--line)',
                             cursor: 'pointer',
                             transition: 'all 0.2s ease',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
                           }}
                           onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--pink)')}
                           onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--line)')}
                         >
-                          👁️ Voir
+                          <Icon icon="lucide:eye" /> Voir
                         </button>
 
                         {/* Edit */}
@@ -559,6 +564,9 @@ export default function ProductsPage() {
                             border: '1px solid var(--line)',
                             cursor: 'pointer',
                             transition: 'all 0.2s ease',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
                           }}
                           onMouseEnter={e => {
                             e.currentTarget.style.borderColor = 'var(--pink)';
@@ -569,7 +577,7 @@ export default function ProductsPage() {
                             e.currentTarget.style.color = 'var(--text)';
                           }}
                         >
-                          ✏️ Edit
+                          <Icon icon="lucide:edit-3" /> Edit
                         </button>
 
                         {/* Duplicate */}
@@ -586,11 +594,14 @@ export default function ProductsPage() {
                             border: '1px solid var(--line)',
                             cursor: 'pointer',
                             transition: 'all 0.2s ease',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
                           }}
                           onMouseEnter={e => (e.currentTarget.style.background = '#FAF7F5')}
                           onMouseLeave={e => (e.currentTarget.style.background = '#FFFFFF')}
                         >
-                          📋 Copier
+                          <Icon icon="lucide:copy" /> Copier
                         </button>
 
                         {/* Delete */}
@@ -598,20 +609,22 @@ export default function ProductsPage() {
                           onClick={() => setConfirmDelete(p)}
                           title="Supprimer"
                           style={{
-                            padding: '7px 12px',
+                            padding: '7px 10px',
                             borderRadius: '8px',
-                            fontSize: '0.78rem',
+                            fontSize: '0.85rem',
                             fontWeight: 600,
                             color: '#DC2626',
                             background: '#FEE2E2',
                             border: '1px solid #FCA5A5',
                             cursor: 'pointer',
                             transition: 'all 0.2s ease',
+                            display: 'inline-flex',
+                            alignItems: 'center',
                           }}
                           onMouseEnter={e => (e.currentTarget.style.background = '#FCA5A5')}
                           onMouseLeave={e => (e.currentTarget.style.background = '#FEE2E2')}
                         >
-                          🗑️
+                          <Icon icon="lucide:trash-2" />
                         </button>
                       </div>
                     </td>
@@ -622,7 +635,9 @@ export default function ProductsPage() {
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan={6} style={{ padding: '60px 24px', textAlign: 'center', background: '#FFFFFF' }}>
-                    <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>🍃</div>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>
+                      <Icon icon="lucide:package-open" style={{ color: 'var(--text-soft)' }} />
+                    </div>
                     <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>
                       Aucun produit trouvé
                     </p>
@@ -690,7 +705,7 @@ export default function ProductsPage() {
                   justifyContent: 'center',
                 }}
               >
-                ✕
+                <Icon icon="lucide:x" />
               </button>
             </div>
 
@@ -757,9 +772,12 @@ export default function ProductsPage() {
                     border: 'none',
                     cursor: 'pointer',
                     boxShadow: '0 4px 12px rgba(169, 144, 132, 0.35)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
                   }}
                 >
-                  ✏️ Modifier ce Produit
+                  <Icon icon="lucide:edit-3" /> Modifier ce Produit
                 </button>
               </div>
             </div>
@@ -797,7 +815,7 @@ export default function ProductsPage() {
             }}
           >
             <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#FEE2E2', color: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', margin: '0 auto 16px auto' }}>
-              ⚠️
+              <Icon icon="lucide:alert-triangle" />
             </div>
 
             <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.7rem', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
@@ -847,4 +865,3 @@ export default function ProductsPage() {
     </AdminLayout>
   );
 }
-

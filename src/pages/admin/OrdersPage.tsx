@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Icon } from '@iconify/react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useToast } from '../../store/ToastContext';
 
@@ -89,7 +90,6 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [paymentFilter, setPaymentFilter] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { showToast } = useToast();
 
@@ -99,8 +99,7 @@ export default function OrdersPage() {
                         o.phone.includes(search) ||
                         o.city.toLowerCase().includes(search.toLowerCase());
     const matchStatus = !statusFilter || o.status === statusFilter;
-    const matchPayment = !paymentFilter || o.paymentMethod === paymentFilter;
-    return matchSearch && matchStatus && matchPayment;
+    return matchSearch && matchStatus;
   });
 
   const updateStatus = (id: string, newStatus: Order['status']) => {
@@ -108,7 +107,7 @@ export default function OrdersPage() {
     if (selectedOrder && selectedOrder.id === id) {
       setSelectedOrder(prev => prev ? { ...prev, status: newStatus } : null);
     }
-    showToast(`Statut de la commande ${id} changé en "${newStatus}".`);
+    showToast(`Statut de la commande ${id} mis à jour : "${newStatus}".`);
   };
 
   const getStatusBadgeStyle = (status: Order['status']) => {
@@ -120,14 +119,6 @@ export default function OrdersPage() {
     }
   };
 
-  const getPaymentBadgeStyle = (method: Order['paymentMethod']) => {
-    switch (method) {
-      case 'Wave': return { bg: '#E0F2FE', color: '#0284C7' };
-      case 'Orange Money': return { bg: '#FFEDD5', color: '#C2410C' };
-      case 'Espèces à la livraison': return { bg: '#F3F4F6', color: '#374151' };
-    }
-  };
-
   const totalOrdersCount = orders.length;
   const pendingCount = orders.filter(o => o.status === 'En attente').length;
   const deliveryCount = orders.filter(o => o.status === 'En livraison').length;
@@ -136,9 +127,9 @@ export default function OrdersPage() {
 
   return (
     <AdminLayout title="Gestion des Commandes">
-      {/* KPI Stats Cards Row */}
+      {/* Top KPI Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '28px' }}>
-        {/* Total Commandes */}
+        {/* Card 1: Total */}
         <div
           style={{
             background: '#FFFFFF',
@@ -153,18 +144,18 @@ export default function OrdersPage() {
         >
           <div>
             <p style={{ fontSize: '0.74rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', marginBottom: '4px' }}>
-              Commandes Total
+              Total Commandes
             </p>
             <p style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text)', fontFamily: "'Cormorant Garamond', serif" }}>
               {totalOrdersCount}
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#F5EFEA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
-            🛍️
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#F5EFEA', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:shopping-bag" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
 
-        {/* En Attente */}
+        {/* Card 2: En Attente */}
         <div
           style={{
             background: '#FFFFFF',
@@ -185,12 +176,12 @@ export default function OrdersPage() {
               {pendingCount}
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#FEF3C7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
-            ⏳
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:clock" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
 
-        {/* En Livraison */}
+        {/* Card 3: En Livraison */}
         <div
           style={{
             background: '#FFFFFF',
@@ -211,12 +202,12 @@ export default function OrdersPage() {
               {deliveryCount}
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#F5F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
-            🚚
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#F5F3FF', color: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:truck" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
 
-        {/* Livrées */}
+        {/* Card 4: Livrées */}
         <div
           style={{
             background: '#FFFFFF',
@@ -237,12 +228,12 @@ export default function OrdersPage() {
               {completedCount}
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#DCFCE7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
-            ✅
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#DCFCE7', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:check-circle-2" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
 
-        {/* Total Revenue */}
+        {/* Card 5: Chiffre d'Affaires */}
         <div
           style={{
             background: 'linear-gradient(135deg, #FAF7F5 0%, #F5EFEA 100%)',
@@ -263,13 +254,13 @@ export default function OrdersPage() {
               {totalRevenue.toLocaleString('fr-FR')} FCFA
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-            💎
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#FFFFFF', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+            <Icon icon="lucide:gem" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
       </div>
 
-      {/* Toolbar & Filters */}
+      {/* Toolbar Search & Status Filter Tabs */}
       <div
         style={{
           background: '#FFFFFF',
@@ -286,12 +277,12 @@ export default function OrdersPage() {
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
           {/* Search Box */}
           <div style={{ position: 'relative', flex: 1, minWidth: '280px' }}>
-            <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '0.95rem', color: 'var(--text-soft)' }}>
-              🔍
+            <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-soft)', display: 'flex', alignItems: 'center' }}>
+              <Icon icon="lucide:search" style={{ fontSize: '1.1rem' }} />
             </span>
             <input
               type="text"
-              placeholder="Rechercher par client, n° commande, ville..."
+              placeholder="Rechercher par client, N° commande, ville..."
               value={search}
               onChange={e => setSearch(e.target.value)}
               style={{
@@ -321,43 +312,20 @@ export default function OrdersPage() {
                   border: 'none',
                   color: 'var(--text-soft)',
                   cursor: 'pointer',
-                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
-                ✕
+                <Icon icon="lucide:x" style={{ fontSize: '1rem' }} />
               </button>
             )}
           </div>
-
-          {/* Payment Method Filter */}
-          <select
-            value={paymentFilter}
-            onChange={e => setPaymentFilter(e.target.value)}
-            style={{
-              padding: '12px 18px',
-              borderRadius: '12px',
-              border: '1.5px solid var(--line)',
-              fontSize: '0.88rem',
-              outline: 'none',
-              background: '#FAF8F4',
-              color: 'var(--text)',
-              cursor: 'pointer',
-              fontWeight: 600,
-            }}
-            onFocus={e => (e.currentTarget.style.borderColor = 'var(--pink)')}
-            onBlur={e => (e.currentTarget.style.borderColor = 'var(--line)')}
-          >
-            <option value="">Tous modes de paiement</option>
-            <option value="Wave">Wave</option>
-            <option value="Orange Money">Orange Money</option>
-            <option value="Espèces à la livraison">Espèces à la livraison</option>
-          </select>
         </div>
 
-        {/* Status Tabs */}
+        {/* Status Filter Tabs */}
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', borderTop: '1px solid var(--line)', paddingTop: '14px' }}>
-          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-soft)', uppercase: true, letterSpacing: '0.05em', marginRight: '8px' }}>
-            Statut:
+          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-soft)', textTransform: 'uppercase', letterSpacing: '0.05em', marginRight: '8px' }}>
+            Filtrer par statut:
           </span>
           {[
             { key: '', label: 'Toutes', count: totalOrdersCount },
@@ -388,7 +356,7 @@ export default function OrdersPage() {
         </div>
       </div>
 
-      {/* Orders Table Card */}
+      {/* Orders Table - Renamed column to 'Détails' & Compact Eye Icon Only Button */}
       <div
         style={{
           background: '#FFFFFF',
@@ -399,39 +367,29 @@ export default function OrdersPage() {
         }}
       >
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem', tableLayout: 'fixed' }}>
             <thead>
               <tr style={{ background: '#FAF7F5', borderBottom: '1px solid var(--line)' }}>
-                <th style={{ padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
-                  Commande
+                <th style={{ width: '24%', padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                  N° Commande & Date
                 </th>
-                <th style={{ padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
-                  Client & Livraison
+                <th style={{ width: '32%', padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                  Client & Destination
                 </th>
-                <th style={{ padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
-                  Articles
-                </th>
-                <th style={{ padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
-                  Paiement
-                </th>
-                <th style={{ padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
-                  Total
-                </th>
-                <th style={{ padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                <th style={{ width: '20%', padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
                   Statut
                 </th>
-                <th style={{ padding: '16px 24px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', textAlign: 'right' }}>
-                  Actions
+                <th style={{ width: '16%', padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                  Total
+                </th>
+                <th style={{ width: '8%', padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', textAlign: 'center' }}>
+                  Détails
                 </th>
               </tr>
             </thead>
             <tbody>
               {filteredOrders.map(o => {
                 const badgeStyle = getStatusBadgeStyle(o.status);
-                const payBadgeStyle = getPaymentBadgeStyle(o.paymentMethod);
-                const waMessage = encodeURIComponent(
-                  `Bonjour ${o.customerName}, nous vous contactons concernant votre commande Taneem'Store ${o.id} (${o.totalPrice.toLocaleString('fr-FR')} FCFA).`
-                );
 
                 return (
                   <tr
@@ -439,153 +397,87 @@ export default function OrdersPage() {
                     style={{
                       borderBottom: '1px solid var(--line)',
                       transition: 'background 0.15s ease',
+                      cursor: 'pointer',
                     }}
+                    onClick={() => setSelectedOrder(o)}
                     onMouseEnter={e => (e.currentTarget.style.background = '#FAF8F4')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                   >
                     {/* Commande ID & Date */}
-                    <td style={{ padding: '16px 20px', verticalAlign: 'top' }}>
-                      <div
-                        onClick={() => setSelectedOrder(o)}
-                        style={{ fontWeight: 700, color: 'var(--text)', cursor: 'pointer', fontFamily: 'monospace', fontSize: '0.9rem' }}
-                      >
+                    <td style={{ padding: '14px 20px', verticalAlign: 'middle' }}>
+                      <div style={{ fontWeight: 700, color: 'var(--text)', fontFamily: 'monospace', fontSize: '0.9rem' }}>
                         {o.id}
                       </div>
-                      <div style={{ fontSize: '0.76rem', color: 'var(--text-soft)', marginTop: '4px' }}>
-                        📅 {o.date}
+                      <div style={{ fontSize: '0.76rem', color: 'var(--text-soft)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Icon icon="lucide:calendar" style={{ fontSize: '0.8rem' }} />
+                        <span>{o.date}</span>
                       </div>
                     </td>
 
-                    {/* Customer & Address */}
-                    <td style={{ padding: '16px 20px', verticalAlign: 'top' }}>
+                    {/* Client & City */}
+                    <td style={{ padding: '14px 20px', verticalAlign: 'middle' }}>
                       <div style={{ fontWeight: 700, color: 'var(--text)' }}>
                         {o.customerName}
                       </div>
-                      <a
-                        href={`tel:${o.phone}`}
-                        style={{ fontSize: '0.78rem', color: 'var(--pink-deep)', textDecoration: 'none', fontWeight: 600, display: 'inline-block', marginTop: '2px' }}
-                      >
-                        📞 {o.phone}
-                      </a>
-                      <div style={{ fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '3px' }}>
-                        📍 {o.address} <span style={{ fontWeight: 600, color: 'var(--text)' }}>({o.city})</span>
+                      <div style={{ fontSize: '0.76rem', color: 'var(--text-soft)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ background: '#FAF7F5', padding: '2px 8px', borderRadius: '100px', border: '1px solid var(--line)', fontWeight: 600, color: 'var(--pink-deep)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                          <Icon icon="lucide:map-pin" style={{ fontSize: '0.75rem' }} /> {o.city}
+                        </span>
                       </div>
                     </td>
 
-                    {/* Items Preview */}
-                    <td style={{ padding: '16px 20px', verticalAlign: 'top' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        {o.items.map((item, idx) => (
-                          <div key={idx} style={{ fontSize: '0.8rem', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ fontWeight: 700, color: 'var(--pink-deep)', background: '#FAF7F5', padding: '1px 6px', borderRadius: '4px' }}>
-                              {item.qty}x
-                            </span>
-                            <span>{item.name}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </td>
-
-                    {/* Payment */}
-                    <td style={{ padding: '16px 20px', verticalAlign: 'top' }}>
+                    {/* Statut Badge */}
+                    <td style={{ padding: '14px 20px', verticalAlign: 'middle' }}>
                       <span
                         style={{
-                          padding: '4px 10px',
-                          borderRadius: '100px',
-                          fontSize: '0.76rem',
-                          fontWeight: 700,
-                          background: payBadgeStyle.bg,
-                          color: payBadgeStyle.color,
-                          display: 'inline-block',
-                        }}
-                      >
-                        {o.paymentMethod}
-                      </span>
-                    </td>
-
-                    {/* Total Price */}
-                    <td style={{ padding: '16px 20px', verticalAlign: 'top', fontWeight: 800, color: 'var(--pink-deep)', fontSize: '0.95rem' }}>
-                      {o.totalPrice.toLocaleString('fr-FR')} FCFA
-                    </td>
-
-                    {/* Interactive Status Switcher */}
-                    <td style={{ padding: '16px 20px', verticalAlign: 'top' }}>
-                      <select
-                        value={o.status}
-                        onChange={e => updateStatus(o.id, e.target.value as Order['status'])}
-                        style={{
-                          padding: '6px 12px',
+                          padding: '5px 12px',
                           borderRadius: '100px',
                           fontSize: '0.78rem',
                           fontWeight: 700,
-                          outline: 'none',
-                          cursor: 'pointer',
                           background: badgeStyle.bg,
                           color: badgeStyle.color,
                           border: `1px solid ${badgeStyle.border}`,
+                          display: 'inline-block',
                         }}
                       >
-                        <option value="En attente">En attente</option>
-                        <option value="Confirmée">Confirmée</option>
-                        <option value="En livraison">En livraison</option>
-                        <option value="Livrée">Livrée</option>
-                      </select>
+                        {o.status}
+                      </span>
                     </td>
 
-                    {/* Actions Column */}
-                    <td style={{ padding: '16px 24px', textAlign: 'right', verticalAlign: 'top' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
-                        {/* WhatsApp CTA */}
-                        <a
-                          href={`https://wa.me/${o.phone.replace(/[^0-9]/g, '')}?text=${waMessage}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title="Discuter sur WhatsApp"
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            padding: '7px 14px',
-                            borderRadius: '100px',
-                            fontSize: '0.78rem',
-                            fontWeight: 700,
-                            background: '#25D366',
-                            color: '#FFFFFF',
-                            textDecoration: 'none',
-                            boxShadow: '0 2px 8px rgba(37, 211, 102, 0.25)',
-                            transition: 'all 0.2s ease',
-                          }}
-                        >
-                          <span>💬</span> WhatsApp
-                        </a>
+                    {/* Montant Total */}
+                    <td style={{ padding: '14px 20px', verticalAlign: 'middle', fontWeight: 800, color: 'var(--pink-deep)', fontSize: '0.95rem' }}>
+                      {o.totalPrice.toLocaleString('fr-FR')} FCFA
+                    </td>
 
-                        {/* Order Invoice Details Drawer */}
-                        <button
-                          onClick={() => setSelectedOrder(o)}
-                          title="Facture et détails"
-                          style={{
-                            padding: '7px 12px',
-                            borderRadius: '8px',
-                            fontSize: '0.78rem',
-                            fontWeight: 600,
-                            color: 'var(--text)',
-                            background: '#FFFFFF',
-                            border: '1px solid var(--line)',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease',
-                          }}
-                          onMouseEnter={e => {
-                            e.currentTarget.style.borderColor = 'var(--pink)';
-                            e.currentTarget.style.color = 'var(--pink-deep)';
-                          }}
-                          onMouseLeave={e => {
-                            e.currentTarget.style.borderColor = 'var(--line)';
-                            e.currentTarget.style.color = 'var(--text)';
-                          }}
-                        >
-                          👁️ Reçu
-                        </button>
-                      </div>
+                    {/* Eye Icon Only Compact Button */}
+                    <td style={{ padding: '14px 20px', textAlign: 'center', verticalAlign: 'middle' }}>
+                      <button
+                        onClick={e => {
+                          e.stopPropagation();
+                          setSelectedOrder(o);
+                        }}
+                        title="Voir les détails de la commande"
+                        style={{
+                          width: '34px',
+                          height: '34px',
+                          borderRadius: '50%',
+                          fontSize: '0.9rem',
+                          color: '#FFFFFF',
+                          background: 'linear-gradient(90deg, #A99084 0%, #8F776C 100%)',
+                          border: 'none',
+                          cursor: 'pointer',
+                          boxShadow: '0 2px 8px rgba(169, 144, 132, 0.3)',
+                          transition: 'all 0.2s ease',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          margin: '0 auto',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.08)')}
+                        onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                      >
+                        <Icon icon="lucide:eye" style={{ fontSize: '1.1rem' }} />
+                      </button>
                     </td>
                   </tr>
                 );
@@ -593,13 +485,15 @@ export default function OrdersPage() {
 
               {filteredOrders.length === 0 && (
                 <tr>
-                  <td colSpan={7} style={{ padding: '60px 24px', textAlign: 'center', background: '#FFFFFF' }}>
-                    <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>🛍️</div>
+                  <td colSpan={5} style={{ padding: '60px 24px', textAlign: 'center', background: '#FFFFFF' }}>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>
+                      <Icon icon="lucide:shopping-bag" style={{ color: 'var(--text-soft)' }} />
+                    </div>
                     <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>
                       Aucune commande trouvée
                     </p>
                     <p style={{ fontSize: '0.85rem', color: 'var(--text-soft)' }}>
-                      Essayez de modifier votre mot-clé de recherche ou de réinitialiser le filtre de statut.
+                      Essayez de modifier votre mot-clé de recherche ou de réinitialiser le filtre.
                     </p>
                   </td>
                 </tr>
@@ -609,7 +503,7 @@ export default function OrdersPage() {
         </div>
       </div>
 
-      {/* Invoice / Order Details Modal */}
+      {/* Comprehensive Order Details Modal */}
       {selectedOrder && (
         <div
           onClick={() => setSelectedOrder(null)}
@@ -637,7 +531,7 @@ export default function OrdersPage() {
               border: '1px solid var(--line)',
             }}
           >
-            {/* Header */}
+            {/* Modal Header */}
             <div
               style={{
                 background: 'linear-gradient(135deg, #150F18 0%, #2A1F30 100%)',
@@ -650,7 +544,7 @@ export default function OrdersPage() {
             >
               <div>
                 <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#A99084' }}>
-                  Fiche Commande & Facture
+                  Fiche Commande & Facture Client
                 </p>
                 <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', fontWeight: 700, color: '#FFFFFF', marginTop: '2px' }}>
                   {selectedOrder.id}
@@ -672,58 +566,65 @@ export default function OrdersPage() {
                   justifyContent: 'center',
                 }}
               >
-                ✕
+                <Icon icon="lucide:x" style={{ fontSize: '1.2rem' }} />
               </button>
             </div>
 
             {/* Modal Body */}
             <div style={{ padding: '28px 32px', maxHeight: '75vh', overflowY: 'auto' }}>
-              {/* Customer Info Grid */}
+              {/* Customer & Address Card */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px', background: '#FAF8F4', padding: '20px', borderRadius: '16px', border: '1px solid var(--line)' }}>
                 <div>
                   <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', marginBottom: '4px' }}>
                     Informations Client
                   </p>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text)' }}>
+                  <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)' }}>
                     {selectedOrder.customerName}
                   </p>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--pink-deep)', fontWeight: 600, marginTop: '2px' }}>
-                    📞 {selectedOrder.phone}
-                  </p>
+                  <a
+                    href={`tel:${selectedOrder.phone}`}
+                    style={{ fontSize: '0.85rem', color: 'var(--pink-deep)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '4px', textDecoration: 'none' }}
+                  >
+                    <Icon icon="lucide:phone" /> {selectedOrder.phone}
+                  </a>
                 </div>
 
                 <div>
                   <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', marginBottom: '4px' }}>
-                    Adresse de Livraison
+                    Livraison & Date
                   </p>
                   <p style={{ fontSize: '0.88rem', color: 'var(--text)', lineHeight: 1.4 }}>
                     📍 {selectedOrder.address}, <strong>{selectedOrder.city}</strong>
                   </p>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '4px' }}>
-                    📅 Date: {selectedOrder.date}
+                  <p style={{ fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <Icon icon="lucide:calendar" /> Date: {selectedOrder.date}
                   </p>
                 </div>
               </div>
 
-              {/* Status & Payment Bar */}
+              {/* Status & Payment Controls Bar */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--line)' }}>
                 <div>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginRight: '8px' }}>Mode de Paiement:</span>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)' }}>{selectedOrder.paymentMethod}</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginRight: '8px' }}>Paiement:</span>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)', background: '#FAF7F5', padding: '4px 10px', borderRadius: '100px', border: '1px solid var(--line)' }}>
+                    {selectedOrder.paymentMethod}
+                  </span>
                 </div>
                 <div>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginRight: '8px' }}>Statut:</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginRight: '8px' }}>Changer le statut:</span>
                   <select
                     value={selectedOrder.status}
                     onChange={e => updateStatus(selectedOrder.id, e.target.value as Order['status'])}
                     style={{
-                      padding: '5px 12px',
+                      padding: '6px 14px',
                       borderRadius: '100px',
                       fontSize: '0.8rem',
                       fontWeight: 700,
                       cursor: 'pointer',
-                      border: '1px solid var(--pink)',
+                      border: '1.5px solid var(--pink)',
                       background: '#FAF7F5',
+                      color: 'var(--text)',
+                      outline: 'none',
                     }}
                   >
                     <option value="En attente">En attente</option>
@@ -734,18 +635,18 @@ export default function OrdersPage() {
                 </div>
               </div>
 
-              {/* Items List */}
-              <p style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', marginBottom: '12px' }}>
-                Détail des Articles Commandés
+              {/* Items List Table */}
+              <p style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', marginBottom: '12px' }}>
+                Articles Commandés
               </p>
               <div style={{ border: '1px solid var(--line)', borderRadius: '14px', overflow: 'hidden', marginBottom: '24px' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
                   <thead>
                     <tr style={{ background: '#FAF7F5', borderBottom: '1px solid var(--line)' }}>
-                      <th style={{ padding: '10px 16px', textAlign: 'left', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-soft)' }}>Article</th>
-                      <th style={{ padding: '10px 16px', textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-soft)' }}>Qté</th>
-                      <th style={{ padding: '10px 16px', textAlign: 'right', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-soft)' }}>Prix Unitaire</th>
-                      <th style={{ padding: '10px 16px', textAlign: 'right', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-soft)' }}>Sous-total</th>
+                      <th style={{ padding: '12px 16px', textAlign: 'left', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-soft)' }}>Produit</th>
+                      <th style={{ padding: '12px 16px', textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-soft)' }}>Qté</th>
+                      <th style={{ padding: '12px 16px', textAlign: 'right', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-soft)' }}>Prix Unitaire</th>
+                      <th style={{ padding: '12px 16px', textAlign: 'right', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-soft)' }}>Sous-total</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -769,11 +670,11 @@ export default function OrdersPage() {
                 </table>
               </div>
 
-              {/* Total Summary */}
+              {/* Total Calculation Card */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
                 <div style={{ width: '260px', background: '#FAF8F4', padding: '16px 20px', borderRadius: '14px', border: '1px solid var(--line)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '8px' }}>
-                    <span>Frais de livraison:</span>
+                    <span>Livraison:</span>
                     <span style={{ fontWeight: 600, color: '#166534' }}>Inclus / Offert</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.1rem', fontWeight: 800, color: 'var(--text)', borderTop: '1px solid var(--line)', paddingTop: '8px' }}>
@@ -783,7 +684,7 @@ export default function OrdersPage() {
                 </div>
               </div>
 
-              {/* Actions Footer */}
+              {/* Modal Bottom Actions */}
               <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', borderTop: '1px solid var(--line)', paddingTop: '20px' }}>
                 <button
                   onClick={() => window.print()}
@@ -801,10 +702,10 @@ export default function OrdersPage() {
                     gap: '6px',
                   }}
                 >
-                  🖨️ Imprimer la Facture
+                  <Icon icon="lucide:printer" style={{ fontSize: '1rem' }} /> Imprimer
                 </button>
                 <a
-                  href={`https://wa.me/${selectedOrder.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Bonjour ${selectedOrder.customerName}, nous vous confirmons la bonne réception de votre commande ${selectedOrder.id}.`)}`}
+                  href={`https://wa.me/${selectedOrder.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Bonjour ${selectedOrder.customerName}, nous vous contactons concernant votre commande Taneem'Store ${selectedOrder.id} (${selectedOrder.totalPrice.toLocaleString('fr-FR')} FCFA).`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -818,9 +719,10 @@ export default function OrdersPage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '6px',
+                    boxShadow: '0 3px 10px rgba(37, 211, 102, 0.3)',
                   }}
                 >
-                  💬 WhatsApp
+                  <Icon icon="logos:whatsapp-icon" style={{ fontSize: '1.1rem' }} /> WhatsApp
                 </a>
               </div>
             </div>

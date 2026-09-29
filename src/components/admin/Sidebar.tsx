@@ -1,12 +1,13 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 import { useAuth } from '../../store/AuthContext';
 import { useProducts } from '../../store/ProductsContext';
 
 const links = [
-  { to: '/admin', label: 'Tableau de bord', icon: '📊', exact: true },
-  { to: '/admin/orders', label: 'Commandes', icon: '🛍️' },
-  { to: '/admin/products', label: 'Produits', icon: '✨' },
-  { to: '/admin/categories', label: 'Catégories', icon: '🏷️' },
+  { to: '/admin', label: 'Tableau de bord', icon: 'lucide:layout-dashboard', exact: true },
+  { to: '/admin/orders', label: 'Commandes', icon: 'lucide:shopping-bag' },
+  { to: '/admin/products', label: 'Produits', icon: 'lucide:package' },
+  { to: '/admin/categories', label: 'Catégories', icon: 'lucide:tags' },
 ];
 
 export default function Sidebar() {
@@ -127,7 +128,7 @@ export default function Sidebar() {
               boxShadow: isActive ? '0 4px 14px rgba(169, 144, 132, 0.35)' : 'none',
             })}
           >
-            <span style={{ fontSize: '1.1rem' }}>{link.icon}</span>
+            <Icon icon={link.icon} style={{ fontSize: '1.2rem' }} />
             <span>{link.label}</span>
           </NavLink>
         ))}
@@ -172,7 +173,7 @@ export default function Sidebar() {
             e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
           }}
         >
-          <span>🌐</span> Voir la boutique
+          <Icon icon="lucide:external-link" style={{ fontSize: '1.05rem' }} /> Voir la boutique
         </a>
 
         <button
@@ -200,9 +201,10 @@ export default function Sidebar() {
             e.currentTarget.style.background = 'rgba(248, 113, 113, 0.08)';
           }}
         >
-          <span>🚪</span> Déconnexion
+          <Icon icon="lucide:log-out" style={{ fontSize: '1.05rem' }} /> Déconnexion
         </button>
       </div>
     </aside>
   );
 }
+
