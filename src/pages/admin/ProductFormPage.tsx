@@ -83,7 +83,7 @@ export default function ProductFormPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '20px',
+            borderRadius: '16px',
             border: '1px solid var(--line)',
             padding: '36px 40px',
             boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
@@ -105,7 +105,7 @@ export default function ProductFormPage() {
               style={{
                 width: '100%',
                 padding: '14px 18px',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 border: `1.5px solid ${errors.name ? '#DC2626' : 'var(--line)'}`,
                 fontSize: '0.92rem',
                 outline: 'none',
@@ -130,7 +130,7 @@ export default function ProductFormPage() {
               style={{
                 width: '100%',
                 padding: '14px 18px',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 border: '1.5px solid var(--line)',
                 fontSize: '0.92rem',
                 outline: 'none',
@@ -165,7 +165,7 @@ export default function ProductFormPage() {
               style={{
                 width: '100%',
                 padding: '14px 18px',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 border: `1.5px solid ${errors.description ? '#DC2626' : 'var(--line)'}`,
                 fontSize: '0.92rem',
                 outline: 'none',
@@ -194,7 +194,7 @@ export default function ProductFormPage() {
               style={{
                 width: '100%',
                 padding: '14px 18px',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 border: `1.5px solid ${errors.price ? '#DC2626' : 'var(--line)'}`,
                 fontSize: '0.92rem',
                 outline: 'none',
@@ -235,7 +235,7 @@ export default function ProductFormPage() {
             >
               {image ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                  <img src={image} alt="Aperçu" style={{ maxHeight: '120px', borderRadius: '12px', objectFit: 'cover', border: '1px solid var(--line)' }} />
+                  <img src={image} alt="Aperçu" style={{ maxHeight: '120px', borderRadius: '10px', objectFit: 'cover', border: '1px solid var(--line)' }} />
                   <span style={{ fontSize: '0.78rem', color: 'var(--pink-deep)', fontWeight: 600 }}>Cliquez pour changer d'image</span>
                 </div>
               ) : (
@@ -259,7 +259,7 @@ export default function ProductFormPage() {
               style={{
                 width: '100%',
                 padding: '12px 16px',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 border: '1.5px solid var(--line)',
                 fontSize: '0.85rem',
                 outline: 'none',
@@ -359,7 +359,7 @@ export default function ProductFormPage() {
           <div
             style={{
               background: '#FFFFFF',
-              borderRadius: '20px',
+              borderRadius: '16px',
               border: '1px solid var(--line)',
               padding: '24px',
               boxShadow: '0 4px 20px rgba(0,0,0,0.03)',

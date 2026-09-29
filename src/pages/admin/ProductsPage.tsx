@@ -92,7 +92,7 @@ export default function ProductsPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 24px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -109,8 +109,8 @@ export default function ProductsPage() {
               {totalCount}
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#F5EFEA', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon icon="lucide:package" style={{ fontSize: '1.4rem' }} />
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#F5EFEA', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:package" style={{ fontSize: '1.3rem' }} />
           </div>
         </div>
 
@@ -118,7 +118,7 @@ export default function ProductsPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 24px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -135,8 +135,8 @@ export default function ProductsPage() {
               {inStockCount}
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#DCFCE7', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon icon="lucide:check-circle-2" style={{ fontSize: '1.4rem' }} />
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#DCFCE7', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:check-circle-2" style={{ fontSize: '1.3rem' }} />
           </div>
         </div>
 
@@ -144,7 +144,7 @@ export default function ProductsPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 24px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -161,8 +161,8 @@ export default function ProductsPage() {
               {outStockCount}
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#FEE2E2', color: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon icon="lucide:alert-triangle" style={{ fontSize: '1.4rem' }} />
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#FEE2E2', color: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:alert-triangle" style={{ fontSize: '1.3rem' }} />
           </div>
         </div>
 
@@ -170,7 +170,7 @@ export default function ProductsPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 24px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -187,8 +187,8 @@ export default function ProductsPage() {
               {categoriesCount}
             </p>
           </div>
-          <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: '#FAF7F5', color: 'var(--pink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon icon="lucide:tags" style={{ fontSize: '1.4rem' }} />
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#FAF7F5', color: 'var(--pink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon icon="lucide:tags" style={{ fontSize: '1.3rem' }} />
           </div>
         </div>
       </div>
@@ -197,7 +197,7 @@ export default function ProductsPage() {
       <div
         style={{
           background: '#FFFFFF',
-          borderRadius: '20px',
+          borderRadius: '16px',
           padding: '20px 24px',
           border: '1px solid var(--line)',
           boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -221,7 +221,7 @@ export default function ProductsPage() {
               style={{
                 width: '100%',
                 padding: '12px 40px 12px 44px',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 border: '1.5px solid var(--line)',
                 fontSize: '0.88rem',
                 outline: 'none',
@@ -260,7 +260,7 @@ export default function ProductsPage() {
             onChange={e => setCatFilter(e.target.value)}
             style={{
               padding: '12px 18px',
-              borderRadius: '12px',
+              borderRadius: '10px',
               border: '1.5px solid var(--line)',
               fontSize: '0.88rem',
               outline: 'none',
@@ -368,7 +368,7 @@ export default function ProductsPage() {
       <div
         style={{
           background: '#FFFFFF',
-          borderRadius: '20px',
+          borderRadius: '16px',
           border: '1px solid var(--line)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
           overflow: 'hidden',
@@ -438,9 +438,9 @@ export default function ProductsPage() {
                       <div
                         onClick={() => setPreviewProduct(p)}
                         style={{
-                          width: '48px',
-                          height: '48px',
-                          borderRadius: '12px',
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: '10px',
                           overflow: 'hidden',
                           border: '1px solid var(--line)',
                           background: '#FAF8F4',
@@ -467,7 +467,7 @@ export default function ProductsPage() {
                         {p.name}
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
-                        <span style={{ fontSize: '0.72rem', color: 'var(--text-soft)', background: '#F5EFEA', padding: '2px 8px', borderRadius: '4px', fontFamily: 'monospace' }}>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--text-soft)', background: '#F5EFEA', padding: '2px 8px', borderRadius: '6px', fontFamily: 'monospace' }}>
                           ID: {p.id}
                         </span>
                       </div>
@@ -532,7 +532,7 @@ export default function ProductsPage() {
                           title="Aperçu rapide"
                           style={{
                             padding: '7px 12px',
-                            borderRadius: '8px',
+                            borderRadius: '10px',
                             fontSize: '0.78rem',
                             fontWeight: 600,
                             color: 'var(--text-soft)',
@@ -556,7 +556,7 @@ export default function ProductsPage() {
                           title="Modifier le produit"
                           style={{
                             padding: '7px 12px',
-                            borderRadius: '8px',
+                            borderRadius: '10px',
                             fontSize: '0.78rem',
                             fontWeight: 600,
                             color: 'var(--text)',
@@ -586,7 +586,7 @@ export default function ProductsPage() {
                           title="Dupliquer"
                           style={{
                             padding: '7px 12px',
-                            borderRadius: '8px',
+                            borderRadius: '10px',
                             fontSize: '0.78rem',
                             fontWeight: 600,
                             color: 'var(--text-soft)',
@@ -610,7 +610,7 @@ export default function ProductsPage() {
                           title="Supprimer"
                           style={{
                             padding: '7px 10px',
-                            borderRadius: '8px',
+                            borderRadius: '10px',
                             fontSize: '0.85rem',
                             fontWeight: 600,
                             color: '#DC2626',
@@ -672,7 +672,7 @@ export default function ProductsPage() {
             onClick={e => e.stopPropagation()}
             style={{
               background: '#FFFFFF',
-              borderRadius: '24px',
+              borderRadius: '16px',
               maxWidth: '560px',
               width: '100%',
               overflow: 'hidden',
@@ -714,7 +714,7 @@ export default function ProductsPage() {
                 <span
                   style={{
                     padding: '4px 12px',
-                    borderRadius: '100px',
+                    borderRadius: '6px',
                     fontSize: '0.78rem',
                     fontWeight: 700,
                     background: previewProduct.inStock ? '#DCFCE7' : '#FEE2E2',
@@ -805,7 +805,7 @@ export default function ProductsPage() {
             onClick={e => e.stopPropagation()}
             style={{
               background: '#FFFFFF',
-              borderRadius: '24px',
+              borderRadius: '16px',
               padding: '32px 36px',
               maxWidth: '440px',
               width: '100%',

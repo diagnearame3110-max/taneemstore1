@@ -58,7 +58,7 @@ export default function CategoriesPage() {
               {categories.length}
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#F5EFEA', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#F5EFEA', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon icon="lucide:tags" style={{ fontSize: '1.3rem' }} />
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function CategoriesPage() {
               {totalAssignedProducts}
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#FAF7F5', color: 'var(--pink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#FAF7F5', color: 'var(--pink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon icon="lucide:package" style={{ fontSize: '1.3rem' }} />
           </div>
         </div>
@@ -94,7 +94,7 @@ export default function CategoriesPage() {
       <div
         style={{
           background: '#FFFFFF',
-          borderRadius: '20px',
+          borderRadius: '16px',
           border: '1px solid var(--line)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
           overflow: 'hidden',
@@ -137,7 +137,7 @@ export default function CategoriesPage() {
                     background: badge.bg,
                     border: `1px solid ${badge.border}`,
                     padding: '6px 12px',
-                    borderRadius: '8px',
+                    borderRadius: '6px',
                     flexShrink: 0,
                   }}
                 >
@@ -154,7 +154,7 @@ export default function CategoriesPage() {
                         onChange={e => setEditData(d => ({ ...d, title: e.target.value }))}
                         style={{
                           padding: '6px 12px',
-                          borderRadius: '8px',
+                          borderRadius: '10px',
                           border: '1.5px solid var(--pink)',
                           fontSize: '0.92rem',
                           fontWeight: 700,
@@ -173,7 +173,7 @@ export default function CategoriesPage() {
                     <span
                       style={{
                         padding: '3px 10px',
-                        borderRadius: '100px',
+                        borderRadius: '6px',
                         fontSize: '0.75rem',
                         fontWeight: 600,
                         background: badge.bg,
@@ -223,7 +223,7 @@ export default function CategoriesPage() {
                         onClick={() => setEditing(null)}
                         style={{
                           padding: '7px 14px',
-                          borderRadius: '8px',
+                          borderRadius: '10px',
                           fontSize: '0.8rem',
                           fontWeight: 600,
                           border: '1px solid var(--line)',
@@ -238,7 +238,7 @@ export default function CategoriesPage() {
                         onClick={() => saveEdit(cat.slug)}
                         style={{
                           padding: '7px 16px',
-                          borderRadius: '8px',
+                          borderRadius: '10px',
                           fontSize: '0.8rem',
                           fontWeight: 700,
                           background: 'linear-gradient(90deg, #A99084 0%, #8F776C 100%)',
@@ -255,7 +255,7 @@ export default function CategoriesPage() {
                       onClick={() => startEdit(cat)}
                       style={{
                         padding: '7px 14px',
-                        borderRadius: '8px',
+                        borderRadius: '10px',
                         fontSize: '0.8rem',
                         fontWeight: 600,
                         color: 'var(--text)',

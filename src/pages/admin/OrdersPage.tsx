@@ -133,7 +133,7 @@ export default function OrdersPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 22px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -150,7 +150,7 @@ export default function OrdersPage() {
               {totalOrdersCount}
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#F5EFEA', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#F5EFEA', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon icon="lucide:shopping-bag" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
@@ -159,7 +159,7 @@ export default function OrdersPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 22px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -176,7 +176,7 @@ export default function OrdersPage() {
               {pendingCount}
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon icon="lucide:clock" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
@@ -185,7 +185,7 @@ export default function OrdersPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 22px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -202,7 +202,7 @@ export default function OrdersPage() {
               {deliveryCount}
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#F5F3FF', color: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#F5F3FF', color: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon icon="lucide:truck" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
@@ -211,7 +211,7 @@ export default function OrdersPage() {
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 22px',
             border: '1px solid var(--line)',
             boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -228,7 +228,7 @@ export default function OrdersPage() {
               {completedCount}
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#DCFCE7', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#DCFCE7', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon icon="lucide:check-circle-2" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
@@ -237,7 +237,7 @@ export default function OrdersPage() {
         <div
           style={{
             background: 'linear-gradient(135deg, #FAF7F5 0%, #F5EFEA 100%)',
-            borderRadius: '18px',
+            borderRadius: '16px',
             padding: '20px 22px',
             border: '1px solid var(--pink)',
             boxShadow: '0 4px 16px rgba(169, 144, 132, 0.12)',
@@ -254,7 +254,7 @@ export default function OrdersPage() {
               {totalRevenue.toLocaleString('fr-FR')} FCFA
             </p>
           </div>
-          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#FFFFFF', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#FFFFFF', color: 'var(--pink-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
             <Icon icon="lucide:gem" style={{ fontSize: '1.4rem' }} />
           </div>
         </div>
@@ -264,7 +264,7 @@ export default function OrdersPage() {
       <div
         style={{
           background: '#FFFFFF',
-          borderRadius: '20px',
+          borderRadius: '16px',
           padding: '20px 24px',
           border: '1px solid var(--line)',
           boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -288,7 +288,7 @@ export default function OrdersPage() {
               style={{
                 width: '100%',
                 padding: '12px 40px 12px 44px',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 border: '1.5px solid var(--line)',
                 fontSize: '0.88rem',
                 outline: 'none',
@@ -360,7 +360,7 @@ export default function OrdersPage() {
       <div
         style={{
           background: '#FFFFFF',
-          borderRadius: '20px',
+          borderRadius: '16px',
           border: '1px solid var(--line)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
           width: '100%',
@@ -420,7 +420,7 @@ export default function OrdersPage() {
                         {o.customerName}
                       </div>
                       <div style={{ fontSize: '0.76rem', color: 'var(--text-soft)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <span style={{ background: '#FAF7F5', padding: '2px 8px', borderRadius: '100px', border: '1px solid var(--line)', fontWeight: 600, color: 'var(--pink-deep)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                        <span style={{ background: '#FAF7F5', padding: '2px 8px', borderRadius: '6px', border: '1px solid var(--line)', fontWeight: 600, color: 'var(--pink-deep)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
                           <Icon icon="lucide:map-pin" style={{ fontSize: '0.75rem' }} /> {o.city}
                         </span>
                       </div>
@@ -431,7 +431,7 @@ export default function OrdersPage() {
                       <span
                         style={{
                           padding: '5px 12px',
-                          borderRadius: '100px',
+                          borderRadius: '6px',
                           fontSize: '0.78rem',
                           fontWeight: 700,
                           background: badgeStyle.bg,
@@ -522,7 +522,7 @@ export default function OrdersPage() {
             onClick={e => e.stopPropagation()}
             style={{
               background: '#FFFFFF',
-              borderRadius: '24px',
+              borderRadius: '16px',
               maxWidth: '640px',
               width: '100%',
               overflow: 'hidden',
@@ -605,7 +605,7 @@ export default function OrdersPage() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--line)' }}>
                 <div>
                   <span style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginRight: '8px' }}>Paiement:</span>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)', background: '#FAF7F5', padding: '4px 10px', borderRadius: '100px', border: '1px solid var(--line)' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)', background: '#FAF7F5', padding: '4px 10px', borderRadius: '6px', border: '1px solid var(--line)' }}>
                     {selectedOrder.paymentMethod}
                   </span>
                 </div>
@@ -616,7 +616,7 @@ export default function OrdersPage() {
                     onChange={e => updateStatus(selectedOrder.id, e.target.value as Order['status'])}
                     style={{
                       padding: '6px 14px',
-                      borderRadius: '100px',
+                      borderRadius: '10px',
                       fontSize: '0.8rem',
                       fontWeight: 700,
                       cursor: 'pointer',
@@ -638,7 +638,7 @@ export default function OrdersPage() {
               <p style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', marginBottom: '12px' }}>
                 Articles Commandés
               </p>
-              <div style={{ border: '1px solid var(--line)', borderRadius: '14px', overflow: 'hidden', marginBottom: '24px' }}>
+              <div style={{ border: '1px solid var(--line)', borderRadius: '10px', overflow: 'hidden', marginBottom: '24px' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
                   <thead>
                     <tr style={{ background: '#FAF7F5', borderBottom: '1px solid var(--line)' }}>
@@ -671,7 +671,7 @@ export default function OrdersPage() {
 
               {/* Total Calculation Card */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
-                <div style={{ width: '260px', background: '#FAF8F4', padding: '16px 20px', borderRadius: '14px', border: '1px solid var(--line)' }}>
+                <div style={{ width: '260px', background: '#FAF8F4', padding: '16px 20px', borderRadius: '10px', border: '1px solid var(--line)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '8px' }}>
                     <span>Livraison:</span>
                     <span style={{ fontWeight: 600, color: '#166534' }}>Inclus / Offert</span>

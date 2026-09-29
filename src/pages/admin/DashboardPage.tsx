@@ -91,7 +91,7 @@ export default function DashboardPage() {
               background: '#059669',
               color: '#FFFFFF',
               border: 'none',
-              borderRadius: '8px',
+              borderRadius: '10px',
               padding: '8px 16px',
               fontSize: '0.82rem',
               fontWeight: 600,
@@ -140,7 +140,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Products Table Container - Fixed Static Layout, No Overflow */}
-      <div style={{ background: '#FFFFFF', borderRadius: '20px', border: '1px solid var(--line)', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', overflow: 'hidden' }}>
+      <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid var(--line)', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', overflow: 'hidden' }}>
         <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
           <div>
             <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
