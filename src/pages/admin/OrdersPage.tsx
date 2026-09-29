@@ -356,37 +356,37 @@ export default function OrdersPage() {
         </div>
       </div>
 
-      {/* Orders Table - Renamed column to 'Détails' & Compact Eye Icon Only Button */}
+      {/* Orders Table - Completely Static Layout, No Horizontal Scrollbar */}
       <div
         style={{
           background: '#FFFFFF',
           borderRadius: '20px',
           border: '1px solid var(--line)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+          width: '100%',
           overflow: 'hidden',
         }}
       >
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem', tableLayout: 'fixed' }}>
-            <thead>
-              <tr style={{ background: '#FAF7F5', borderBottom: '1px solid var(--line)' }}>
-                <th style={{ width: '24%', padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
-                  N° Commande & Date
-                </th>
-                <th style={{ width: '32%', padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
-                  Client & Destination
-                </th>
-                <th style={{ width: '20%', padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
-                  Statut
-                </th>
-                <th style={{ width: '16%', padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
-                  Total
-                </th>
-                <th style={{ width: '8%', padding: '16px 20px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', textAlign: 'center' }}>
-                  Détails
-                </th>
-              </tr>
-            </thead>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem', tableLayout: 'fixed' }}>
+          <thead>
+            <tr style={{ background: '#FAF7F5', borderBottom: '1px solid var(--line)' }}>
+              <th style={{ width: '25%', padding: '16px 18px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                N° Commande & Date
+              </th>
+              <th style={{ width: '31%', padding: '16px 18px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                Client & Destination
+              </th>
+              <th style={{ width: '20%', padding: '16px 18px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                Statut
+              </th>
+              <th style={{ width: '16%', padding: '16px 18px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)' }}>
+                Total
+              </th>
+              <th style={{ width: '8%', padding: '16px 18px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-soft)', textAlign: 'center' }}>
+                Détails
+              </th>
+            </tr>
+          </thead>
             <tbody>
               {filteredOrders.map(o => {
                 const badgeStyle = getStatusBadgeStyle(o.status);
@@ -500,7 +500,6 @@ export default function OrdersPage() {
               )}
             </tbody>
           </table>
-        </div>
       </div>
 
       {/* Comprehensive Order Details Modal */}
