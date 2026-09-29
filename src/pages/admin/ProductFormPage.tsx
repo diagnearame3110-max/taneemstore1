@@ -7,11 +7,11 @@ import ProductCard from '../../components/store/ProductCard';
 import type { CategorySlug, Product } from '../../data/types';
 
 const CATEGORIES: { slug: CategorySlug; label: string }[] = [
-  { slug: 'corps', label: 'Corps' },
-  { slug: 'visage', label: 'Visage' },
-  { slug: 'maquillage', label: 'Maquillage' },
-  { slug: 'accessoires', label: 'Accessoires' },
-  { slug: 'bienetre', label: 'Bien-être & hygiène' },
+  { slug: 'corps', label: 'Soins du Corps' },
+  { slug: 'visage', label: 'Soins du Visage' },
+  { slug: 'maquillage', label: 'Maquillage & Éclat' },
+  { slug: 'accessoires', label: 'Accessoires Beauté' },
+  { slug: 'bienetre', label: 'Bien-être & Hygiène' },
 ];
 
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
@@ -36,7 +36,7 @@ export default function ProductFormPage() {
   const preview: Product = {
     id: existing?.id ?? '__preview__',
     name: name || 'Nom du produit',
-    description: description || 'Description courte.',
+    description: description || 'Description courte du produit.',
     price: priceNum,
     priceFormatted: priceNum.toLocaleString('fr-FR') + ' FCFA',
     image: image || PLACEHOLDER,
@@ -47,9 +47,9 @@ export default function ProductFormPage() {
 
   function validate(): boolean {
     const e: Record<string, string> = {};
-    if (!name.trim()) e.name = 'Le nom est requis.';
+    if (!name.trim()) e.name = 'Le nom du produit est requis.';
     if (!description.trim()) e.description = 'La description est requise.';
-    if (!price || isNaN(parseFloat(price)) || parseFloat(price) <= 0) e.price = 'Entrez un prix valide.';
+    if (!price || isNaN(parseFloat(price)) || parseFloat(price) <= 0) e.price = 'Entrez un prix valide supérieur à 0.';
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -62,53 +62,84 @@ export default function ProductFormPage() {
     reader.readAsDataURL(file);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
     const data = { name, description, price: parseFloat(price), image: image || PLACEHOLDER, categorySlug, inStock };
     if (existing) {
-      updateProduct(existing.id, data);
-      showToast('Produit modifié.');
+      await updateProduct(existing.id, data);
+      showToast('Produit mis à jour avec succès.');
     } else {
-      addProduct(data);
-      showToast('Produit ajouté.');
+      await addProduct(data);
+      showToast('Nouveau produit ajouté.');
     }
     navigate('/admin/products');
   }
 
-  const inputClass = "w-full px-4 py-2.5 rounded-lg border text-sm outline-none transition-colors bg-white";
-  const inputStyle = { borderColor: '#E5E3E8', color: 'var(--ink)' };
-
   return (
-    <AdminLayout title={existing ? 'Modifier le produit' : 'Nouveau produit'}>
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Form fields */}
-        <div className="lg:col-span-2 bg-white rounded-xl border p-6 flex flex-col gap-5" style={{ borderColor: '#E5E3E8' }}>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--ink)' }}>
-              Nom du produit *
+    <AdminLayout title={existing ? 'Modifier le Produit' : 'Ajouter un Nouveau Produit'}>
+      <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '32px', alignItems: 'start' }}>
+        {/* Form Container */}
+        <div
+          style={{
+            background: '#FFFFFF',
+            borderRadius: '20px',
+            border: '1px solid var(--line)',
+            padding: '36px 40px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px',
+          }}
+        >
+          {/* Nom du produit */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text)' }}>
+              Nom du Produit *
             </label>
             <input
               type="text"
+              placeholder="ex: Lotion Hydratante Eclat Rose"
               value={name}
-              onChange={e => setName(e.target.value)}
-              className={inputClass}
-              style={inputStyle}
+              onChange={e => { setName(e.target.value); if (errors.name) setErrors(prev => ({ ...prev, name: '' })); }}
+              style={{
+                width: '100%',
+                padding: '14px 18px',
+                borderRadius: '12px',
+                border: `1.5px solid ${errors.name ? '#DC2626' : 'var(--line)'}`,
+                fontSize: '0.92rem',
+                outline: 'none',
+                transition: 'all 0.2s ease',
+                background: '#FAF8F4',
+                boxSizing: 'border-box',
+              }}
               onFocus={e => (e.currentTarget.style.borderColor = 'var(--pink)')}
-              onBlur={e => (e.currentTarget.style.borderColor = errors.name ? '#dc2626' : '#E5E3E8')}
+              onBlur={e => (e.currentTarget.style.borderColor = errors.name ? '#DC2626' : 'var(--line)')}
             />
-            {errors.name && <p className="text-xs text-red-600">{errors.name}</p>}
+            {errors.name && <span style={{ fontSize: '0.8rem', color: '#DC2626', fontWeight: 600 }}>{errors.name}</span>}
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--ink)' }}>
-              Catégorie
+          {/* Catégorie */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text)' }}>
+              Catégorie du Produit
             </label>
             <select
               value={categorySlug}
               onChange={e => setCategorySlug(e.target.value as CategorySlug)}
-              className={inputClass}
-              style={inputStyle}
+              style={{
+                width: '100%',
+                padding: '14px 18px',
+                borderRadius: '12px',
+                border: '1.5px solid var(--line)',
+                fontSize: '0.92rem',
+                outline: 'none',
+                background: '#FAF8F4',
+                cursor: 'pointer',
+                boxSizing: 'border-box',
+              }}
+              onFocus={e => (e.currentTarget.style.borderColor = 'var(--pink)')}
+              onBlur={e => (e.currentTarget.style.borderColor = 'var(--line)')}
             >
               {CATEGORIES.map(c => (
                 <option key={c.slug} value={c.slug}>{c.label}</option>
@@ -116,124 +147,239 @@ export default function ProductFormPage() {
             </select>
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wide flex justify-between" style={{ color: 'var(--ink)' }}>
-              <span>Description courte *</span>
-              <span className={description.length > 60 ? 'text-orange-500' : ''} style={{ color: 'var(--ink-soft)' }}>
-                {description.length}/60
+          {/* Description */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <label style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text)' }}>
+                Description Courte *
+              </label>
+              <span style={{ fontSize: '0.76rem', color: description.length > 60 ? '#E65100' : 'var(--text-soft)', fontWeight: 600 }}>
+                {description.length}/60 caractères
               </span>
-            </label>
+            </div>
             <textarea
               value={description}
-              onChange={e => setDescription(e.target.value)}
+              onChange={e => { setDescription(e.target.value); if (errors.description) setErrors(prev => ({ ...prev, description: '' })); }}
               rows={3}
-              className={inputClass}
-              style={inputStyle}
+              placeholder="Courte description vendeuse (ex: Lotion nourrissante au beurre de karité...)"
+              style={{
+                width: '100%',
+                padding: '14px 18px',
+                borderRadius: '12px',
+                border: `1.5px solid ${errors.description ? '#DC2626' : 'var(--line)'}`,
+                fontSize: '0.92rem',
+                outline: 'none',
+                transition: 'all 0.2s ease',
+                background: '#FAF8F4',
+                resize: 'vertical',
+                boxSizing: 'border-box',
+              }}
               onFocus={e => (e.currentTarget.style.borderColor = 'var(--pink)')}
-              onBlur={e => (e.currentTarget.style.borderColor = '#E5E3E8')}
+              onBlur={e => (e.currentTarget.style.borderColor = errors.description ? '#DC2626' : 'var(--line)')}
             />
-            {errors.description && <p className="text-xs text-red-600">{errors.description}</p>}
+            {errors.description && <span style={{ fontSize: '0.8rem', color: '#DC2626', fontWeight: 600 }}>{errors.description}</span>}
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--ink)' }}>
-              Prix (FCFA) *
+          {/* Prix */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text)' }}>
+              Prix de Vente (FCFA) *
             </label>
             <input
               type="number"
               min="0"
+              placeholder="ex: 12500"
               value={price}
-              onChange={e => setPrice(e.target.value)}
-              className={inputClass}
-              style={inputStyle}
+              onChange={e => { setPrice(e.target.value); if (errors.price) setErrors(prev => ({ ...prev, price: '' })); }}
+              style={{
+                width: '100%',
+                padding: '14px 18px',
+                borderRadius: '12px',
+                border: `1.5px solid ${errors.price ? '#DC2626' : 'var(--line)'}`,
+                fontSize: '0.92rem',
+                outline: 'none',
+                transition: 'all 0.2s ease',
+                background: '#FAF8F4',
+                boxSizing: 'border-box',
+              }}
               onFocus={e => (e.currentTarget.style.borderColor = 'var(--pink)')}
-              onBlur={e => (e.currentTarget.style.borderColor = '#E5E3E8')}
+              onBlur={e => (e.currentTarget.style.borderColor = errors.price ? '#DC2626' : 'var(--line)')}
             />
-            {errors.price && <p className="text-xs text-red-600">{errors.price}</p>}
-            {priceNum > 0 && (
-              <p className="text-xs" style={{ color: 'var(--ink-soft)' }}>
-                Aperçu : {priceNum.toLocaleString('fr-FR')} FCFA
-              </p>
-            )}
+            {errors.price && <span style={{ fontSize: '0.8rem', color: '#DC2626', fontWeight: 600 }}>{errors.price}</span>}
           </div>
 
-          {/* Image */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--ink)' }}>
-              Image du produit
+          {/* Upload Image Section */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text)' }}>
+              Image du Produit
             </label>
             <div
-              className="border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors"
-              style={{ borderColor: '#E5E3E8' }}
               onClick={() => fileRef.current?.click()}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--pink)')}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = '#E5E3E8')}
+              style={{
+                border: '2px dashed var(--line)',
+                borderRadius: '16px',
+                padding: '24px',
+                textAlign: 'center',
+                cursor: 'pointer',
+                background: '#FAF8F4',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = 'var(--pink)';
+                e.currentTarget.style.background = 'var(--blush-soft)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--line)';
+                e.currentTarget.style.background = '#FAF8F4';
+              }}
             >
               {image ? (
-                <img src={image} alt="Aperçu" className="mx-auto max-h-32 rounded-lg object-cover" />
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                  <img src={image} alt="Aperçu" style={{ maxHeight: '120px', borderRadius: '12px', objectFit: 'cover', border: '1px solid var(--line)' }} />
+                  <span style={{ fontSize: '0.78rem', color: 'var(--pink-deep)', fontWeight: 600 }}>Cliquez pour changer d'image</span>
+                </div>
               ) : (
-                <p className="text-sm" style={{ color: 'var(--ink-soft)' }}>
-                  Cliquez pour uploader une image ou collez une URL ci-dessous
-                </p>
+                <div style={{ padding: '12px 0' }}>
+                  <span style={{ fontSize: '2rem', display: 'block', marginBottom: '8px' }}>📷</span>
+                  <p style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text)' }}>
+                    Cliquez ici pour uploader une photo
+                  </p>
+                  <p style={{ fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '4px' }}>
+                    Formats acceptés : PNG, JPG, WEBP
+                  </p>
+                </div>
               )}
             </div>
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageFile} />
+            <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageFile} />
             <input
               type="url"
-              placeholder="…ou collez une URL d'image"
+              placeholder="…ou collez une URL d'image directe (Unsplash, etc.)"
               value={image.startsWith('data:') ? '' : image}
               onChange={e => setImage(e.target.value)}
-              className={inputClass}
-              style={inputStyle}
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                borderRadius: '12px',
+                border: '1.5px solid var(--line)',
+                fontSize: '0.85rem',
+                outline: 'none',
+                background: '#FAF8F4',
+                boxSizing: 'border-box',
+                marginTop: '4px',
+              }}
             />
           </div>
 
-          {/* Stock toggle */}
-          <div className="flex items-center gap-3">
+          {/* Toggle Stock Status */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '12px 0' }}>
             <button
               type="button"
               onClick={() => setInStock(s => !s)}
-              className="relative w-12 h-6 rounded-full transition-colors"
-              style={{ background: inStock ? 'var(--pink)' : '#D1D5DB' }}
+              style={{
+                position: 'relative',
+                width: '52px',
+                height: '28px',
+                borderRadius: '100px',
+                background: inStock ? 'var(--pink)' : '#D1D5DB',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background 0.2s ease',
+              }}
             >
               <span
-                className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform"
-                style={{ transform: inStock ? 'translateX(24px)' : 'translateX(0)' }}
+                style={{
+                  position: 'absolute',
+                  top: '3px',
+                  left: '3px',
+                  width: '22px',
+                  height: '22px',
+                  borderRadius: '50%',
+                  background: '#FFFFFF',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                  transition: 'transform 0.2s ease',
+                  transform: inStock ? 'translateX(24px)' : 'translateX(0)',
+                }}
               />
             </button>
-            <span className="text-sm font-medium" style={{ color: 'var(--ink)' }}>
-              {inStock ? 'En stock' : 'Rupture de stock'}
-            </span>
+            <div>
+              <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text)' }}>
+                {inStock ? '● Produit En Stock' : '○ En Rupture de Stock'}
+              </span>
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-soft)' }}>
+                {inStock ? 'Visible et disponible à la commande' : 'Masquera le bouton d\'achat direct'}
+              </p>
+            </div>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          {/* Actions */}
+          <div style={{ display: 'flex', gap: '14px', paddingTop: '12px', borderTop: '1px solid var(--line)' }}>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-lg font-semibold text-sm text-white transition-colors"
-              style={{ background: 'var(--pink)' }}
+              style={{
+                background: 'var(--pink)',
+                color: '#FFFFFF',
+                padding: '14px 32px',
+                borderRadius: '100px',
+                fontSize: '0.9rem',
+                fontWeight: 700,
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 15px rgba(169, 144, 132, 0.35)',
+                transition: 'all 0.2s ease',
+              }}
               onMouseEnter={e => (e.currentTarget.style.background = 'var(--pink-deep)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'var(--pink)')}
             >
-              Enregistrer
+              {existing ? 'Enregistrer les Modifications' : 'Créer le Produit'}
             </button>
             <button
               type="button"
               onClick={() => navigate('/admin/products')}
-              className="px-6 py-2.5 rounded-lg font-semibold text-sm border transition-colors"
-              style={{ borderColor: '#E5E3E8', color: 'var(--ink)' }}
+              style={{
+                background: 'transparent',
+                color: 'var(--text)',
+                padding: '14px 28px',
+                borderRadius: '100px',
+                fontSize: '0.9rem',
+                fontWeight: 600,
+                border: '1.5px solid var(--line)',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'var(--blush-soft)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               Annuler
             </button>
           </div>
         </div>
 
-        {/* Live preview */}
-        <div className="flex flex-col gap-3">
-          <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--ink-soft)' }}>
-            Aperçu de la carte
-          </p>
-          <div style={{ maxWidth: 260 }}>
-            <ProductCard product={preview} preview />
+        {/* Live Preview Sidebar */}
+        <div style={{ position: 'sticky', top: '96px' }}>
+          <div
+            style={{
+              background: '#FFFFFF',
+              borderRadius: '20px',
+              border: '1px solid var(--line)',
+              padding: '24px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '0.76rem',
+                fontWeight: 700,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'var(--text-soft)',
+                marginBottom: '16px',
+              }}
+            >
+              Aperçu en Direct sur la Boutique
+            </div>
+            <div style={{ maxWidth: '280px', margin: '0 auto' }}>
+              <ProductCard product={preview} preview />
+            </div>
           </div>
         </div>
       </form>
