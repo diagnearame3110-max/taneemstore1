@@ -59,21 +59,6 @@ export default function Hero() {
           zIndex: 3,
         }}
       >
-        <div
-          style={{
-            fontFamily: "'Montserrat', sans-serif",
-            fontSize: '0.82rem',
-            fontWeight: 700,
-            letterSpacing: '0.18em',
-            color: '#F9EBEF',
-            textTransform: 'uppercase',
-            marginBottom: '16px',
-            textShadow: '0 2px 8px rgba(0,0,0,0.4)',
-          }}
-        >
-          PRENEZ SOIN DE CE QUI VOUS REND UNIQUE
-        </div>
-
         <h1
           style={{
             fontFamily: "'Cormorant Garamond', serif",
