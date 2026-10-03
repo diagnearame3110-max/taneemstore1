@@ -86,7 +86,7 @@ export default function Hero() {
             textShadow: '0 4px 16px rgba(0,0,0,0.5)',
           }}
         >
-          The clean girl era commence ici.
+          Welcome to the Clean Girl Era
         </h1>
 
         <p
