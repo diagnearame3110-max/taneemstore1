@@ -100,7 +100,7 @@ export default function Hero() {
             textShadow: '0 2px 10px rgba(0,0,0,0.45)',
           }}
         >
-          Taneem'Store — <em>Prenez soin de ce qui vous rend unique.</em>
+          Beauty, wellness & everyday rituals designed to make taking care of yourself feel effortless.
         </p>
 
         <div style={{ display: 'flex', justifyContent: 'center' }}>
