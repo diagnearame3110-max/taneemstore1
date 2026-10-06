@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
 import type { Product, Category, CategorySlug } from '../data/types';
 import { SEED_PRODUCTS, SEED_CATEGORIES } from '../data/seedData';
-import { formatPrice, generateId } from '../utils/format';
+import { formatPrice, generateId, normalizeCategorySlug } from '../utils/format';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 interface State {
@@ -37,6 +37,7 @@ function cleanText(str?: unknown): string {
   if (typeof str !== 'string' || !str) return '';
   return str.replace(/&amp;/g, '&');
 }
+
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -144,7 +145,8 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
               name: cleanText(p.name) || 'Produit',
               description: cleanText(p.description),
               price: typeof p.price === 'number' && !isNaN(p.price) ? p.price : Number(p.price) || 0,
-              priceFormatted: formatPrice(p.price)
+              priceFormatted: formatPrice(p.price),
+              categorySlug: normalizeCategorySlug(p.categorySlug || (p as any).category_slug)
             })),
             categories: categories.map(c => ({
               ...c,
@@ -163,7 +165,8 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
         ...p,
         name: cleanText(p.name),
         description: cleanText(p.description),
-        priceFormatted: formatPrice(p.price)
+        priceFormatted: formatPrice(p.price),
+        categorySlug: normalizeCategorySlug(p.categorySlug)
       })),
       categories: SEED_CATEGORIES.map(c => ({
         ...c,
@@ -193,8 +196,6 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
           .order('created_at', { ascending: true });
 
         if (!catErr && !prodErr && (dbCategories || dbProducts)) {
-          const VALID_SLUGS: CategorySlug[] = ['corps', 'visage', 'maquillage', 'accessoires', 'bienetre'];
-
           // Build categories map seeded with default categories
           const catMap = new Map<string, Category>();
           SEED_CATEGORIES.forEach(c => catMap.set(c.slug, c));
@@ -215,13 +216,11 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
 
           const categoriesToUse = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
 
-          let productsToUse: Product[] = state.products;
+          let dbMapped: Product[] = [];
           if (dbProducts && dbProducts.length > 0) {
-            const dbMapped = dbProducts.map(p => {
+            dbMapped = dbProducts.map(p => {
               const rawSlug = p.category_slug || p.categorySlug;
-              const categorySlug: CategorySlug = (typeof rawSlug === 'string' && VALID_SLUGS.includes(rawSlug as CategorySlug))
-                ? (rawSlug as CategorySlug)
-                : 'corps';
+              const categorySlug: CategorySlug = normalizeCategorySlug(rawSlug);
               const priceNum = typeof p.price === 'number' && !isNaN(p.price) ? p.price : (Number(p.price) || 0);
 
               return {
@@ -312,9 +311,11 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
 
   const addProduct = async (data: Omit<Product, 'id' | 'priceFormatted' | 'updatedAt'>) => {
     const id = generateId();
+    const normalizedSlug = normalizeCategorySlug(data.categorySlug);
     const product: Product = {
       ...data,
       id,
+      categorySlug: normalizedSlug,
       priceFormatted: formatPrice(data.price),
       updatedAt: new Date().toISOString(),
     };
@@ -334,7 +335,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
           description: data.description,
           price: data.price,
           image: imageUrl,
-          category_slug: data.categorySlug,
+          category_slug: normalizedSlug,
           in_stock: data.inStock,
         });
 
@@ -348,23 +349,27 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateProduct = async (id: string, data: Partial<Omit<Product, 'id'>>) => {
-    dispatch({ type: 'UPDATE_PRODUCT', payload: { id, data } });
+    const updatedData = { ...data };
+    if (updatedData.categorySlug) {
+      updatedData.categorySlug = normalizeCategorySlug(updatedData.categorySlug);
+    }
+    dispatch({ type: 'UPDATE_PRODUCT', payload: { id, data: updatedData } });
 
     if (supabase) {
       try {
         const dbPayload: Record<string, any> = {};
-        if (data.name !== undefined) dbPayload.name = data.name;
-        if (data.description !== undefined) dbPayload.description = data.description;
-        if (data.price !== undefined) dbPayload.price = data.price;
-        if (data.image !== undefined) {
-          let imageUrl = data.image;
+        if (updatedData.name !== undefined) dbPayload.name = updatedData.name;
+        if (updatedData.description !== undefined) dbPayload.description = updatedData.description;
+        if (updatedData.price !== undefined) dbPayload.price = updatedData.price;
+        if (updatedData.image !== undefined) {
+          let imageUrl = updatedData.image;
           if (imageUrl && imageUrl.startsWith('data:') && imageUrl.length > 100000) {
             imageUrl = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
           }
           dbPayload.image = imageUrl;
         }
-        if (data.categorySlug !== undefined) dbPayload.category_slug = data.categorySlug;
-        if (data.inStock !== undefined) dbPayload.in_stock = data.inStock;
+        if (updatedData.categorySlug !== undefined) dbPayload.category_slug = updatedData.categorySlug;
+        if (updatedData.inStock !== undefined) dbPayload.in_stock = updatedData.inStock;
         dbPayload.updated_at = new Date().toISOString();
 
         const { error } = await supabase.from('products').update(dbPayload).eq('id', id);

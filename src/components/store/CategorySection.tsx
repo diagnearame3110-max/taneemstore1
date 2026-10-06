@@ -1,5 +1,6 @@
 import type { Category, Product } from '../../data/types';
 import ProductCard from './ProductCard';
+import { normalizeCategorySlug } from '../../utils/format';
 
 interface Props {
   category: Category;
@@ -9,7 +10,8 @@ interface Props {
 
 export default function CategorySection({ category, products, onOpenQuickView }: Props) {
   if (!category || !category.slug) return null;
-  const active = (products || []).filter(p => p && p.categorySlug === category.slug);
+  const targetSlug = normalizeCategorySlug(category.slug);
+  const active = (products || []).filter(p => p && normalizeCategorySlug(p.categorySlug || (p as any).category_slug) === targetSlug);
   if (active.length === 0) return null;
 
   return (
