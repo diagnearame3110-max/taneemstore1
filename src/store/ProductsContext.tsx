@@ -77,10 +77,12 @@ function reducer(state: State, action: Action): State {
     case 'REORDER_CATEGORIES':
       return {
         ...state,
-        categories: action.payload.map((slug, i) => {
-          const cat = state.categories.find(c => c.slug === slug)!;
-          return { ...cat, order: i + 1 };
-        }),
+        categories: action.payload
+          .map((slug, i) => {
+            const cat = state.categories.find(c => c.slug === slug);
+            return cat ? { ...cat, order: i + 1 } : null;
+          })
+          .filter(Boolean) as Category[],
       };
     default:
       return state;
