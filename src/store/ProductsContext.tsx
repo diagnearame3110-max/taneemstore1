@@ -57,11 +57,11 @@ function reducer(state: State, action: Action): State {
         products: state.products.map(p =>
           p.id === action.payload.id
             ? {
-                ...p,
-                ...action.payload.data,
-                priceFormatted: formatPrice(action.payload.data.price ?? p.price),
-                updatedAt: new Date().toISOString(),
-              }
+              ...p,
+              ...action.payload.data,
+              priceFormatted: formatPrice(action.payload.data.price ?? p.price),
+              updatedAt: new Date().toISOString(),
+            }
             : p
         ),
       };
@@ -136,7 +136,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (err) {
       console.warn('LocalStorage load error, using seeds fallback:', err);
-      try { localStorage.removeItem(LS_KEY); } catch {}
+      try { localStorage.removeItem(LS_KEY); } catch { }
     }
     return {
       products: SEED_PRODUCTS.map(p => ({
@@ -332,39 +332,3 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateCategory = async (slug: CategorySlug, data: Partial<Category>) => {
-    dispatch({ type: 'UPDATE_CATEGORY', payload: { slug, data } });
-    if (supabase) {
-      await supabase.from('categories').update(data).eq('slug', slug);
-    }
-  };
-
-  const reorderCategories = async (slugs: CategorySlug[]) => {
-    dispatch({ type: 'REORDER_CATEGORIES', payload: slugs });
-    if (supabase) {
-      for (let i = 0; i < slugs.length; i++) {
-        await supabase.from('categories').update({ order: i + 1 }).eq('slug', slugs[i]);
-      }
-    }
-  };
-
-  const value: ProductsContextValue = {
-    ...state,
-    isSupabaseActive: isSupabaseConfigured,
-    isLoading,
-    addProduct,
-    updateProduct,
-    deleteProduct,
-    toggleStock,
-    updateCategory,
-    reorderCategories,
-    syncSeedToSupabase,
-  };
-
-  return <ProductsContext.Provider value={value}>{children}</ProductsContext.Provider>;
-}
-
-export function useProducts() {
-  const ctx = useContext(ProductsContext);
-  if (!ctx) throw new Error('useProducts must be used within ProductsProvider');
-  return ctx;
-}
