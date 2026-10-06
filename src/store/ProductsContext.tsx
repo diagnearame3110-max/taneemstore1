@@ -152,24 +152,34 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
         if (!catErr && !prodErr && dbCategories && dbProducts) {
           if (dbCategories.length > 0 || dbProducts.length > 0) {
             const categories: Category[] = dbCategories.map(c => ({
-              slug: c.slug as CategorySlug,
+              slug: (c.slug || 'corps') as CategorySlug,
               number: c.number || '01',
-              title: cleanText(c.title),
-              description: cleanText(c.description),
-              order: c.order || 1,
+              title: cleanText(c.title) || 'Catégorie',
+              description: cleanText(c.description) || '',
+              order: Number(c.order) || 1,
             }));
 
-            const products: Product[] = dbProducts.map(p => ({
-              id: p.id,
-              name: cleanText(p.name),
-              description: cleanText(p.description),
-              price: Number(p.price),
-              priceFormatted: formatPrice(Number(p.price)),
-              image: p.image,
-              categorySlug: p.category_slug as CategorySlug,
-              inStock: p.in_stock ?? true,
-              updatedAt: p.updated_at || new Date().toISOString(),
-            }));
+            const VALID_SLUGS: CategorySlug[] = ['corps', 'visage', 'maquillage', 'accessoires', 'bienetre'];
+
+            const products: Product[] = dbProducts.map(p => {
+              const rawSlug = p.category_slug || p.categorySlug;
+              const categorySlug: CategorySlug = (typeof rawSlug === 'string' && VALID_SLUGS.includes(rawSlug as CategorySlug))
+                ? (rawSlug as CategorySlug)
+                : 'corps';
+              const priceNum = typeof p.price === 'number' && !isNaN(p.price) ? p.price : (Number(p.price) || 0);
+
+              return {
+                id: String(p.id || generateId()),
+                name: cleanText(p.name) || 'Produit sans nom',
+                description: cleanText(p.description) || '',
+                price: priceNum,
+                priceFormatted: formatPrice(priceNum),
+                image: p.image || 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format',
+                categorySlug,
+                inStock: p.in_stock ?? p.inStock ?? true,
+                updatedAt: p.updated_at || p.updatedAt || new Date().toISOString(),
+              };
+            });
 
             dispatch({
               type: 'SET_STATE',

@@ -144,7 +144,7 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
                 color: 'var(--pink-deep)',
               }}
             >
-              {product.categorySlug.toUpperCase()}
+              {(product.categorySlug || 'corps').toUpperCase()}
             </span>
             <h2
               style={{
