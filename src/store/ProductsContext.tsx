@@ -332,3 +332,39 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateCategory = async (slug: CategorySlug, data: Partial<Category>) => {
+    dispatch({ type: 'UPDATE_CATEGORY', payload: { slug, data } });
+    if (supabase) {
+      await supabase.from('categories').update(data).eq('slug', slug);
+    }
+  };
+
+  const reorderCategories = async (slugs: CategorySlug[]) => {
+    dispatch({ type: 'REORDER_CATEGORIES', payload: slugs });
+    if (supabase) {
+      for (let i = 0; i < slugs.length; i++) {
+        await supabase.from('categories').update({ order: i + 1 }).eq('slug', slugs[i]);
+      }
+    }
+  };
+
+  const value: ProductsContextValue = {
+    ...state,
+    isSupabaseActive: isSupabaseConfigured,
+    isLoading,
+    addProduct,
+    updateProduct,
+    deleteProduct,
+    toggleStock,
+    updateCategory,
+    reorderCategories,
+    syncSeedToSupabase,
+  };
+
+  return <ProductsContext.Provider value={value}>{children}</ProductsContext.Provider>;
+}
+
+export function useProducts() {
+  const ctx = useContext(ProductsContext);
+  if (!ctx) throw new Error('useProducts must be used within ProductsProvider');
+  return ctx;
+}
