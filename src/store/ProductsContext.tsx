@@ -11,6 +11,7 @@ interface State {
 
 type Action =
   | { type: 'SET_STATE'; payload: State }
+  | { type: 'MERGE_SUPABASE_DATA'; payload: { categories: Category[]; products: Product[] } }
   | { type: 'ADD_PRODUCT'; payload: Product }
   | { type: 'UPDATE_PRODUCT'; payload: { id: string; data: Partial<Omit<Product, 'id'>> } }
   | { type: 'DELETE_PRODUCT'; payload: string }
@@ -48,8 +49,27 @@ function reducer(state: State, action: Action): State {
           ? action.payload.categories
           : state.categories,
       };
+    case 'MERGE_SUPABASE_DATA': {
+      const catMap = new Map<string, Category>();
+      state.categories.forEach(c => catMap.set(c.slug, c));
+      (action.payload.categories || []).forEach(c => catMap.set(c.slug, c));
+      const categories = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      const prodMap = new Map<string, Product>();
+      // 1. Add DB products
+      (action.payload.products || []).forEach(p => prodMap.set(p.id, p));
+      // 2. Add current state products on top (preserves newly added local products)
+      state.products.forEach(p => prodMap.set(p.id, p));
+      const products = Array.from(prodMap.values());
+
+      return { categories, products };
+    }
     case 'ADD_PRODUCT': {
-      return { ...state, products: [...state.products, action.payload] };
+      const exists = state.products.some(p => p.id === action.payload.id);
+      const updatedProducts = exists
+        ? state.products.map(p => (p.id === action.payload.id ? action.payload : p))
+        : [action.payload, ...state.products];
+      return { ...state, products: updatedProducts };
     }
     case 'UPDATE_PRODUCT':
       return {
@@ -216,19 +236,13 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
                 updatedAt: p.updated_at || p.updatedAt || new Date().toISOString(),
               };
             });
-
-            // Merge local state products and Supabase products so newly added products are NEVER lost on refresh
-            const prodMap = new Map<string, Product>();
-            state.products.forEach(p => prodMap.set(p.id, p));
-            dbMapped.forEach(p => prodMap.set(p.id, p));
-            productsToUse = Array.from(prodMap.values());
           }
 
           dispatch({
-            type: 'SET_STATE',
+            type: 'MERGE_SUPABASE_DATA',
             payload: {
               categories: categoriesToUse,
-              products: productsToUse,
+              products: dbMapped,
             },
           });
         }
