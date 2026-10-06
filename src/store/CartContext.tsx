@@ -33,7 +33,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem(LS_KEY);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed.filter(item => item && item.product && typeof item.product === 'object' && item.product.id);
+        }
+      }
     } catch {}
     return [];
   });
@@ -43,27 +48,30 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       localStorage.setItem(LS_KEY, JSON.stringify(cart));
-    } catch {}
+    } catch (err) {
+      console.warn('Could not save cart to localStorage:', err);
+    }
   }, [cart]);
 
   const addToCart = (product: Product, quantity = 1) => {
-    if (!product.inStock) return;
+    if (!product || !product.inStock) return;
     setCart(prev => {
-      const existingIndex = prev.findIndex(item => item.product.id === product.id);
+      const validPrev = Array.isArray(prev) ? prev.filter(i => i && i.product) : [];
+      const existingIndex = validPrev.findIndex(item => item.product.id === product.id);
       if (existingIndex > -1) {
-        const updated = [...prev];
+        const updated = [...validPrev];
         updated[existingIndex] = {
           ...updated[existingIndex],
-          quantity: updated[existingIndex].quantity + quantity,
+          quantity: (updated[existingIndex].quantity || 0) + quantity,
         };
         return updated;
       }
-      return [...prev, { product, quantity }];
+      return [...validPrev, { product, quantity }];
     });
   };
 
   const removeFromCart = (productId: string) => {
-    setCart(prev => prev.filter(item => item.product.id !== productId));
+    setCart(prev => (Array.isArray(prev) ? prev.filter(item => item && item.product && item.product.id !== productId) : []));
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
@@ -72,7 +80,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     setCart(prev =>
-      prev.map(item => (item.product.id === productId ? { ...item, quantity } : item))
+      (Array.isArray(prev) ? prev : []).map(item =>
+        item && item.product && item.product.id === productId ? { ...item, quantity } : item
+      ).filter(item => item && item.product)
     );
   };
 
@@ -85,12 +95,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const toggleCart = () => setIsCartOpen(prev => !prev);
 
   const totalItems = useMemo(
-    () => cart.reduce((acc, item) => acc + item.quantity, 0),
+    () => (Array.isArray(cart) ? cart : []).reduce((acc, item) => acc + (item?.quantity || 0), 0),
     [cart]
   );
 
   const totalPrice = useMemo(
-    () => cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0),
+    () =>
+      (Array.isArray(cart) ? cart : []).reduce((acc, item) => {
+        if (!item || !item.product) return acc;
+        const priceNum = typeof item.product.price === 'number' && !isNaN(item.product.price)
+          ? item.product.price
+          : Number(item.product.price) || 0;
+        return acc + priceNum * (item.quantity || 1);
+      }, 0),
     [cart]
   );
 

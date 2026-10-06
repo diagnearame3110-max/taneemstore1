@@ -17,13 +17,13 @@ import OrdersPage from './pages/admin/OrdersPage';
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <ProductsProvider>
-          <ToastProvider>
-            <CartProvider>
-              <WishlistProvider>
-                <ErrorBoundary>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <AuthProvider>
+          <ProductsProvider>
+            <ToastProvider>
+              <CartProvider>
+                <WishlistProvider>
                   <Routes>
                     <Route path="/" element={<StorePage />} />
                     <Route path="/checkout" element={<CheckoutPage />} />
@@ -51,12 +51,12 @@ export default function App() {
 
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
-                </ErrorBoundary>
-              </WishlistProvider>
-            </CartProvider>
-          </ToastProvider>
-        </ProductsProvider>
-      </AuthProvider>
-    </BrowserRouter>
+                </WishlistProvider>
+              </CartProvider>
+            </ToastProvider>
+          </ProductsProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }

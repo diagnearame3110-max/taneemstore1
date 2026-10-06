@@ -115,7 +115,7 @@ export default function CartDrawer() {
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {cart.map(({ product, quantity }) => (
+              {(cart || []).filter(item => item && item.product).map(({ product, quantity }) => (
                 <div
                   key={product.id}
                   style={{
