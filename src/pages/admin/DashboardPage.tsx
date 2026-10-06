@@ -204,6 +204,7 @@ export default function DashboardPage() {
                           alt={p.name}
                           style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover', border: '1px solid var(--line)', flexShrink: 0 }}
                           onError={e => {
+                            e.currentTarget.onerror = null;
                             (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=200';
                           }}
                         />

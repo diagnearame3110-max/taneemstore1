@@ -452,6 +452,7 @@ export default function ProductsPage() {
                           alt={p.name}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           onError={e => {
+                            e.currentTarget.onerror = null;
                             (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=200';
                           }}
                         />

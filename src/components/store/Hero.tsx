@@ -20,7 +20,8 @@ export default function Hero() {
         src={heroBannerBack || '/banier.jpg'}
         alt="Taneem'Store Hero Banner"
         onError={(e) => {
-          (e.currentTarget as HTMLImageElement).src = '/banier.jpg';
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=1200';
         }}
         style={{
           position: 'absolute',

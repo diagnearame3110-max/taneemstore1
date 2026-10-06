@@ -66,6 +66,10 @@ export default function ProductCard({ product, preview = false, onOpenQuickView 
         <img
           src={product.image || 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format'}
           alt={product.name}
+          onError={e => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
+          }}
           style={!product.inStock ? { filter: 'grayscale(0.6) brightness(0.85)' } : {}}
         />
         {!product.inStock && (

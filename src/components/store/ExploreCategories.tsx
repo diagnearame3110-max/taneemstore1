@@ -10,7 +10,7 @@ export default function ExploreCategories() {
     if (el) {
       const headerOffset = 80;
       const elementPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      const offsetPosition = elementPosition + (window.scrollY || window.pageYOffset || 0) - headerOffset;
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth',
@@ -23,7 +23,7 @@ export default function ExploreCategories() {
     if (el) {
       const headerOffset = 80;
       const elementPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      const offsetPosition = elementPosition + (window.scrollY || window.pageYOffset || 0) - headerOffset;
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth',
@@ -150,6 +150,10 @@ export default function ExploreCategories() {
                 <img
                   src={image}
                   alt={catTitle}
+                  onError={e => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&auto=format&fit=crop&q=80';
+                  }}
                   style={{
                     width: '100%',
                     height: '100%',

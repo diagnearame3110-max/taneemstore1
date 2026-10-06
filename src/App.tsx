@@ -4,6 +4,7 @@ import { AuthProvider } from './store/AuthContext';
 import { ToastProvider } from './store/ToastContext';
 import { CartProvider } from './store/CartContext';
 import { WishlistProvider } from './store/WishlistContext';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import StorePage from './pages/StorePage';
 import CheckoutPage from './pages/CheckoutPage';
@@ -22,35 +23,37 @@ export default function App() {
           <ToastProvider>
             <CartProvider>
               <WishlistProvider>
-                <Routes>
-                <Route path="/" element={<StorePage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
+                <ErrorBoundary>
+                  <Routes>
+                    <Route path="/" element={<StorePage />} />
+                    <Route path="/checkout" element={<CheckoutPage />} />
 
-                <Route path="/admin/login" element={<LoginPage />} />
+                    <Route path="/admin/login" element={<LoginPage />} />
 
-                <Route path="/admin" element={
-                  <ProtectedRoute><DashboardPage /></ProtectedRoute>
-                } />
-                <Route path="/admin/orders" element={
-                  <ProtectedRoute><OrdersPage /></ProtectedRoute>
-                } />
-                <Route path="/admin/products" element={
-                  <ProtectedRoute><ProductsPage /></ProtectedRoute>
-                } />
-                <Route path="/admin/products/new" element={
-                  <ProtectedRoute><ProductFormPage /></ProtectedRoute>
-                } />
-                <Route path="/admin/products/:id/edit" element={
-                  <ProtectedRoute><ProductFormPage /></ProtectedRoute>
-                } />
-                <Route path="/admin/categories" element={
-                  <ProtectedRoute><CategoriesPage /></ProtectedRoute>
-                } />
+                    <Route path="/admin" element={
+                      <ProtectedRoute><DashboardPage /></ProtectedRoute>
+                    } />
+                    <Route path="/admin/orders" element={
+                      <ProtectedRoute><OrdersPage /></ProtectedRoute>
+                    } />
+                    <Route path="/admin/products" element={
+                      <ProtectedRoute><ProductsPage /></ProtectedRoute>
+                    } />
+                    <Route path="/admin/products/new" element={
+                      <ProtectedRoute><ProductFormPage /></ProtectedRoute>
+                    } />
+                    <Route path="/admin/products/:id/edit" element={
+                      <ProtectedRoute><ProductFormPage /></ProtectedRoute>
+                    } />
+                    <Route path="/admin/categories" element={
+                      <ProtectedRoute><CategoriesPage /></ProtectedRoute>
+                    } />
 
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </WishlistProvider>
-          </CartProvider>
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </ErrorBoundary>
+              </WishlistProvider>
+            </CartProvider>
           </ToastProvider>
         </ProductsProvider>
       </AuthProvider>

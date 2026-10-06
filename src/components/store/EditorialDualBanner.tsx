@@ -163,7 +163,8 @@ export default function EditorialDualBanner() {
                   src={editorialMoodboard || '/editorial-moodboard.jpg'}
                   alt="Taneem'Store — Lumière Moodboard Collection"
                   onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src = '/editorial-moodboard.jpg';
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=800';
                   }}
                   style={{
                     width: '100%',
