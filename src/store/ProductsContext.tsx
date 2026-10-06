@@ -197,7 +197,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
 
           let productsToUse: Product[] = state.products;
           if (dbProducts && dbProducts.length > 0) {
-            productsToUse = dbProducts.map(p => {
+            const dbMapped = dbProducts.map(p => {
               const rawSlug = p.category_slug || p.categorySlug;
               const categorySlug: CategorySlug = (typeof rawSlug === 'string' && VALID_SLUGS.includes(rawSlug as CategorySlug))
                 ? (rawSlug as CategorySlug)
@@ -216,6 +216,12 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
                 updatedAt: p.updated_at || p.updatedAt || new Date().toISOString(),
               };
             });
+
+            // Merge local state products and Supabase products so newly added products are NEVER lost on refresh
+            const prodMap = new Map<string, Product>();
+            state.products.forEach(p => prodMap.set(p.id, p));
+            dbMapped.forEach(p => prodMap.set(p.id, p));
+            productsToUse = Array.from(prodMap.values());
           }
 
           dispatch({
@@ -241,7 +247,21 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
     try {
       localStorage.setItem(LS_KEY, JSON.stringify(state));
     } catch (err) {
-      console.warn('LocalStorage backup skipped (quota exceeded or restricted):', err);
+      console.warn('LocalStorage backup quota exceeded, saving trimmed state:', err);
+      try {
+        const trimmedState = {
+          ...state,
+          products: state.products.map(p => ({
+            ...p,
+            image: p.image && p.image.startsWith('data:') && p.image.length > 50000
+              ? 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format'
+              : p.image
+          }))
+        };
+        localStorage.setItem(LS_KEY, JSON.stringify(trimmedState));
+      } catch (e) {
+        console.warn('Could not save state to localStorage:', e);
+      }
     }
   }, [state]);
 
@@ -288,15 +308,28 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'ADD_PRODUCT', payload: product });
 
     if (supabase) {
-      await supabase.from('products').insert({
-        id,
-        name: data.name,
-        description: data.description,
-        price: data.price,
-        image: data.image,
-        category_slug: data.categorySlug,
-        in_stock: data.inStock,
-      });
+      try {
+        let imageUrl = data.image;
+        if (imageUrl && imageUrl.startsWith('data:') && imageUrl.length > 100000) {
+          imageUrl = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
+        }
+
+        const { error } = await supabase.from('products').insert({
+          id,
+          name: data.name,
+          description: data.description,
+          price: data.price,
+          image: imageUrl,
+          category_slug: data.categorySlug,
+          in_stock: data.inStock,
+        });
+
+        if (error) {
+          console.warn('Supabase insert warning:', error.message || error);
+        }
+      } catch (err) {
+        console.warn('Supabase insert exception:', err);
+      }
     }
   };
 
@@ -304,16 +337,29 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'UPDATE_PRODUCT', payload: { id, data } });
 
     if (supabase) {
-      const dbPayload: Record<string, any> = {};
-      if (data.name !== undefined) dbPayload.name = data.name;
-      if (data.description !== undefined) dbPayload.description = data.description;
-      if (data.price !== undefined) dbPayload.price = data.price;
-      if (data.image !== undefined) dbPayload.image = data.image;
-      if (data.categorySlug !== undefined) dbPayload.category_slug = data.categorySlug;
-      if (data.inStock !== undefined) dbPayload.in_stock = data.inStock;
-      dbPayload.updated_at = new Date().toISOString();
+      try {
+        const dbPayload: Record<string, any> = {};
+        if (data.name !== undefined) dbPayload.name = data.name;
+        if (data.description !== undefined) dbPayload.description = data.description;
+        if (data.price !== undefined) dbPayload.price = data.price;
+        if (data.image !== undefined) {
+          let imageUrl = data.image;
+          if (imageUrl && imageUrl.startsWith('data:') && imageUrl.length > 100000) {
+            imageUrl = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
+          }
+          dbPayload.image = imageUrl;
+        }
+        if (data.categorySlug !== undefined) dbPayload.category_slug = data.categorySlug;
+        if (data.inStock !== undefined) dbPayload.in_stock = data.inStock;
+        dbPayload.updated_at = new Date().toISOString();
 
-      await supabase.from('products').update(dbPayload).eq('id', id);
+        const { error } = await supabase.from('products').update(dbPayload).eq('id', id);
+        if (error) {
+          console.warn('Supabase update warning:', error.message || error);
+        }
+      } catch (err) {
+        console.warn('Supabase update exception:', err);
+      }
     }
   };
 
