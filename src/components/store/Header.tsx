@@ -2,15 +2,17 @@ import { useState } from 'react';
 import { buildWhatsAppLink } from '../../utils/whatsapp';
 import { useProducts } from '../../store/ProductsContext';
 import { useCart } from '../../store/CartContext';
+import { SEED_CATEGORIES } from '../../data/seedData';
 import SearchModal from './SearchModal';
 import TopAnnouncementBar from './TopAnnouncementBar';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { categories } = useProducts();
+  const { categories } = useProducts() || {};
   const { totalItems, openCart } = useCart();
-  const sorted = [...categories].sort((a, b) => a.order - b.order);
+  const validCategories = Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES;
+  const sorted = [...validCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
@@ -27,7 +29,7 @@ export default function Header() {
           <nav className="links">
             {sorted.map(cat => (
               <a key={cat.slug} href={`#${cat.slug}`}>
-                {cat.title.replace(/&amp;/g, '&')}
+                {(cat.title || '').replace(/&amp;/g, '&')}
               </a>
             ))}
           </nav>
@@ -158,7 +160,7 @@ export default function Header() {
       <div className={`mobile-menu ${menuOpen ? 'is-open' : ''}`}>
         {sorted.map(cat => (
           <a key={cat.slug} href={`#${cat.slug}`} onClick={closeMenu}>
-            {cat.title.replace(/&amp;/g, '&')}
+            {(cat.title || '').replace(/&amp;/g, '&')}
           </a>
         ))}
         <button

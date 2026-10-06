@@ -1,9 +1,11 @@
 import React from 'react';
 import { useProducts } from '../../store/ProductsContext';
+import { SEED_CATEGORIES } from '../../data/seedData';
 
 export default function ExploreCategories() {
-  const { categories, products } = useProducts();
-  const sorted = [...categories].sort((a, b) => a.order - b.order);
+  const { categories, products } = useProducts() || {};
+  const validCategories = Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES;
+  const sorted = [...validCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
 
   const scrollToCategory = (slug: string) => {
     const el = document.getElementById(slug);
@@ -115,10 +117,10 @@ export default function ExploreCategories() {
           }}
         >
           {sorted.map(cat => {
-            const count = products.filter(p => p.categorySlug === cat.slug).length;
-            const firstProd = products.find(p => p.categorySlug === cat.slug);
+            const count = (products || []).filter(p => p && p.categorySlug === cat.slug).length;
+            const firstProd = (products || []).find(p => p && p.categorySlug === cat.slug);
             const image = firstProd?.image || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&auto=format&fit=crop&q=80';
-            const catTitle = cat.title.replace(/&amp;/g, '&');
+            const catTitle = (cat.title || '').replace(/&amp;/g, '&');
 
             return (
               <div

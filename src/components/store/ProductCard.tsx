@@ -1,6 +1,7 @@
 import type { Product } from '../../data/types';
 import { useCart } from '../../store/CartContext';
 import { useToast } from '../../store/ToastContext';
+import { formatPrice } from '../../utils/format';
 
 interface Props {
   product: Product;
@@ -15,21 +16,23 @@ export default function ProductCard({ product, preview = false, onOpenQuickView 
   const { addToCart } = useCart();
   const { showToast } = useToast();
 
-  const isBestSeller = BEST_SELLER_IDS.has(product.id);
+  const isBestSeller = product?.id ? BEST_SELLER_IDS.has(product.id) : false;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (preview || !product.inStock) return;
+    if (preview || !product?.inStock) return;
     addToCart(product);
-    showToast(`"${product.name}" ajouté au panier !`, 'success');
+    showToast(`"${product.name || 'Produit'}" ajouté au panier !`, 'success');
   };
 
   const handleCardClick = () => {
-    if (!preview && onOpenQuickView) {
+    if (!preview && onOpenQuickView && product) {
       onOpenQuickView(product);
     }
   };
+
+  if (!product) return null;
 
   return (
     <div
@@ -65,7 +68,7 @@ export default function ProductCard({ product, preview = false, onOpenQuickView 
 
         <img
           src={product.image || 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format'}
-          alt={product.name}
+          alt={product.name || 'Produit'}
           onError={e => {
             e.currentTarget.onerror = null;
             e.currentTarget.src = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
@@ -101,7 +104,7 @@ export default function ProductCard({ product, preview = false, onOpenQuickView 
         </div>
 
         <h3 style={{ fontSize: '0.98rem', fontWeight: 700, marginBottom: '12px', lineHeight: 1.3 }}>
-          {product.name}
+          {product.name || 'Produit'}
         </h3>
         
         <div 
@@ -118,7 +121,7 @@ export default function ProductCard({ product, preview = false, onOpenQuickView 
           }}
         >
           <span className="price-note" style={{ fontSize: '0.95rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
-            {(product.priceFormatted || `${product.price.toLocaleString('fr-FR')} FCFA`).replace(/\s/g, '\u00A0')}
+            {product.priceFormatted || formatPrice(product.price)}
           </span>
 
           <button

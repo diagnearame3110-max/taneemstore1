@@ -32,15 +32,22 @@ interface ProductsContextValue extends State {
 
 const LS_KEY = 'taneem_store_data_v3';
 
-function cleanText(str?: string): string {
-  if (!str) return '';
+function cleanText(str?: unknown): string {
+  if (typeof str !== 'string' || !str) return '';
   return str.replace(/&amp;/g, '&');
 }
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'SET_STATE':
-      return action.payload;
+      return {
+        products: Array.isArray(action.payload.products) && action.payload.products.length > 0
+          ? action.payload.products
+          : state.products,
+        categories: Array.isArray(action.payload.categories) && action.payload.categories.length > 0
+          ? action.payload.categories
+          : state.categories,
+      };
     case 'ADD_PRODUCT': {
       return { ...state, products: [...state.products, action.payload] };
     }
@@ -98,23 +105,39 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
       const saved = localStorage.getItem(LS_KEY);
       if (saved) {
         const parsed = JSON.parse(saved) as State;
-        if (parsed.products && parsed.products.length > 0) {
+        if (parsed && Array.isArray(parsed.products) && parsed.products.length > 0) {
+          const rawCategories = Array.isArray(parsed.categories) && parsed.categories.length > 0
+            ? parsed.categories
+            : SEED_CATEGORIES;
+
+          // Merge SEED_CATEGORIES with rawCategories to guarantee all 5 default categories exist
+          const catMap = new Map<string, Category>();
+          SEED_CATEGORIES.forEach(c => catMap.set(c.slug, c));
+          rawCategories.forEach(c => {
+            if (c && c.slug) catMap.set(c.slug, c);
+          });
+          const categories = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
+
           return {
             products: parsed.products.map(p => ({
               ...p,
-              name: cleanText(p.name),
+              name: cleanText(p.name) || 'Produit',
               description: cleanText(p.description),
+              price: typeof p.price === 'number' && !isNaN(p.price) ? p.price : Number(p.price) || 0,
               priceFormatted: formatPrice(p.price)
             })),
-            categories: (parsed.categories || SEED_CATEGORIES).map(c => ({
+            categories: categories.map(c => ({
               ...c,
-              title: cleanText(c.title),
+              title: cleanText(c.title) || 'Catégorie',
               description: cleanText(c.description)
             }))
           };
         }
       }
-    } catch {}
+    } catch (err) {
+      console.warn('LocalStorage load error, using seeds fallback:', err);
+      try { localStorage.removeItem(LS_KEY); } catch {}
+    }
     return {
       products: SEED_PRODUCTS.map(p => ({
         ...p,
@@ -149,19 +172,32 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
           .select('*')
           .order('created_at', { ascending: true });
 
-        if (!catErr && !prodErr && dbCategories && dbProducts) {
-          if (dbCategories.length > 0 || dbProducts.length > 0) {
-            const categories: Category[] = dbCategories.map(c => ({
-              slug: (c.slug || 'corps') as CategorySlug,
-              number: c.number || '01',
-              title: cleanText(c.title) || 'Catégorie',
-              description: cleanText(c.description) || '',
-              order: Number(c.order) || 1,
-            }));
+        if (!catErr && !prodErr && (dbCategories || dbProducts)) {
+          const VALID_SLUGS: CategorySlug[] = ['corps', 'visage', 'maquillage', 'accessoires', 'bienetre'];
 
-            const VALID_SLUGS: CategorySlug[] = ['corps', 'visage', 'maquillage', 'accessoires', 'bienetre'];
+          // Build categories map seeded with default categories
+          const catMap = new Map<string, Category>();
+          SEED_CATEGORIES.forEach(c => catMap.set(c.slug, c));
 
-            const products: Product[] = dbProducts.map(p => {
+          if (dbCategories && dbCategories.length > 0) {
+            dbCategories.forEach(c => {
+              if (c && c.slug) {
+                catMap.set(c.slug, {
+                  slug: c.slug as CategorySlug,
+                  number: c.number || '01',
+                  title: cleanText(c.title) || 'Catégorie',
+                  description: cleanText(c.description) || '',
+                  order: Number(c.order) || 1,
+                });
+              }
+            });
+          }
+
+          const categoriesToUse = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
+
+          let productsToUse: Product[] = state.products;
+          if (dbProducts && dbProducts.length > 0) {
+            productsToUse = dbProducts.map(p => {
               const rawSlug = p.category_slug || p.categorySlug;
               const categorySlug: CategorySlug = (typeof rawSlug === 'string' && VALID_SLUGS.includes(rawSlug as CategorySlug))
                 ? (rawSlug as CategorySlug)
@@ -180,15 +216,15 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
                 updatedAt: p.updated_at || p.updatedAt || new Date().toISOString(),
               };
             });
-
-            dispatch({
-              type: 'SET_STATE',
-              payload: {
-                categories: categories.length > 0 ? categories : state.categories,
-                products: products.length > 0 ? products : state.products,
-              },
-            });
           }
+
+          dispatch({
+            type: 'SET_STATE',
+            payload: {
+              categories: categoriesToUse,
+              products: productsToUse,
+            },
+          });
         }
       } catch (err) {
         console.warn('Supabase fetch warning, using local state fallback:', err);

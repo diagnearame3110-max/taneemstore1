@@ -8,7 +8,8 @@ interface Props {
 }
 
 export default function CategorySection({ category, products, onOpenQuickView }: Props) {
-  const active = products.filter(p => p.categorySlug === category.slug);
+  if (!category || !category.slug) return null;
+  const active = (products || []).filter(p => p && p.categorySlug === category.slug);
   if (active.length === 0) return null;
 
   return (

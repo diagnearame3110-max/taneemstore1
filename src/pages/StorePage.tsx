@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useProducts } from '../store/ProductsContext';
+import { SEED_CATEGORIES } from '../data/seedData';
 import Header from '../components/store/Header';
 import Hero from '../components/store/Hero';
 import BeautyManifesto from '../components/store/BeautyManifesto';
@@ -16,9 +17,10 @@ import ProductQuickViewModal from '../components/store/ProductQuickViewModal';
 import type { Product } from '../data/types';
 
 export default function StorePage() {
-  const { products, categories } = useProducts();
+  const { products = [], categories = [] } = useProducts() || {};
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-  const sorted = [...categories].sort((a, b) => a.order - b.order);
+  const validCategories = Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES;
+  const sorted = [...validCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
 
   return (
     <div style={{ background: 'var(--bg)' }}>
