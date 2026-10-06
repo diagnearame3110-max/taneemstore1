@@ -7,6 +7,7 @@ import BeautyManifesto from '../components/store/BeautyManifesto';
 import EditorialDualBanner from '../components/store/EditorialDualBanner';
 import ExploreCategories from '../components/store/ExploreCategories';
 import TrustStrip from '../components/store/TrustStrip';
+import JustDroppedSection from '../components/store/JustDroppedSection';
 import CategorySection from '../components/store/CategorySection';
 import CTABand from '../components/store/CTABand';
 import Footer from '../components/store/Footer';
@@ -29,6 +30,10 @@ export default function StorePage() {
         <Hero />
         <BeautyManifesto />
         <TrustStrip />
+        <JustDroppedSection
+          products={products}
+          onOpenQuickView={prod => setQuickViewProduct(prod)}
+        />
         {sorted.map(cat => (
           <React.Fragment key={cat.slug}>
             {cat.slug === 'bienetre' && <ExploreCategories />}

@@ -52,16 +52,24 @@ function reducer(state: State, action: Action): State {
       };
     case 'MERGE_SUPABASE_DATA': {
       const catMap = new Map<string, Category>();
-      state.categories.forEach(c => catMap.set(c.slug, c));
       (action.payload.categories || []).forEach(c => catMap.set(c.slug, c));
+      state.categories.forEach(c => {
+        if (!catMap.has(c.slug)) catMap.set(c.slug, c);
+      });
       const categories = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
 
       const prodMap = new Map<string, Product>();
-      // 1. Add DB products
-      (action.payload.products || []).forEach(p => prodMap.set(p.id, p));
-      // 2. Add current state products on top (preserves newly added local products)
+      // 1. Add current state products first
       state.products.forEach(p => prodMap.set(p.id, p));
-      const products = Array.from(prodMap.values());
+      // 2. Override/add Supabase DB products
+      (action.payload.products || []).forEach(p => prodMap.set(p.id, p));
+
+      // 3. Keep products sorted newest first
+      const products = Array.from(prodMap.values()).sort((a, b) => {
+        const timeA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+        const timeB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+        return timeB - timeA;
+      });
 
       return { categories, products };
     }
@@ -193,7 +201,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
         const { data: dbProducts, error: prodErr } = await supabase
           .from('products')
           .select('*')
-          .order('created_at', { ascending: true });
+          .order('created_at', { ascending: false });
 
         if (!catErr && !prodErr && (dbCategories || dbProducts)) {
           // Build categories map seeded with default categories
