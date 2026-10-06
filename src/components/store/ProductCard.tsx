@@ -118,7 +118,7 @@ export default function ProductCard({ product, preview = false, onOpenQuickView 
           }}
         >
           <span className="price-note" style={{ fontSize: '0.95rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
-            {product.priceFormatted.replace(/\s/g, '\u00A0')}
+            {(product.priceFormatted || `${product.price.toLocaleString('fr-FR')} FCFA`).replace(/\s/g, '\u00A0')}
           </span>
 
           <button
