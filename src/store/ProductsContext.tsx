@@ -238,7 +238,11 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
 
   // Save to local storage backup
   useEffect(() => {
-    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(state));
+    } catch (err) {
+      console.warn('LocalStorage backup skipped (quota exceeded or restricted):', err);
+    }
   }, [state]);
 
   // Sync initial seed products to Supabase

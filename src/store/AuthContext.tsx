@@ -12,11 +12,19 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem(LS_AUTH));
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    try {
+      return !!localStorage.getItem(LS_AUTH);
+    } catch {
+      return false;
+    }
+  });
 
   function login(email: string, password: string): boolean {
     if (email === ADMIN_USER.email && password === ADMIN_USER.password) {
-      localStorage.setItem(LS_AUTH, 'taneem-fake-token');
+      try {
+        localStorage.setItem(LS_AUTH, 'taneem-fake-token');
+      } catch {}
       setIsAuthenticated(true);
       return true;
     }
@@ -24,7 +32,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   function logout() {
-    localStorage.removeItem(LS_AUTH);
+    try {
+      localStorage.removeItem(LS_AUTH);
+    } catch {}
     setIsAuthenticated(false);
   }
 
