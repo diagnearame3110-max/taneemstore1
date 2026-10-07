@@ -567,8 +567,24 @@ footer {
     margin-top: 20px !important;
   }
   .explore-cat-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 12px !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 8px !important;
+    margin-right: -12px !important;
+    padding-right: 12px !important;
+  }
+  .explore-cat-grid::-webkit-scrollbar {
+    display: none !important;
+  }
+  .explore-cat-card {
+    flex: 0 0 150px !important;
+    width: 150px !important;
+    height: 185px !important;
+    scroll-snap-align: start !important;
   }
   .edit-cat-grid {
     grid-template-columns: repeat(2, 1fr) !important;
