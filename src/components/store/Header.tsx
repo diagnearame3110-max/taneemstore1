@@ -13,6 +13,7 @@ export default function Header() {
   const { totalItems, openCart } = useCart();
   const validCategories = Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES;
   const sorted = [...validCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
+  const navCategories = sorted.filter(cat => cat && cat.slug !== 'visage');
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
@@ -27,7 +28,7 @@ export default function Header() {
           </a>
 
           <nav className="links">
-            {sorted.map(cat => (
+            {navCategories.map(cat => (
               <a key={cat.slug} href={`#${cat.slug}`}>
                 {(cat.title || '').replace(/&amp;/g, '&')}
               </a>
@@ -158,7 +159,7 @@ export default function Header() {
         onClick={closeMenu}
       />
       <div className={`mobile-menu ${menuOpen ? 'is-open' : ''}`}>
-        {sorted.map(cat => (
+        {navCategories.map(cat => (
           <a key={cat.slug} href={`#${cat.slug}`} onClick={closeMenu}>
             {(cat.title || '').replace(/&amp;/g, '&')}
           </a>
