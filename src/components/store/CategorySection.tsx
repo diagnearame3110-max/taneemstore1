@@ -19,8 +19,9 @@ export default function CategorySection({ category, products, onOpenQuickView }:
       <div className="wrap">
         <div className="cat-head">
           <div>
-            <div className="cat-num">{String(category.number || '01').replace(/^0+/, '').padStart(2, '0')}</div>
-            <h2>{category.title || ''}</h2>
+            <h2>
+              {String(category.number || '01').replace(/^0+/, '').padStart(2, '0')}. {category.title || ''}
+            </h2>
           </div>
         </div>
 
