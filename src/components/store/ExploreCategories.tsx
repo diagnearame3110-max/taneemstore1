@@ -1,7 +1,7 @@
 import React from 'react';
 import { useProducts } from '../../store/ProductsContext';
 import { SEED_CATEGORIES } from '../../data/seedData';
-import { normalizeCategorySlug } from '../../utils/format';
+import { normalizeCategorySlug, formatCategoryTitle } from '../../utils/format';
 
 export default function ExploreCategories() {
   const { categories, products } = useProducts() || {};
@@ -122,7 +122,7 @@ export default function ExploreCategories() {
             const count = (products || []).filter(p => p && normalizeCategorySlug(p.categorySlug || (p as any).category_slug) === targetSlug).length;
             const firstProd = (products || []).find(p => p && normalizeCategorySlug(p.categorySlug || (p as any).category_slug) === targetSlug);
             const image = firstProd?.image || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&auto=format&fit=crop&q=80';
-            const catTitle = (cat.title || '').replace(/&amp;/g, '&');
+            const catTitle = formatCategoryTitle(cat.title, cat.slug);
 
             return (
               <div

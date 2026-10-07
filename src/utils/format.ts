@@ -21,4 +21,15 @@ export function normalizeCategorySlug(raw?: unknown): import('../data/types').Ca
   return 'corps';
 }
 
-
+export function formatCategoryTitle(title?: unknown, slug?: string): string {
+  const clean = typeof title === 'string' ? title.replace(/&amp;/g, '&').trim() : '';
+  const normSlug = slug ? normalizeCategorySlug(slug) : (clean ? normalizeCategorySlug(clean) : 'corps');
+  
+  if (normSlug === 'visage') return 'Visage';
+  if (normSlug === 'corps') return 'Corps';
+  if (normSlug === 'maquillage') return 'Maquillage';
+  if (normSlug === 'accessoires') return 'Accessoires';
+  if (normSlug === 'bienetre') return 'Bien-être';
+  
+  return clean || 'Catégorie';
+}

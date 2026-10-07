@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
 import type { Product, Category, CategorySlug } from '../data/types';
 import { SEED_PRODUCTS, SEED_CATEGORIES } from '../data/seedData';
-import { formatPrice, generateId, normalizeCategorySlug } from '../utils/format';
+import { formatPrice, generateId, normalizeCategorySlug, formatCategoryTitle } from '../utils/format';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 interface State {
@@ -163,7 +163,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
                 })),
               categories: categories.map(c => ({
                 ...c,
-                title: cleanText(c.title) || 'Catégorie',
+                title: formatCategoryTitle(c.title, c.slug),
                 description: cleanText(c.description)
               }))
             };
@@ -184,7 +184,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
       })),
       categories: SEED_CATEGORIES.map(c => ({
         ...c,
-        title: cleanText(c.title),
+        title: formatCategoryTitle(c.title, c.slug),
         description: cleanText(c.description)
       }))
     };

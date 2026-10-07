@@ -1,6 +1,6 @@
 import type { Category, Product } from '../../data/types';
 import ProductCard from './ProductCard';
-import { normalizeCategorySlug } from '../../utils/format';
+import { normalizeCategorySlug, formatCategoryTitle } from '../../utils/format';
 
 interface Props {
   category: Category;
@@ -12,6 +12,7 @@ export default function CategorySection({ category, products, onOpenQuickView }:
   if (!category || !category.slug) return null;
   const targetSlug = normalizeCategorySlug(category.slug);
   const active = (products || []).filter(p => p && normalizeCategorySlug(p.categorySlug || (p as any).category_slug) === targetSlug);
+  const displayTitle = formatCategoryTitle(category.title, category.slug);
 
   return (
     <section id={category.slug} className="cat" style={{ position: 'relative' }}>
@@ -20,7 +21,7 @@ export default function CategorySection({ category, products, onOpenQuickView }:
         <div className="cat-head">
           <div>
             <h2>
-              {String(category.number || '01').replace(/^0+/, '').padStart(2, '0')}. {category.title || ''}
+              {String(category.number || '01').replace(/^0+/, '').padStart(2, '0')}. {displayTitle}
             </h2>
           </div>
         </div>
