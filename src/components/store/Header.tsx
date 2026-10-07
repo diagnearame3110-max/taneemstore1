@@ -6,17 +6,24 @@ import { SEED_CATEGORIES } from '../../data/seedData';
 import SearchModal from './SearchModal';
 import TopAnnouncementBar from './TopAnnouncementBar';
 
-const MENU_ITEMS = [
-  { label: 'Skin', href: '#visage' },
-  { label: 'Body', href: '#corps' },
-  { label: 'Beauty', href: '#maquillage' },
-  { label: 'Wellness', href: '#bienetre' },
-];
+function formatMenuTitle(title?: string): string {
+  if (!title) return '';
+  const clean = title.replace(/&amp;/g, '&').trim();
+  if (clean.toLowerCase().includes('corp')) return 'Corps';
+  if (clean.toLowerCase().includes('visage')) return 'Visage';
+  if (clean.toLowerCase().includes('maquillage')) return 'Maquillage';
+  if (clean.toLowerCase().includes('accessoire')) return 'Accessoires';
+  if (clean.toLowerCase().includes('bien') || clean.toLowerCase().includes('hygien')) return 'Bien-être';
+  return clean;
+}
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const { categories } = useProducts() || {};
   const { totalItems, openCart } = useCart();
+  const validCategories = Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES;
+  const sorted = [...validCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
@@ -31,9 +38,9 @@ export default function Header() {
           </a>
 
           <nav className="links">
-            {MENU_ITEMS.map(item => (
-              <a key={item.label} href={item.href}>
-                {item.label}
+            {sorted.map(cat => (
+              <a key={cat.slug} href={`#${cat.slug}`}>
+                {formatMenuTitle(cat.title)}
               </a>
             ))}
           </nav>
@@ -162,9 +169,9 @@ export default function Header() {
         onClick={closeMenu}
       />
       <div className={`mobile-menu ${menuOpen ? 'is-open' : ''}`}>
-        {MENU_ITEMS.map(item => (
-          <a key={item.label} href={item.href} onClick={closeMenu}>
-            {item.label}
+        {sorted.map(cat => (
+          <a key={cat.slug} href={`#${cat.slug}`} onClick={closeMenu}>
+            {formatMenuTitle(cat.title)}
           </a>
         ))}
         <button

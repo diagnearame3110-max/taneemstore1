@@ -12,7 +12,6 @@ export default function CategorySection({ category, products, onOpenQuickView }:
   if (!category || !category.slug) return null;
   const targetSlug = normalizeCategorySlug(category.slug);
   const active = (products || []).filter(p => p && normalizeCategorySlug(p.categorySlug || (p as any).category_slug) === targetSlug);
-  if (active.length === 0) return null;
 
   return (
     <section id={category.slug} className="cat" style={{ position: 'relative' }}>
@@ -24,11 +23,29 @@ export default function CategorySection({ category, products, onOpenQuickView }:
             <h2>{category.title || ''}</h2>
           </div>
         </div>
-        <div className="grid grid-4">
-          {active.map(product => (
-            <ProductCard key={product.id} product={product} onOpenQuickView={onOpenQuickView} />
-          ))}
-        </div>
+
+        {active.length > 0 ? (
+          <div className="grid grid-4">
+            {active.map(product => (
+              <ProductCard key={product.id} product={product} onOpenQuickView={onOpenQuickView} />
+            ))}
+          </div>
+        ) : (
+          <div
+            style={{
+              padding: '36px 24px',
+              textAlign: 'center',
+              background: '#FFFFFF',
+              borderRadius: '12px',
+              border: '1px solid var(--line)',
+              color: 'var(--text-soft)',
+              fontSize: '0.9rem',
+              fontWeight: 500,
+            }}
+          >
+            Aucun produit disponible dans la catégorie {category.title || ''} pour le moment.
+          </div>
+        )}
       </div>
     </section>
   );
