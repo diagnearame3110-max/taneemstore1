@@ -70,13 +70,7 @@ export default function ShopTheEditCategories() {
           SHOP THE TANEEM'EDIT
         </h2>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '24px',
-          }}
-        >
+        <div className="edit-cat-grid">
           {editCategories.map(cat => (
             <div
               key={cat.slug}

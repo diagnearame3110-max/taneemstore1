@@ -108,15 +108,7 @@ export default function ExploreCategories() {
         </div>
 
         {/* Categories horizontal track / grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '16px',
-            overflowX: 'auto',
-            paddingBottom: '8px',
-          }}
-        >
+        <div className="explore-cat-grid">
           {sorted.map(cat => {
             const targetSlug = normalizeCategorySlug(cat.slug);
             const count = (products || []).filter(p => p && normalizeCategorySlug(p.categorySlug || (p as any).category_slug) === targetSlug).length;
@@ -127,16 +119,8 @@ export default function ExploreCategories() {
             return (
               <div
                 key={cat.slug}
+                className="explore-cat-card"
                 onClick={() => scrollToCategory(cat.slug)}
-                style={{
-                  position: 'relative',
-                  height: '220px',
-                  borderRadius: '0px',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
-                  transition: 'transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s',
-                }}
                 onMouseEnter={e => {
                   e.currentTarget.style.transform = 'translateY(-4px)';
                   e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.12)';

@@ -516,9 +516,43 @@ footer {
   min-height: calc(100vh - 65px);
 }
 
+/* ---------- RESPONSIVE CATEGORIES & PRODUCT GRIDS ---------- */
+.explore-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.edit-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.explore-cat-card {
+  position: relative;
+  height: 220px;
+  border-radius: 0px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s;
+}
+
+@media (max-width: 1024px) {
+  .explore-cat-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .edit-cat-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
 @media (max-width: 880px) {
   nav.links { display: none; }
-  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .hero-grid { grid-template-columns: 1fr; gap: 32px; }
   .hero-collage { height: 300px; }
   .trust-grid { flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -526,8 +560,47 @@ footer {
 }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 18px; }
-  .grid-4 { grid-template-columns: 1fr; }
+  .wrap { padding: 0 12px; }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    margin-top: 20px !important;
+  }
+  .explore-cat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .edit-cat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .explore-cat-card {
+    height: 165px !important;
+  }
+  .explore-cat-card h3 {
+    font-size: 0.98rem !important;
+  }
+  .card .body {
+    padding: 10px 10px 12px !important;
+  }
+  .card h3 {
+    font-size: 0.88rem !important;
+    margin-bottom: 6px !important;
+    line-height: 1.25 !important;
+  }
+  .card .row {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    padding-top: 8px !important;
+  }
+  .card .price-note {
+    font-size: 0.85rem !important;
+  }
+  .card button {
+    padding: 5px 10px !important;
+    font-size: 0.72rem !important;
+    gap: 4px !important;
+  }
   .foot-grid { grid-template-columns: 1fr; gap: 32px; }
   .wa-float { bottom: 18px; right: 18px; width: 46px; height: 46px; }
   .wa-float svg { width: 24px; height: 24px; }
