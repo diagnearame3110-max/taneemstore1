@@ -59,10 +59,10 @@ function reducer(state: State, action: Action): State {
       const categories = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
 
       const prodMap = new Map<string, Product>();
-      // 1. Add current state products first
-      state.products.forEach(p => prodMap.set(p.id, p));
-      // 2. Override/add Supabase DB products
-      (action.payload.products || []).forEach(p => prodMap.set(p.id, p));
+      // 1. Add current state products first (excluding legacy demo products)
+      state.products.filter(p => !p.id.startsWith('prod_')).forEach(p => prodMap.set(p.id, p));
+      // 2. Override/add Supabase DB products (excluding legacy demo products)
+      (action.payload.products || []).filter(p => !p.id.startsWith('prod_')).forEach(p => prodMap.set(p.id, p));
 
       // 3. Keep products sorted newest first
       const products = Array.from(prodMap.values()).sort((a, b) => {
@@ -148,14 +148,16 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
           const categories = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
 
           return {
-            products: parsed.products.map(p => ({
-              ...p,
-              name: cleanText(p.name) || 'Produit',
-              description: cleanText(p.description),
-              price: typeof p.price === 'number' && !isNaN(p.price) ? p.price : Number(p.price) || 0,
-              priceFormatted: formatPrice(p.price),
-              categorySlug: normalizeCategorySlug(p.categorySlug || (p as any).category_slug)
-            })),
+            products: parsed.products
+              .filter(p => p && !p.id.startsWith('prod_'))
+              .map(p => ({
+                ...p,
+                name: cleanText(p.name) || 'Produit',
+                description: cleanText(p.description),
+                price: typeof p.price === 'number' && !isNaN(p.price) ? p.price : Number(p.price) || 0,
+                priceFormatted: formatPrice(p.price),
+                categorySlug: normalizeCategorySlug(p.categorySlug || (p as any).category_slug)
+              })),
             categories: categories.map(c => ({
               ...c,
               title: cleanText(c.title) || 'Catégorie',
