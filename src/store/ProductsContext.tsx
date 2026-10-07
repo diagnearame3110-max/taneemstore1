@@ -239,7 +239,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
                 description: cleanText(p.description) || '',
                 price: priceNum,
                 priceFormatted: formatPrice(priceNum),
-                image: p.image || 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format',
+                image: p.image || 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format',
                 categorySlug,
                 inStock: p.in_stock ?? p.inStock ?? true,
                 updatedAt: p.updated_at || p.updatedAt || new Date().toISOString(),
@@ -270,21 +270,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
     try {
       localStorage.setItem(LS_KEY, JSON.stringify(state));
     } catch (err) {
-      console.warn('LocalStorage backup quota exceeded, saving trimmed state:', err);
-      try {
-        const trimmedState = {
-          ...state,
-          products: state.products.map(p => ({
-            ...p,
-            image: p.image && p.image.startsWith('data:') && p.image.length > 50000
-              ? 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format'
-              : p.image
-          }))
-        };
-        localStorage.setItem(LS_KEY, JSON.stringify(trimmedState));
-      } catch (e) {
-        console.warn('Could not save state to localStorage:', e);
-      }
+      console.warn('LocalStorage backup quota exceeded:', err);
     }
   }, [state]);
 
@@ -334,17 +320,12 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
 
     if (supabase) {
       try {
-        let imageUrl = data.image;
-        if (imageUrl && imageUrl.startsWith('data:') && imageUrl.length > 100000) {
-          imageUrl = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
-        }
-
         const { error } = await supabase.from('products').insert({
           id,
           name: data.name,
           description: data.description,
           price: data.price,
-          image: imageUrl,
+          image: data.image,
           category_slug: normalizedSlug,
           in_stock: data.inStock,
         });
@@ -371,13 +352,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
         if (updatedData.name !== undefined) dbPayload.name = updatedData.name;
         if (updatedData.description !== undefined) dbPayload.description = updatedData.description;
         if (updatedData.price !== undefined) dbPayload.price = updatedData.price;
-        if (updatedData.image !== undefined) {
-          let imageUrl = updatedData.image;
-          if (imageUrl && imageUrl.startsWith('data:') && imageUrl.length > 100000) {
-            imageUrl = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
-          }
-          dbPayload.image = imageUrl;
-        }
+        if (updatedData.image !== undefined) dbPayload.image = updatedData.image;
         if (updatedData.categorySlug !== undefined) dbPayload.category_slug = updatedData.categorySlug;
         if (updatedData.inStock !== undefined) dbPayload.in_stock = updatedData.inStock;
         dbPayload.updated_at = new Date().toISOString();

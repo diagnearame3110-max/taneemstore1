@@ -67,11 +67,11 @@ export default function ProductCard({ product, preview = false, onOpenQuickView 
         )}
 
         <img
-          src={product.image || 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format'}
+          src={product.image || 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format'}
           alt={product.name || 'Produit'}
           onError={e => {
             e.currentTarget.onerror = null;
-            e.currentTarget.src = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
+            e.currentTarget.src = 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format';
           }}
           style={!product.inStock ? { filter: 'grayscale(0.6) brightness(0.85)' } : {}}
         />

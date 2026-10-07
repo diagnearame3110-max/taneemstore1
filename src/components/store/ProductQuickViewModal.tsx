@@ -96,11 +96,11 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
         {/* Product Image */}
         <div style={{ background: '#f5f2ec', minHeight: '320px', position: 'relative' }}>
           <img
-            src={product.image || 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format'}
+            src={product.image || 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format'}
             alt={product.name}
             onError={e => {
               e.currentTarget.onerror = null;
-              e.currentTarget.src = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
+              e.currentTarget.src = 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format';
             }}
             style={{
               width: '100%',

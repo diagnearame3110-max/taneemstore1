@@ -14,7 +14,7 @@ const CATEGORIES: { slug: CategorySlug; label: string }[] = [
   { slug: 'bienetre', label: 'Bien-être & Hygiène' },
 ];
 
-const PLACEHOLDER = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&auto=format';
+const PLACEHOLDER = 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format';
 
 export default function ProductFormPage() {
   const { id } = useParams<{ id: string }>();
@@ -58,7 +58,38 @@ export default function ProductFormPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = ev => setImage(ev.target?.result as string);
+    reader.onload = ev => {
+      const src = ev.target?.result as string;
+      if (!src) return;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_DIM = 600;
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > MAX_DIM) {
+            height *= MAX_DIM / width;
+            width = MAX_DIM;
+          }
+        } else {
+          if (height > MAX_DIM) {
+            width *= MAX_DIM / height;
+            height = MAX_DIM;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          setImage(canvas.toDataURL('image/jpeg', 0.82));
+        } else {
+          setImage(src);
+        }
+      };
+      img.src = src;
+    };
     reader.readAsDataURL(file);
   }
 
