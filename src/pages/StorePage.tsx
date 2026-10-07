@@ -34,11 +34,14 @@ export default function StorePage() {
           products={products}
           onOpenQuickView={prod => setQuickViewProduct(prod)}
         />
-        {sorted.map(cat => (
+        {sorted.map((cat, idx) => (
           <React.Fragment key={cat.slug}>
             {cat.slug === 'bienetre' && <ExploreCategories />}
             <CategorySection
-              category={cat}
+              category={{
+                ...cat,
+                number: String(idx + 1).padStart(2, '0')
+              }}
               products={products}
               onOpenQuickView={prod => setQuickViewProduct(prod)}
             />
