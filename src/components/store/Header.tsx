@@ -6,14 +6,17 @@ import { SEED_CATEGORIES } from '../../data/seedData';
 import SearchModal from './SearchModal';
 import TopAnnouncementBar from './TopAnnouncementBar';
 
+const MENU_ITEMS = [
+  { label: 'Skin', href: '#visage' },
+  { label: 'Body', href: '#corps' },
+  { label: 'Beauty', href: '#maquillage' },
+  { label: 'Wellness', href: '#bienetre' },
+];
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { categories } = useProducts() || {};
   const { totalItems, openCart } = useCart();
-  const validCategories = Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES;
-  const sorted = [...validCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
-  const navCategories = sorted.filter(cat => cat && cat.slug !== 'visage');
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
@@ -28,9 +31,9 @@ export default function Header() {
           </a>
 
           <nav className="links">
-            {navCategories.map(cat => (
-              <a key={cat.slug} href={`#${cat.slug}`}>
-                {(cat.title || '').replace(/&amp;/g, '&')}
+            {MENU_ITEMS.map(item => (
+              <a key={item.label} href={item.href}>
+                {item.label}
               </a>
             ))}
           </nav>
@@ -159,9 +162,9 @@ export default function Header() {
         onClick={closeMenu}
       />
       <div className={`mobile-menu ${menuOpen ? 'is-open' : ''}`}>
-        {navCategories.map(cat => (
-          <a key={cat.slug} href={`#${cat.slug}`} onClick={closeMenu}>
-            {(cat.title || '').replace(/&amp;/g, '&')}
+        {MENU_ITEMS.map(item => (
+          <a key={item.label} href={item.href} onClick={closeMenu}>
+            {item.label}
           </a>
         ))}
         <button
