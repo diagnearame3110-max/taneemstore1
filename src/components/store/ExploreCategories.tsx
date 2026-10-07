@@ -81,6 +81,7 @@ export default function ExploreCategories() {
 
           <button
             onClick={scrollToFirst}
+            className="explore-voir-tout-btn"
             style={{
               background: 'none',
               border: 'none',

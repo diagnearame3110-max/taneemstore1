@@ -586,6 +586,9 @@ footer {
     height: 185px !important;
     scroll-snap-align: start !important;
   }
+  .explore-voir-tout-btn {
+    display: none !important;
+  }
   .edit-cat-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
