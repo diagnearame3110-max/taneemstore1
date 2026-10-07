@@ -3,6 +3,7 @@ import heroBannerBack from '../../assets/hero-banner-back.jpg';
 export default function Hero() {
   return (
     <section
+      className="hero-section"
       style={{
         position: 'relative',
         minHeight: '620px',
@@ -19,6 +20,7 @@ export default function Hero() {
       <img
         src={heroBannerBack || '/banier.jpg'}
         alt="Taneem'Store Hero Banner"
+        className="hero-bg-img"
         onError={(e) => {
           e.currentTarget.onerror = null;
           e.currentTarget.src = 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=1200';
@@ -30,7 +32,7 @@ export default function Hero() {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
-          objectPosition: 'center 40%',
+          objectPosition: 'center center',
           zIndex: 1,
         }}
       />
@@ -61,6 +63,7 @@ export default function Hero() {
         }}
       >
         <h1
+          className="hero-h1"
           style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontSize: '3.4rem',
@@ -76,6 +79,7 @@ export default function Hero() {
         </h1>
 
         <p
+          className="hero-p"
           style={{
             fontFamily: "'Montserrat', sans-serif",
             fontSize: '1.05rem',

@@ -620,6 +620,24 @@ footer {
     font-size: 0.72rem !important;
     gap: 4px !important;
   }
+  .hero-section {
+    min-height: 480px !important;
+    padding: 64px 16px !important;
+    background-position: center center !important;
+  }
+  .hero-bg-img {
+    object-position: center center !important;
+    object-fit: cover !important;
+  }
+  .hero-h1 {
+    font-size: 2.1rem !important;
+    margin-bottom: 12px !important;
+  }
+  .hero-p {
+    font-size: 0.92rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 24px !important;
+  }
   .foot-grid { grid-template-columns: 1fr; gap: 32px; }
   .wa-float { bottom: 18px; right: 18px; width: 46px; height: 46px; }
   .wa-float svg { width: 24px; height: 24px; }
