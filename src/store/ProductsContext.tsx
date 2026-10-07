@@ -135,35 +135,39 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
       if (saved) {
         const parsed = JSON.parse(saved) as State;
         if (parsed && Array.isArray(parsed.products) && parsed.products.length > 0) {
-          const rawCategories = Array.isArray(parsed.categories) && parsed.categories.length > 0
-            ? parsed.categories
-            : SEED_CATEGORIES;
+          const hasLegacy = parsed.products.some(p => p && p.id && p.id.startsWith('prod_'));
+          if (hasLegacy) {
+            localStorage.removeItem(LS_KEY);
+          } else {
+            const rawCategories = Array.isArray(parsed.categories) && parsed.categories.length > 0
+              ? parsed.categories
+              : SEED_CATEGORIES;
 
-          // Merge SEED_CATEGORIES with rawCategories to guarantee all 5 default categories exist
-          const catMap = new Map<string, Category>();
-          SEED_CATEGORIES.forEach(c => catMap.set(c.slug, c));
-          rawCategories.forEach(c => {
-            if (c && c.slug) catMap.set(c.slug, c);
-          });
-          const categories = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
+            const catMap = new Map<string, Category>();
+            SEED_CATEGORIES.forEach(c => catMap.set(c.slug, c));
+            rawCategories.forEach(c => {
+              if (c && c.slug) catMap.set(c.slug, c);
+            });
+            const categories = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
 
-          return {
-            products: parsed.products
-              .filter(p => p && !p.id.startsWith('prod_'))
-              .map(p => ({
-                ...p,
-                name: cleanText(p.name) || 'Produit',
-                description: cleanText(p.description),
-                price: typeof p.price === 'number' && !isNaN(p.price) ? p.price : Number(p.price) || 0,
-                priceFormatted: formatPrice(p.price),
-                categorySlug: normalizeCategorySlug(p.categorySlug || (p as any).category_slug)
-              })),
-            categories: categories.map(c => ({
-              ...c,
-              title: cleanText(c.title) || 'Catégorie',
-              description: cleanText(c.description)
-            }))
-          };
+            return {
+              products: parsed.products
+                .filter(p => p && !p.id.startsWith('prod_'))
+                .map(p => ({
+                  ...p,
+                  name: cleanText(p.name) || 'Produit',
+                  description: cleanText(p.description),
+                  price: typeof p.price === 'number' && !isNaN(p.price) ? p.price : Number(p.price) || 0,
+                  priceFormatted: formatPrice(p.price),
+                  categorySlug: normalizeCategorySlug(p.categorySlug || (p as any).category_slug)
+                })),
+              categories: categories.map(c => ({
+                ...c,
+                title: cleanText(c.title) || 'Catégorie',
+                description: cleanText(c.description)
+              }))
+            };
+          }
         }
       }
     } catch (err) {

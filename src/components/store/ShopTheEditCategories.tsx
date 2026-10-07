@@ -23,7 +23,7 @@ export default function ShopTheEditCategories() {
       slug: 'maquillage',
       title: 'MAQUILLAGE',
       subtitle: 'Essentiels beauté au quotidien.',
-      image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&auto=format&fit=crop&q=80',
+      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&auto=format&fit=crop&q=80',
       actionText: 'DÉCOUVRIR MAQUILLAGE →'
     },
     {
