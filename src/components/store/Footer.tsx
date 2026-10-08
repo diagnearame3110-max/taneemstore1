@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="wrap copyline">
-        <div>© 2026 Taneem'Store. Tous droits réservés. · The Clean Girl Era</div>
+        <div>© 2026 Taneem'Store. Tous droits réservés. · Your Clean Girl Era</div>
         <div>
           <a href="/admin/login" style={{ opacity: 0.5, fontSize: '0.75rem', textDecoration: 'none' }}>
             Administration
