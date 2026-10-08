@@ -148,7 +148,9 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
             rawCategories.forEach(c => {
               if (c && c.slug) catMap.set(c.slug, c);
             });
-            const categories = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
+            const categories = Array.from(catMap.values())
+              .filter(c => c && (c.slug as string) !== 'maquillage')
+              .sort((a, b) => (a.order || 0) - (b.order || 0));
 
             return {
               products: parsed.products
@@ -228,7 +230,9 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
             });
           }
 
-          const categoriesToUse = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
+          const categoriesToUse = Array.from(catMap.values())
+            .filter(c => c && (c.slug as string) !== 'maquillage')
+            .sort((a, b) => (a.order || 0) - (b.order || 0));
 
           let dbMapped: Product[] = [];
           if (dbProducts && dbProducts.length > 0) {

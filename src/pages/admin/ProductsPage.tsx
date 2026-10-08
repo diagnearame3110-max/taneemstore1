@@ -9,7 +9,6 @@ import type { Product } from '../../data/types';
 const CAT_LABELS: Record<string, string> = {
   corps: 'Soins du Corps',
   visage: 'Soins du Visage',
-  maquillage: 'Maquillage & Éclat',
   accessoires: 'Accessoires',
   bienetre: 'Bien-être & Hygiène',
 };
@@ -17,7 +16,6 @@ const CAT_LABELS: Record<string, string> = {
 const CAT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   corps: { bg: '#FDF8F5', text: '#8F776C', border: '#EFE8E3' },
   visage: { bg: '#F0F9FF', text: '#0369A1', border: '#BAE6FD' },
-  maquillage: { bg: '#FEFCE8', text: '#854D0E', border: '#FEF08A' },
   accessoires: { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
   bienetre: { bg: '#F5F3FF', text: '#5B21B6', border: '#DDD6FE' },
 };

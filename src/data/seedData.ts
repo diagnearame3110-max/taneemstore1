@@ -16,27 +16,19 @@ export const SEED_CATEGORIES: Category[] = [
     "order": 2
   },
   {
-    "slug": "maquillage",
+    "slug": "accessoires",
     "number": "03",
-    "title": "Maquillage",
-    "description": "Quelques essentiels maquillage au quotidien.",
+    "title": "Accessoires",
+    "description": "Les outils indispensables pour votre routine.",
     "order": 3
   },
   {
-    "slug": "accessoires",
-    "number": "04",
-    "title": "Accessoires",
-    "description": "Les outils indispensables pour votre routine.",
-    "order": 4
-  },
-  {
     "slug": "bienetre",
-    "number": "05",
+    "number": "04",
     "title": "Bien-être",
     "description": "Soins et produits pour votre bien-être au quotidien.",
-    "order": 5
+    "order": 4
   }
 ];
 
 export const SEED_PRODUCTS: Product[] = [];
-

@@ -22,7 +22,7 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const { categories } = useProducts() || {};
   const { totalItems, openCart } = useCart();
-  const validCategories = Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES;
+  const validCategories = (Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES).filter(c => c && c.slug !== ('maquillage' as any));
   const sorted = [...validCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
 
   const toggleMenu = () => setMenuOpen(!menuOpen);

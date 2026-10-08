@@ -9,7 +9,6 @@ import type { CategorySlug, Product } from '../../data/types';
 const CATEGORIES: { slug: CategorySlug; label: string }[] = [
   { slug: 'corps', label: 'Soins du Corps' },
   { slug: 'visage', label: 'Soins du Visage' },
-  { slug: 'maquillage', label: 'Maquillage & Éclat' },
   { slug: 'accessoires', label: 'Accessoires Beauté' },
   { slug: 'bienetre', label: 'Bien-être & Hygiène' },
 ];

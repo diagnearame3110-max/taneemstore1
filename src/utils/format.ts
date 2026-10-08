@@ -10,11 +10,10 @@ export function generateId(): string {
 export function normalizeCategorySlug(raw?: unknown): import('../data/types').CategorySlug {
   if (!raw || typeof raw !== 'string') return 'corps';
   const clean = raw.toLowerCase().trim();
-  if (clean === 'corps' || clean === 'visage' || clean === 'maquillage' || clean === 'accessoires' || clean === 'bienetre') {
+  if (clean === 'corps' || clean === 'visage' || clean === 'accessoires' || clean === 'bienetre') {
     return clean as import('../data/types').CategorySlug;
   }
   if (clean.includes('visage')) return 'visage';
-  if (clean.includes('maquillage')) return 'maquillage';
   if (clean.includes('accessoire')) return 'accessoires';
   if (clean.includes('bien') || clean.includes('hygiene') || clean.includes('hygiéne')) return 'bienetre';
   if (clean.includes('corp')) return 'corps';
@@ -27,7 +26,6 @@ export function formatCategoryTitle(title?: unknown, slug?: string): string {
   
   if (normSlug === 'visage') return 'Visage';
   if (normSlug === 'corps') return 'Corps';
-  if (normSlug === 'maquillage') return 'Maquillage';
   if (normSlug === 'accessoires') return 'Accessoires';
   if (normSlug === 'bienetre') return 'Bien-être';
   

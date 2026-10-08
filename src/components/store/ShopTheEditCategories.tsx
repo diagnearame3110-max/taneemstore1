@@ -20,11 +20,11 @@ export default function ShopTheEditCategories() {
       actionText: 'DÉCOUVRIR CORPS →'
     },
     {
-      slug: 'maquillage',
-      title: 'MAQUILLAGE',
-      subtitle: 'Essentiels beauté au quotidien.',
+      slug: 'accessoires',
+      title: 'ACCESSOIRES',
+      subtitle: 'Les essentiels accessoires beauté.',
       image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&auto=format&fit=crop&q=80',
-      actionText: 'DÉCOUVRIR MAQUILLAGE →'
+      actionText: 'DÉCOUVRIR ACCESSOIRES →'
     },
     {
       slug: 'bienetre',
