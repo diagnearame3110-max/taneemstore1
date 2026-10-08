@@ -148,13 +148,14 @@ nav.links a:hover {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  width: 24px;
-  height: 18px;
+  width: 26px;
+  height: 20px;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
   z-index: 60;
+  position: relative;
 }
 
 .burger span {
@@ -162,7 +163,20 @@ nav.links a:hover {
   height: 2px;
   background-color: var(--text);
   border-radius: 2px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  transform-origin: center;
+}
+
+.burger.is-open span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.burger.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger.is-open span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
 }
 
 @media (max-width: 880px) {
@@ -174,12 +188,12 @@ nav.links a:hover {
 .menu-scrim {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
   z-index: 55;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.35s ease;
 }
 
 .menu-scrim.is-open {
@@ -196,27 +210,17 @@ nav.links a:hover {
   max-width: 360px;
   background: var(--bg);
   z-index: 60;
-  padding: 80px 24px 32px 24px;
+  padding: 24px 20px 32px 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  box-shadow: -6px 0 32px rgba(0, 0, 0, 0.2);
   transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-y: auto;
 }
 
 .mobile-menu.is-open {
   transform: translateX(0);
-}
-
-.mobile-menu a {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.98rem;
-  font-weight: 600;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line);
-  color: var(--text);
 }
 
 /* ---------- HERO ---------- */
