@@ -570,14 +570,26 @@ footer {
     margin-top: 20px !important;
   }
   .explore-cat-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 12px !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 8px !important;
+    margin-right: -12px !important;
+    padding-right: 12px !important;
     width: 100% !important;
   }
+  .explore-cat-grid::-webkit-scrollbar {
+    display: none !important;
+  }
   .explore-cat-card {
-    width: 100% !important;
-    height: 165px !important;
+    flex: 0 0 160px !important;
+    width: 160px !important;
+    min-width: 160px !important;
+    height: 180px !important;
+    scroll-snap-align: start !important;
   }
   .explore-voir-tout-btn {
     display: none !important;

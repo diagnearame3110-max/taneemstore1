@@ -177,17 +177,6 @@ export default function ExploreCategories() {
                   >
                     {catTitle}
                   </h3>
-                  <span
-                    style={{
-                      color: 'rgba(255, 255, 255, 0.88)',
-                      fontSize: '0.82rem',
-                      fontWeight: 500,
-                      marginTop: '4px',
-                      textShadow: '0 1px 2px rgba(0,0,0,0.3)',
-                    }}
-                  >
-                    {count} {count > 1 ? 'produits' : 'produit'}
-                  </span>
                 </div>
               </div>
             );
