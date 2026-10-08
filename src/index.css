@@ -519,19 +519,22 @@ footer {
 /* ---------- RESPONSIVE CATEGORIES & PRODUCT GRIDS ---------- */
 .explore-cat-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+  width: 100%;
 }
 
 .edit-cat-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
+  width: 100%;
 }
 
 .explore-cat-card {
   position: relative;
   height: 220px;
+  width: 100%;
   border-radius: 0px;
   overflow: hidden;
   cursor: pointer;
@@ -541,7 +544,7 @@ footer {
 
 @media (max-width: 1024px) {
   .explore-cat-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 14px;
   }
   .edit-cat-grid {
@@ -567,24 +570,14 @@ footer {
     margin-top: 20px !important;
   }
   .explore-cat-grid {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    gap: 12px !important;
-    scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch !important;
-    padding-bottom: 8px !important;
-    margin-right: -12px !important;
-    padding-right: 12px !important;
-  }
-  .explore-cat-grid::-webkit-scrollbar {
-    display: none !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
   }
   .explore-cat-card {
-    flex: 0 0 150px !important;
-    width: 150px !important;
-    height: 185px !important;
-    scroll-snap-align: start !important;
+    width: 100% !important;
+    height: 165px !important;
   }
   .explore-voir-tout-btn {
     display: none !important;
@@ -592,9 +585,6 @@ footer {
   .edit-cat-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
-  }
-  .explore-cat-card {
-    height: 165px !important;
   }
   .explore-cat-card h3 {
     font-size: 0.98rem !important;
