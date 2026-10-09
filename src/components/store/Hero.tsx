@@ -6,11 +6,11 @@ export default function Hero() {
       className="hero-section"
       style={{
         position: 'relative',
-        minHeight: '480px',
+        minHeight: '520px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '135px 24px 64px 24px',
+        padding: '175px 24px 75px 24px',
         borderBottom: '1px solid var(--line)',
         overflow: 'hidden',
         background: '#1B1420 url("/banier.jpg") center center / cover no-repeat',

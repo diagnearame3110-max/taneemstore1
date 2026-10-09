@@ -677,8 +677,8 @@ footer {
     gap: 4px !important;
   }
   .hero-section {
-    min-height: 350px !important;
-    padding: 105px 16px 36px !important;
+    min-height: 420px !important;
+    padding: 160px 16px 40px !important;
     background-position: center center !important;
   }
   .hero-bg-img {
