@@ -6,11 +6,11 @@ export default function Hero() {
       className="hero-section"
       style={{
         position: 'relative',
-        minHeight: '620px',
+        minHeight: '380px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '160px 24px 96px 24px',
+        padding: '110px 24px 40px 24px',
         borderBottom: '1px solid var(--line)',
         overflow: 'hidden',
         background: '#1B1420 url("/banier.jpg") center center / cover no-repeat',
@@ -66,12 +66,12 @@ export default function Hero() {
           className="hero-h1"
           style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: '3.4rem',
+            fontSize: '2.4rem',
             fontWeight: 600,
             letterSpacing: '0.03em',
             lineHeight: 1.15,
             color: '#FFFFFF',
-            marginBottom: '20px',
+            marginBottom: '12px',
             textShadow: '0 4px 16px rgba(0,0,0,0.5)',
           }}
         >
@@ -82,11 +82,11 @@ export default function Hero() {
           className="hero-p"
           style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: '1.05rem',
-            lineHeight: 1.65,
+            fontSize: '0.92rem',
+            lineHeight: 1.55,
             color: 'rgba(255, 255, 255, 0.95)',
             maxWidth: '680px',
-            margin: '0 auto 34px auto',
+            margin: '0 auto 20px auto',
             textShadow: '0 2px 10px rgba(0,0,0,0.45)',
           }}
         >
@@ -100,12 +100,12 @@ export default function Hero() {
             style={{
               background: '#A99084',
               color: '#FFFFFF',
-              padding: '14px 34px',
-              fontSize: '0.9rem',
+              padding: '10px 28px',
+              fontSize: '0.84rem',
               fontWeight: 700,
               letterSpacing: '0.06em',
               borderRadius: '100px',
-              boxShadow: '0 6px 20px rgba(169, 144, 132, 0.45)',
+              boxShadow: '0 4px 14px rgba(169, 144, 132, 0.45)',
               border: 'none',
               transition: 'all 0.2s ease',
             }}
