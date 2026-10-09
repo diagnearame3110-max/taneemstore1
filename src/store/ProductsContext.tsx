@@ -148,15 +148,17 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
             rawCategories.forEach(c => {
               if (c && c.slug) {
                 const normSlug = normalizeCategorySlug(c.slug);
-                catMap.set(normSlug, {
-                  ...c,
-                  slug: normSlug,
-                  title: formatCategoryTitle(c.title, normSlug)
-                });
+                if (catMap.has(normSlug)) {
+                  const defaultCat = catMap.get(normSlug)!;
+                  catMap.set(normSlug, {
+                    ...defaultCat,
+                    title: formatCategoryTitle(c.title, normSlug),
+                    description: cleanText(c.description) || defaultCat.description,
+                  });
+                }
               }
             });
             const categories = Array.from(catMap.values())
-              .filter(c => c && (c.slug as string) !== 'maquillage')
               .sort((a, b) => (a.order || 0) - (b.order || 0));
 
             return {
@@ -219,7 +221,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
           .order('created_at', { ascending: false });
 
         if (!catErr && !prodErr && (dbCategories || dbProducts)) {
-          // Build categories map seeded with default categories
+          // Build categories map seeded with default 5 categories
           const catMap = new Map<string, Category>();
           SEED_CATEGORIES.forEach(c => catMap.set(c.slug, c));
 
@@ -227,20 +229,45 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
             dbCategories.forEach(c => {
               if (c && c.slug) {
                 const normSlug = normalizeCategorySlug(c.slug);
-                catMap.set(normSlug, {
-                  slug: normSlug,
-                  number: c.number || '01',
-                  title: formatCategoryTitle(c.title, normSlug),
-                  description: cleanText(c.description) || '',
-                  order: Number(c.order) || 1,
-                });
+                if (catMap.has(normSlug)) {
+                  const defaultCat = catMap.get(normSlug)!;
+                  catMap.set(normSlug, {
+                    ...defaultCat,
+                    title: formatCategoryTitle(c.title, normSlug),
+                    description: cleanText(c.description) || defaultCat.description,
+                    order: Number(c.order) || defaultCat.order,
+                  });
+                }
               }
             });
           }
 
           const categoriesToUse = Array.from(catMap.values())
-            .filter(c => c && (c.slug as string) !== 'maquillage')
             .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+          // Auto-upsert canonical categories to Supabase to update DB table
+          try {
+            const categoriesPayload = categoriesToUse.map((c, i) => ({
+              slug: c.slug,
+              number: String(i + 1).padStart(2, '0'),
+              title: c.title,
+              description: c.description,
+              order: i + 1,
+            }));
+            await supabase.from('categories').upsert(categoriesPayload, { onConflict: 'slug' });
+
+            // Delete legacy categories from Supabase (e.g., 'visage', 'accessoires', 'maquillage')
+            const validSlugs = new Set(['skincare', 'corps', 'dentaire', 'levres', 'bienetre']);
+            if (dbCategories && dbCategories.length > 0) {
+              for (const cat of dbCategories) {
+                if (cat && cat.slug && !validSlugs.has(cat.slug)) {
+                  await supabase.from('categories').delete().eq('slug', cat.slug);
+                }
+              }
+            }
+          } catch (e) {
+            console.warn('Supabase categories auto-sync warning:', e);
+          }
 
           let dbMapped: Product[] = [];
           if (dbProducts && dbProducts.length > 0) {
@@ -248,6 +275,11 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
               const rawSlug = p.category_slug || p.categorySlug;
               const categorySlug: CategorySlug = normalizeCategorySlug(rawSlug);
               const priceNum = typeof p.price === 'number' && !isNaN(p.price) ? p.price : (Number(p.price) || 0);
+
+              // Update legacy product category_slug in Supabase if needed
+              if (rawSlug !== categorySlug && supabase) {
+                supabase.from('products').update({ category_slug: categorySlug }).eq('id', p.id).then();
+              }
 
               return {
                 id: String(p.id || generateId()),
