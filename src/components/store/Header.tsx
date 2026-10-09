@@ -129,7 +129,7 @@ export default function Header() {
               </svg>
             </button>
 
-            {/* Contact WhatsApp Icon Button */}
+            {/* Contact WhatsApp Button */}
             <a
               href={buildWhatsAppLink("Bonjour Taneem'Store, je souhaite des informations.")}
               target="_blank"
@@ -137,49 +137,38 @@ export default function Header() {
               aria-label="Contact WhatsApp"
               title="Contactez-nous sur WhatsApp"
               style={{
-                position: 'relative',
-                background: 'rgba(255, 255, 255, 0.12)',
+                background: 'rgba(255, 255, 255, 0.14)',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
                 border: '1px solid rgba(255, 255, 255, 0.25)',
                 cursor: 'pointer',
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                display: 'flex',
+                padding: '8px 16px',
+                borderRadius: '100px',
+                display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                gap: '7px',
                 color: '#FFFFFF',
+                fontSize: '0.84rem',
+                fontWeight: 600,
+                letterSpacing: '0.02em',
                 textDecoration: 'none',
                 transition: 'all 0.2s ease',
                 boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
+                textShadow: '0 1px 3px rgba(0,0,0,0.4)',
               }}
               onMouseEnter={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255, 255, 255, 0.25)';
-                (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1.08)';
+                (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255, 255, 255, 0.28)';
+                (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255, 255, 255, 0.12)';
-                (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1)';
+                (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255, 255, 255, 0.14)';
+                (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(0)';
               }}
             >
-              {/* Online Green Indicator Dot */}
-              <span
-                style={{
-                  position: 'absolute',
-                  top: '2px',
-                  right: '2px',
-                  width: '9px',
-                  height: '9px',
-                  borderRadius: '50%',
-                  background: '#22C55E',
-                  border: '2px solid rgba(0,0,0,0.3)',
-                  boxShadow: '0 0 6px #22C55E',
-                }}
-              />
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
               </svg>
+              <span>Contact</span>
             </a>
 
             {/* Cart Icon Button */}
