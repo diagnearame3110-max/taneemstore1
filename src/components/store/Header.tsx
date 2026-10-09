@@ -33,54 +33,55 @@ export default function Header() {
           top: 0,
           left: 0,
           right: 0,
-          zIndex: 40,
+          zIndex: 50,
           background: 'transparent',
           borderBottom: 'none',
-          padding: '16px 0',
+          padding: '18px 0 10px 0',
         }}
       >
-        <div className="wrap navrow" style={{ padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {/* Petite Logo Badge */}
+        <div
+          className="wrap navrow"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
+            alignItems: 'center',
+            padding: 0,
+          }}
+        >
+          {/* Left Empty Balance Spacer */}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {/* Can hold subtle back link or remains clean for true symmetry */}
+          </div>
+
+          {/* CENTERED LOGO */}
           <a
             href="/"
             className="brand"
             aria-label="Taneem'Store Accueil"
             style={{
               display: 'inline-flex',
+              flexDirection: 'column',
               alignItems: 'center',
-              gap: '10px',
+              justifyContent: 'center',
               textDecoration: 'none',
-              background: 'rgba(27, 20, 32, 0.45)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255, 255, 255, 0.22)',
-              padding: '5px 16px 5px 6px',
-              borderRadius: '100px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
-              transition: 'transform 0.2s ease, border-color 0.2s ease',
+              gap: '4px',
+              transition: 'transform 0.25s ease',
             }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = 'scale(1.02)';
-              e.currentTarget.style.borderColor = 'rgba(230, 198, 117, 0.5)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)';
-            }}
+            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
+            onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
           >
-            {/* Small Gold Monogram Badge */}
+            {/* Small Gold Monogram Emblem */}
             <div
               style={{
-                width: '32px',
-                height: '32px',
+                width: '34px',
+                height: '34px',
                 borderRadius: '50%',
                 background: 'linear-gradient(135deg, #E6C675 0%, #D4AF37 50%, #9A7B2C 100%)',
                 padding: '1.5px',
-                boxShadow: '0 2px 10px rgba(212, 175, 55, 0.4)',
+                boxShadow: '0 4px 16px rgba(212, 175, 55, 0.45)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                flexShrink: 0,
               }}
             >
               <div
@@ -94,7 +95,7 @@ export default function Header() {
                   justifyContent: 'center',
                   color: '#E6C675',
                   fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: '0.85rem',
+                  fontSize: '0.88rem',
                   fontWeight: 700,
                   letterSpacing: '0.04em',
                 }}
@@ -108,173 +109,174 @@ export default function Header() {
               style={{
                 color: '#FFFFFF',
                 fontWeight: 700,
-                fontSize: '1.25rem',
+                fontSize: '1.3rem',
                 fontFamily: "'Cormorant Garamond', serif",
-                letterSpacing: '0.08em',
-                textShadow: '0 2px 8px rgba(0,0,0,0.4)',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                textShadow: '0 2px 10px rgba(0,0,0,0.6)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
+                lineHeight: 1,
               }}
             >
               TANEEM'STORE
-              <span style={{ color: '#E6C675', fontSize: '0.75rem' }}>✦</span>
+              <span style={{ color: '#E6C675', fontSize: '0.72rem' }}>✦</span>
             </span>
           </a>
 
-          {/* Unified Glassmorphic Capsule Menu for Action Elements ("les autres") */}
+          {/* RIGHT SEPARATE TRANSPARENT ICONS */}
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '4px',
-              background: 'rgba(255, 255, 255, 0.16)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255, 255, 255, 0.28)',
-              padding: '4px 6px',
-              borderRadius: '100px',
-              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+              justifyContent: 'flex-end',
+              gap: '12px',
             }}
           >
-            {/* Recherche Item */}
+            {/* Search Icon Button */}
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Rechercher un produit"
               title="Rechercher"
               style={{
-                background: 'transparent',
-                border: 'none',
+                background: 'rgba(255, 255, 255, 0.12)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
                 cursor: 'pointer',
-                padding: '6px 12px',
-                borderRadius: '100px',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                justifyContent: 'center',
                 color: '#FFFFFF',
-                fontSize: '0.82rem',
-                fontWeight: 600,
-                transition: 'background 0.2s ease, transform 0.2s ease',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
+                e.currentTarget.style.transform = 'scale(1.08)';
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
+                e.currentTarget.style.transform = 'scale(1)';
               }}
             >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
-              <span className="nav-text-label" style={{ letterSpacing: '0.02em', textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>
-                Recherche
-              </span>
             </button>
 
-            {/* Separator Line */}
-            <div style={{ width: '1px', height: '18px', background: 'rgba(255, 255, 255, 0.22)', margin: '0 2px' }} />
-
-            {/* Contact WhatsApp Item */}
+            {/* Contact WhatsApp Icon Button */}
             <a
               href={buildWhatsAppLink("Bonjour Taneem'Store, je souhaite des informations.")}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Contact"
+              aria-label="Contact WhatsApp"
               title="Contactez-nous sur WhatsApp"
               style={{
-                background: 'transparent',
-                color: '#FFFFFF',
-                padding: '6px 12px',
-                borderRadius: '100px',
-                fontSize: '0.82rem',
-                fontWeight: 600,
-                letterSpacing: '0.02em',
-                textDecoration: 'none',
+                position: 'relative',
+                background: 'rgba(255, 255, 255, 0.12)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                cursor: 'pointer',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
-                transition: 'background 0.2s ease',
-                textShadow: '0 1px 3px rgba(0,0,0,0.4)',
+                justifyContent: 'center',
+                color: '#FFFFFF',
+                textDecoration: 'none',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
               }}
               onMouseEnter={e => {
                 (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255, 255, 255, 0.25)';
+                (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1.08)';
               }}
               onMouseLeave={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
+                (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255, 255, 255, 0.12)';
+                (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1)';
               }}
             >
+              {/* Online Green Indicator Dot */}
               <span
                 style={{
-                  width: '6px',
-                  height: '6px',
+                  position: 'absolute',
+                  top: '2px',
+                  right: '2px',
+                  width: '9px',
+                  height: '9px',
                   borderRadius: '50%',
                   background: '#22C55E',
-                  boxShadow: '0 0 8px #22C55E',
-                  display: 'inline-block',
+                  border: '2px solid rgba(0,0,0,0.3)',
+                  boxShadow: '0 0 6px #22C55E',
                 }}
               />
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
               </svg>
-              <span className="nav-text-label">Contact</span>
             </a>
 
-            {/* Separator Line */}
-            <div style={{ width: '1px', height: '18px', background: 'rgba(255, 255, 255, 0.22)', margin: '0 2px' }} />
-
-            {/* Panier (Cart) Item */}
+            {/* Cart Icon Button */}
             <button
               onClick={openCart}
               aria-label="Voir le panier"
               title="Mon Panier"
               style={{
                 position: 'relative',
-                background: 'rgba(255, 255, 255, 0.22)',
-                border: 'none',
+                background: 'rgba(255, 255, 255, 0.12)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
                 cursor: 'pointer',
-                padding: '6px 14px',
-                borderRadius: '100px',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                justifyContent: 'center',
                 color: '#FFFFFF',
-                fontSize: '0.82rem',
-                fontWeight: 700,
                 transition: 'all 0.2s ease',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.35)';
-                e.currentTarget.style.transform = 'scale(1.03)';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
+                e.currentTarget.style.transform = 'scale(1.08)';
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.22)';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
                 e.currentTarget.style.transform = 'scale(1)';
               }}
             >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="9" cy="21" r="1" />
                 <circle cx="20" cy="21" r="1" />
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
               </svg>
-              <span className="nav-text-label">Panier</span>
               {totalItems > 0 && (
                 <span
                   style={{
+                    position: 'absolute',
+                    top: '-3px',
+                    right: '-3px',
                     background: '#E11D48',
                     color: '#ffffff',
-                    fontSize: '0.7rem',
+                    fontSize: '0.72rem',
                     fontWeight: 800,
-                    minWidth: '18px',
+                    width: '18px',
                     height: '18px',
-                    padding: '0 4px',
-                    borderRadius: '100px',
+                    borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginLeft: '2px',
-                    boxShadow: '0 2px 6px rgba(225, 29, 72, 0.4)',
+                    border: '2px solid rgba(0,0,0,0.3)',
+                    boxShadow: '0 2px 6px rgba(225, 29, 72, 0.5)',
                   }}
                 >
                   {totalItems}
@@ -287,7 +289,6 @@ export default function Header() {
               className={`burger ${menuOpen ? 'is-open' : ''}`}
               onClick={toggleMenu}
               aria-label="Toggle menu"
-              style={{ marginLeft: '4px' }}
             >
               <span style={{ backgroundColor: '#FFFFFF' }} />
               <span style={{ backgroundColor: '#FFFFFF' }} />
