@@ -47,30 +47,28 @@ export default function TopAnnouncementBar() {
         onClick={handlePrev}
         aria-label="Annonce précédente"
         style={{
-          background: 'rgba(255, 255, 255, 0.1)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '50%',
-          width: '24px',
-          height: '24px',
+          background: 'none',
+          border: 'none',
           cursor: 'pointer',
-          padding: 0,
-          color: '#E6C675',
+          padding: '4px',
+          color: '#FFFFFF',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          transition: 'all 0.15s ease',
+          transition: 'transform 0.15s ease, opacity 0.15s ease',
           flexShrink: 0,
+          opacity: 0.9,
         }}
         onMouseEnter={e => {
-          e.currentTarget.style.background = 'rgba(230, 198, 117, 0.3)';
-          e.currentTarget.style.transform = 'scale(1.1)';
+          e.currentTarget.style.opacity = '1';
+          e.currentTarget.style.transform = 'scale(1.2)';
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+          e.currentTarget.style.opacity = '0.9';
           e.currentTarget.style.transform = 'scale(1)';
         }}
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="15 18 9 12 15 6" />
         </svg>
       </button>
@@ -82,7 +80,7 @@ export default function TopAnnouncementBar() {
           padding: '0 12px',
           letterSpacing: '0.02em',
           transition: 'opacity 0.3s ease',
-          color: '#F5EFEA',
+          color: '#FFFFFF',
           fontFamily: "'Montserrat', sans-serif",
           fontSize: '0.82rem',
         }}
@@ -94,30 +92,28 @@ export default function TopAnnouncementBar() {
         onClick={handleNext}
         aria-label="Annonce suivante"
         style={{
-          background: 'rgba(255, 255, 255, 0.1)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '50%',
-          width: '24px',
-          height: '24px',
+          background: 'none',
+          border: 'none',
           cursor: 'pointer',
-          padding: 0,
-          color: '#E6C675',
+          padding: '4px',
+          color: '#FFFFFF',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          transition: 'all 0.15s ease',
+          transition: 'transform 0.15s ease, opacity 0.15s ease',
           flexShrink: 0,
+          opacity: 0.9,
         }}
         onMouseEnter={e => {
-          e.currentTarget.style.background = 'rgba(230, 198, 117, 0.3)';
-          e.currentTarget.style.transform = 'scale(1.1)';
+          e.currentTarget.style.opacity = '1';
+          e.currentTarget.style.transform = 'scale(1.2)';
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+          e.currentTarget.style.opacity = '0.9';
           e.currentTarget.style.transform = 'scale(1)';
         }}
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="9 18 15 12 9 6" />
         </svg>
       </button>
