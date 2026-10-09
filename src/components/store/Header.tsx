@@ -25,41 +25,55 @@ export default function Header() {
   return (
     <>
       <TopAnnouncementBar />
-      <header>
-        <div className="wrap navrow">
-          <a href="/" className="brand" style={{ color: '#000000', fontWeight: 700 }}>
+      <header
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 40,
+          background: 'transparent',
+          borderBottom: 'none',
+        }}
+      >
+        <div className="wrap navrow" style={{ padding: '16px 0' }}>
+          <a
+            href="/"
+            className="brand"
+            style={{
+              color: '#FFFFFF',
+              fontWeight: 700,
+              fontSize: '1.9rem',
+              letterSpacing: '0.06em',
+              textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+            }}
+          >
             <span>Taneem'Store</span>
           </a>
 
-          <nav className="links">
-            {sorted.map(cat => (
-              <a key={cat.slug} href={`#${cat.slug}`}>
-                {formatCategoryTitle(cat.title, cat.slug)}
-              </a>
-            ))}
-          </nav>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Rechercher un produit"
               title="Rechercher"
               style={{
-                background: 'none',
-                border: 'none',
+                background: 'rgba(255, 255, 255, 0.18)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 255, 255, 0.35)',
                 cursor: 'pointer',
-                padding: '8px',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--text)',
-                borderRadius: '50%',
-                transition: 'color 0.2s',
+                color: '#FFFFFF',
+                transition: 'all 0.2s ease',
               }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--pink)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text)')}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.35)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.18)')}
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
@@ -72,10 +86,11 @@ export default function Header() {
               aria-label="Contact"
               title="Contactez-nous sur WhatsApp"
               style={{
-                background: 'var(--blush-soft)',
-                color: 'var(--pink-deep)',
-                border: '1px solid var(--line)',
-                padding: '6px 14px',
+                background: 'rgba(255, 255, 255, 0.22)',
+                backdropFilter: 'blur(8px)',
+                color: '#FFFFFF',
+                border: '1px solid rgba(255, 255, 255, 0.38)',
+                padding: '8px 18px',
                 borderRadius: '100px',
                 fontSize: '0.82rem',
                 fontWeight: 600,
@@ -83,13 +98,14 @@ export default function Header() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                transition: 'transform 0.15s ease, background 0.2s',
+                transition: 'all 0.2s ease',
+                textShadow: '0 1px 3px rgba(0,0,0,0.3)',
               }}
               onMouseEnter={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = 'var(--blush)';
+                (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255, 255, 255, 0.38)';
               }}
               onMouseLeave={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = 'var(--blush-soft)';
+                (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255, 255, 255, 0.22)';
               }}
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -104,17 +120,23 @@ export default function Header() {
               title="Mon Panier"
               style={{
                 position: 'relative',
-                background: 'none',
-                border: 'none',
+                background: 'rgba(255, 255, 255, 0.18)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 255, 255, 0.35)',
                 cursor: 'pointer',
-                padding: '8px',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--text)',
+                color: '#FFFFFF',
+                transition: 'all 0.2s ease',
               }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.35)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.18)')}
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="9" cy="21" r="1" />
                 <circle cx="20" cy="21" r="1" />
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
@@ -123,9 +145,9 @@ export default function Header() {
                 <span
                   style={{
                     position: 'absolute',
-                    top: '2px',
-                    right: '2px',
-                    background: 'var(--pink)',
+                    top: '-2px',
+                    right: '-2px',
+                    background: '#E11D48',
                     color: '#ffffff',
                     fontSize: '0.72rem',
                     fontWeight: 700,
@@ -135,7 +157,7 @@ export default function Header() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '2px solid var(--bg)',
+                    border: '2px solid rgba(0,0,0,0.3)',
                   }}
                 >
                   {totalItems}
@@ -148,21 +170,10 @@ export default function Header() {
               onClick={toggleMenu}
               aria-label="Toggle menu"
             >
-              <span />
-              <span />
-              <span />
+              <span style={{ backgroundColor: '#FFFFFF' }} />
+              <span style={{ backgroundColor: '#FFFFFF' }} />
+              <span style={{ backgroundColor: '#FFFFFF' }} />
             </button>
-          </div>
-        </div>
-
-        {/* Horizontal Category Bar (1 single line everywhere, responsive scroll on mobile) */}
-        <div className="cat-subnav-bar">
-          <div className="wrap cat-subnav-track">
-            {sorted.map(cat => (
-              <a key={cat.slug} href={`#${cat.slug}`} className="cat-subnav-pill">
-                {formatCategoryTitle(cat.title, cat.slug)}
-              </a>
-            ))}
           </div>
         </div>
       </header>

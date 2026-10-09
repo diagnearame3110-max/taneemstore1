@@ -10,7 +10,7 @@ export default function Hero() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '96px 24px',
+        padding: '160px 24px 96px 24px',
         borderBottom: '1px solid var(--line)',
         overflow: 'hidden',
         background: '#1B1420 url("/banier.jpg") center center / cover no-repeat',

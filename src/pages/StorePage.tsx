@@ -24,9 +24,11 @@ export default function StorePage() {
 
   return (
     <div style={{ background: 'var(--bg)' }}>
-      <Header />
-      <main>
+      <div style={{ position: 'relative' }}>
+        <Header />
         <Hero />
+      </div>
+      <main>
         <BeautyManifesto />
         <TrustStrip />
         <ExploreCategories />
