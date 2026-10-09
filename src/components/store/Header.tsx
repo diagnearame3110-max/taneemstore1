@@ -60,68 +60,27 @@ export default function Header() {
             aria-label="Taneem'Store Accueil"
             style={{
               display: 'inline-flex',
-              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
               textDecoration: 'none',
-              gap: '4px',
               transition: 'transform 0.25s ease',
             }}
-            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
+            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.02)')}
             onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
           >
-            {/* Small Gold Monogram Emblem */}
-            <div
-              style={{
-                width: '34px',
-                height: '34px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #E6C675 0%, #D4AF37 50%, #9A7B2C 100%)',
-                padding: '1.5px',
-                boxShadow: '0 4px 16px rgba(212, 175, 55, 0.45)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <div
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '50%',
-                  background: '#1B1420',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#E6C675',
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: '0.88rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.04em',
-                }}
-              >
-                TS
-              </div>
-            </div>
-
-            {/* Brand Title Typography */}
             <span
               style={{
                 color: '#FFFFFF',
-                fontWeight: 700,
-                fontSize: '1.3rem',
-                fontFamily: "'Cormorant Garamond', serif",
-                letterSpacing: '0.1em',
+                fontWeight: 500,
+                fontSize: '1.65rem',
+                fontFamily: "'Cormorant Garamond', 'Cinzel', serif",
+                letterSpacing: '0.14em',
                 textTransform: 'uppercase',
-                textShadow: '0 2px 10px rgba(0,0,0,0.6)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
+                textShadow: '0 2px 10px rgba(0,0,0,0.5)',
                 lineHeight: 1,
               }}
             >
-              TANEEM'STORE
-              <span style={{ color: '#E6C675', fontSize: '0.72rem' }}>✦</span>
+              TANEEM’STORE
             </span>
           </a>
 
