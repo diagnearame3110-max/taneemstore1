@@ -1,4 +1,5 @@
 import { useProducts } from '../../store/ProductsContext';
+import { formatCategoryTitle } from '../../utils/format';
 
 export default function Footer() {
   const { categories, products } = useProducts();
@@ -22,7 +23,7 @@ export default function Footer() {
             <h4>Boutique</h4>
             {activeCategories.map(cat => (
               <a key={cat.slug} href={`#${cat.slug}`}>
-                {cat.title}
+                {formatCategoryTitle(cat.title, cat.slug)}
               </a>
             ))}
           </div>

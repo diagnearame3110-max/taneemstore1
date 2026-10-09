@@ -7,17 +7,23 @@ import { useToast } from '../../store/ToastContext';
 import type { Product } from '../../data/types';
 
 const CAT_LABELS: Record<string, string> = {
-  corps: 'Soins du Corps',
-  visage: 'Soins du Visage',
-  accessoires: 'Accessoires',
-  bienetre: 'Bien-être & Hygiène',
+  skincare: 'SKINCARE',
+  corps: 'SOIN CORPS',
+  dentaire: 'SOIN DENTAIRE',
+  levres: 'SOIN DES LEVRES',
+  bienetre: 'SOIN ET BIEN ETRE',
+  visage: 'SKINCARE',
+  accessoires: 'SOIN DENTAIRE',
 };
 
 const CAT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
+  skincare: { bg: '#F0F9FF', text: '#0369A1', border: '#BAE6FD' },
   corps: { bg: '#FDF8F5', text: '#8F776C', border: '#EFE8E3' },
+  dentaire: { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
+  levres: { bg: '#FFF1F2', text: '#E11D48', border: '#FECDD3' },
+  bienetre: { bg: '#F5F3FF', text: '#5B21B6', border: '#DDD6FE' },
   visage: { bg: '#F0F9FF', text: '#0369A1', border: '#BAE6FD' },
   accessoires: { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
-  bienetre: { bg: '#F5F3FF', text: '#5B21B6', border: '#DDD6FE' },
 };
 
 export default function ProductsPage() {

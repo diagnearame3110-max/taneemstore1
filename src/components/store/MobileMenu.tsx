@@ -1,5 +1,6 @@
 import type { Category } from '../../data/types';
 import { buildWhatsAppLink } from '../../utils/whatsapp';
+import { formatCategoryTitle } from '../../utils/format';
 
 interface Props {
   open: boolean;
@@ -59,7 +60,7 @@ export default function MobileMenu({ open, onClose, categories }: Props) {
               className="text-xl"
               style={{ fontFamily: 'Fraunces, serif', fontStyle: 'italic', color: 'var(--ink)' }}
             >
-              {cat.title}
+              {formatCategoryTitle(cat.title, cat.slug)}
             </a>
           ))}
         </nav>

@@ -146,7 +146,14 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
             const catMap = new Map<string, Category>();
             SEED_CATEGORIES.forEach(c => catMap.set(c.slug, c));
             rawCategories.forEach(c => {
-              if (c && c.slug) catMap.set(c.slug, c);
+              if (c && c.slug) {
+                const normSlug = normalizeCategorySlug(c.slug);
+                catMap.set(normSlug, {
+                  ...c,
+                  slug: normSlug,
+                  title: formatCategoryTitle(c.title, normSlug)
+                });
+              }
             });
             const categories = Array.from(catMap.values())
               .filter(c => c && (c.slug as string) !== 'maquillage')
@@ -219,10 +226,11 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
           if (dbCategories && dbCategories.length > 0) {
             dbCategories.forEach(c => {
               if (c && c.slug) {
-                catMap.set(c.slug, {
-                  slug: c.slug as CategorySlug,
+                const normSlug = normalizeCategorySlug(c.slug);
+                catMap.set(normSlug, {
+                  slug: normSlug,
                   number: c.number || '01',
-                  title: cleanText(c.title) || 'Catégorie',
+                  title: formatCategoryTitle(c.title, normSlug),
                   description: cleanText(c.description) || '',
                   order: Number(c.order) || 1,
                 });

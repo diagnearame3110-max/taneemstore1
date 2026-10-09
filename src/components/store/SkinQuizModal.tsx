@@ -15,8 +15,8 @@ export default function SkinQuizModal({ isOpen, onClose }: SkinQuizModalProps) {
   const [preferredGoal, setPreferredGoal] = useState<string | null>(null);
 
   const { products } = useProducts();
-  const { addItem, setIsCartOpen } = useCart();
-  const { addToast } = useToast();
+  const { addToCart, setIsCartOpen } = useCart();
+  const { showToast } = useToast();
 
   if (!isOpen) return null;
 
@@ -33,7 +33,7 @@ export default function SkinQuizModal({ isOpen, onClose }: SkinQuizModalProps) {
   };
 
   // Recommended products based on selections
-  const recommendedProducts = products.filter(p => p.categorySlug === 'skin').slice(0, 3);
+  const recommendedProducts = products.filter(p => p.categorySlug === 'skincare').slice(0, 3);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
@@ -161,8 +161,8 @@ export default function SkinQuizModal({ isOpen, onClose }: SkinQuizModalProps) {
                   </div>
                   <button
                     onClick={() => {
-                      addItem(prod);
-                      addToast(`${prod.name} ajouté à votre sac !`, 'success');
+                      addToCart(prod);
+                      showToast(`${prod.name} ajouté à votre sac !`, 'success');
                     }}
                     className="btn-primary text-[10px] py-1.5 px-3 whitespace-nowrap"
                   >
@@ -175,10 +175,10 @@ export default function SkinQuizModal({ isOpen, onClose }: SkinQuizModalProps) {
             <div className="flex items-center gap-3 pt-2">
               <button
                 onClick={() => {
-                  recommendedProducts.forEach(p => addItem(p));
+                  recommendedProducts.forEach(p => addToCart(p));
                   handleClose();
                   setIsCartOpen(true);
-                  addToast('Routine complète ajoutée à votre sac !', 'success');
+                  showToast('Routine complète ajoutée à votre sac !', 'success');
                 }}
                 className="btn-primary flex-1 py-3 text-xs uppercase tracking-widest"
               >

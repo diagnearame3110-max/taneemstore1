@@ -7,10 +7,11 @@ import ProductCard from '../../components/store/ProductCard';
 import type { CategorySlug, Product } from '../../data/types';
 
 const CATEGORIES: { slug: CategorySlug; label: string }[] = [
-  { slug: 'corps', label: 'Soins du Corps' },
-  { slug: 'visage', label: 'Soins du Visage' },
-  { slug: 'accessoires', label: 'Accessoires Beauté' },
-  { slug: 'bienetre', label: 'Bien-être & Hygiène' },
+  { slug: 'skincare', label: 'SKINCARE' },
+  { slug: 'corps', label: 'SOIN CORPS' },
+  { slug: 'dentaire', label: 'SOIN DENTAIRE' },
+  { slug: 'levres', label: 'SOIN DES LEVRES' },
+  { slug: 'bienetre', label: 'SOIN ET BIEN ETRE' },
 ];
 
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format';
@@ -23,7 +24,7 @@ export default function ProductFormPage() {
   const existing = id ? products.find(p => p.id === id) : null;
 
   const [name, setName] = useState(existing?.name ?? '');
-  const [categorySlug, setCategorySlug] = useState<CategorySlug>(existing?.categorySlug ?? 'corps');
+  const [categorySlug, setCategorySlug] = useState<CategorySlug>(existing?.categorySlug ?? 'skincare');
   const [description, setDescription] = useState(existing?.description ?? '');
   const [price, setPrice] = useState(existing?.price.toString() ?? '');
   const [image, setImage] = useState(existing?.image ?? '');

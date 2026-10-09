@@ -6,32 +6,39 @@ export default function ShopTheEditCategories() {
 
   const editCategories = [
     {
-      slug: 'visage',
-      title: 'VISAGE',
-      subtitle: 'Une peau saine & éclatante.',
+      slug: 'skincare',
+      title: 'SKINCARE',
+      subtitle: 'Sérums & nettoyants visage pour une peau parfaite.',
       image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80',
-      actionText: 'DÉCOUVRIR VISAGE →'
+      actionText: 'DÉCOUVRIR SKINCARE →'
     },
     {
       slug: 'corps',
-      title: 'CORPS',
-      subtitle: 'Soin & rituel du corps.',
+      title: 'SOIN CORPS',
+      subtitle: 'Lotions, gommages & rituels hydratation corps.',
       image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&auto=format&fit=crop&q=80',
-      actionText: 'DÉCOUVRIR CORPS →'
+      actionText: 'DÉCOUVRIR SOIN CORPS →'
     },
     {
-      slug: 'accessoires',
-      title: 'ACCESSOIRES',
-      subtitle: 'Les essentiels accessoires beauté.',
-      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&auto=format&fit=crop&q=80',
-      actionText: 'DÉCOUVRIR ACCESSOIRES →'
+      slug: 'dentaire',
+      title: 'SOIN DENTAIRE',
+      subtitle: "Soins d'hygiène bucco-dentaire & dentifrices.",
+      image: 'https://images.unsplash.com/photo-1559599101-f09722fb4948?w=800&auto=format&fit=crop&q=80',
+      actionText: 'DÉCOUVRIR SOIN DENTAIRE →'
+    },
+    {
+      slug: 'levres',
+      title: 'SOIN DES LEVRES',
+      subtitle: 'Baumes, masques & soins repulpants lèvres.',
+      image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=800&auto=format&fit=crop&q=80',
+      actionText: 'DÉCOUVRIR SOIN DES LEVRES →'
     },
     {
       slug: 'bienetre',
-      title: 'BIEN-ÊTRE',
-      subtitle: 'Sérénité & bien-être intérieur.',
+      title: 'SOIN ET BIEN ETRE',
+      subtitle: 'Sérénité, hygiène & bien-être au quotidien.',
       image: 'https://images.unsplash.com/photo-1519735777090-ec97162dc266?w=800&auto=format&fit=crop&q=80',
-      actionText: 'DÉCOUVRIR BIEN-ÊTRE →'
+      actionText: 'DÉCOUVRIR SOIN ET BIEN ETRE →'
     }
   ];
 

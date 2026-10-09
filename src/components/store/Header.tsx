@@ -3,18 +3,12 @@ import { buildWhatsAppLink } from '../../utils/whatsapp';
 import { useProducts } from '../../store/ProductsContext';
 import { useCart } from '../../store/CartContext';
 import { SEED_CATEGORIES } from '../../data/seedData';
+import { formatCategoryTitle } from '../../utils/format';
 import SearchModal from './SearchModal';
 import TopAnnouncementBar from './TopAnnouncementBar';
 
-function formatMenuTitle(title?: string): string {
-  if (!title) return '';
-  const clean = title.replace(/&amp;/g, '&').trim();
-  if (clean.toLowerCase().includes('corp')) return 'Corps';
-  if (clean.toLowerCase().includes('visage')) return 'Visage';
-  if (clean.toLowerCase().includes('maquillage')) return 'Maquillage';
-  if (clean.toLowerCase().includes('accessoire')) return 'Accessoires';
-  if (clean.toLowerCase().includes('bien') || clean.toLowerCase().includes('hygien')) return 'Bien-être';
-  return clean;
+function formatMenuTitle(title?: string, slug?: string): string {
+  return formatCategoryTitle(title, slug);
 }
 
 export default function Header() {
@@ -22,7 +16,7 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const { categories } = useProducts() || {};
   const { totalItems, openCart } = useCart();
-  const validCategories = (Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES).filter(c => c && c.slug !== ('maquillage' as any));
+  const validCategories = (Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES).filter(c => c && (c.slug as string) !== 'maquillage');
   const sorted = [...validCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -40,7 +34,7 @@ export default function Header() {
           <nav className="links">
             {sorted.map(cat => (
               <a key={cat.slug} href={`#${cat.slug}`}>
-                {formatMenuTitle(cat.title)}
+                {formatCategoryTitle(cat.title, cat.slug)}
               </a>
             ))}
           </nav>
@@ -207,7 +201,7 @@ export default function Header() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                justify: 'space-between',
+                justifyContent: 'space-between',
                 padding: '14px 18px',
                 borderRadius: '12px',
                 background: '#FFFFFF',

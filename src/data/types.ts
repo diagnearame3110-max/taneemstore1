@@ -1,4 +1,4 @@
-export type CategorySlug = 'corps' | 'visage' | 'accessoires' | 'bienetre';
+export type CategorySlug = 'skincare' | 'corps' | 'dentaire' | 'levres' | 'bienetre';
 
 export interface Product {
   id: string;
@@ -19,3 +19,4 @@ export interface Category {
   description: string;
   order: number;
 }
+

@@ -8,26 +8,29 @@ export function generateId(): string {
 }
 
 export function normalizeCategorySlug(raw?: unknown): import('../data/types').CategorySlug {
-  if (!raw || typeof raw !== 'string') return 'corps';
+  if (!raw || typeof raw !== 'string') return 'skincare';
   const clean = raw.toLowerCase().trim();
-  if (clean === 'corps' || clean === 'visage' || clean === 'accessoires' || clean === 'bienetre') {
+  if (clean === 'skincare' || clean === 'corps' || clean === 'dentaire' || clean === 'levres' || clean === 'bienetre') {
     return clean as import('../data/types').CategorySlug;
   }
-  if (clean.includes('visage')) return 'visage';
-  if (clean.includes('accessoire')) return 'accessoires';
-  if (clean.includes('bien') || clean.includes('hygiene') || clean.includes('hygiéne')) return 'bienetre';
+  if (clean.includes('skin') || clean.includes('visage')) return 'skincare';
   if (clean.includes('corp')) return 'corps';
-  return 'corps';
+  if (clean.includes('dent')) return 'dentaire';
+  if (clean.includes('levr') || clean.includes('lèvre')) return 'levres';
+  if (clean.includes('bien') || clean.includes('hygiene') || clean.includes('hygiéne')) return 'bienetre';
+  if (clean.includes('accessoire')) return 'dentaire';
+  return 'skincare';
 }
 
 export function formatCategoryTitle(title?: unknown, slug?: string): string {
   const clean = typeof title === 'string' ? title.replace(/&amp;/g, '&').trim() : '';
-  const normSlug = slug ? normalizeCategorySlug(slug) : (clean ? normalizeCategorySlug(clean) : 'corps');
+  const normSlug = slug ? normalizeCategorySlug(slug) : (clean ? normalizeCategorySlug(clean) : 'skincare');
   
-  if (normSlug === 'visage') return 'Visage';
-  if (normSlug === 'corps') return 'Corps';
-  if (normSlug === 'accessoires') return 'Accessoires';
-  if (normSlug === 'bienetre') return 'Bien-être';
+  if (normSlug === 'skincare') return 'SKINCARE';
+  if (normSlug === 'corps') return 'SOIN CORPS';
+  if (normSlug === 'dentaire') return 'SOIN DENTAIRE';
+  if (normSlug === 'levres') return 'SOIN DES LEVRES';
+  if (normSlug === 'bienetre') return 'SOIN ET BIEN ETRE';
   
-  return clean || 'Catégorie';
+  return clean ? clean.toUpperCase() : 'SKINCARE';
 }

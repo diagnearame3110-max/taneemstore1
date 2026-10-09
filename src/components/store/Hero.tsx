@@ -96,7 +96,7 @@ export default function Hero() {
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <a
             className="btn-primary"
-            href="#corps"
+            href="#skincare"
             style={{
               background: '#A99084',
               color: '#FFFFFF',

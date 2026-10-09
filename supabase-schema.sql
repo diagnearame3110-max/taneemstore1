@@ -60,9 +60,9 @@ CREATE POLICY "Public Update Orders" ON orders FOR UPDATE USING (true);
 -- INITIAL SEED DATA FOR CATEGORIES
 -- ================================================
 INSERT INTO categories (slug, number, title, description, "order") VALUES
-  ('corps', '01', 'Soins du Corps', 'Nourrissez, sublimez et enveloppez votre peau de douceur au quotidien.', 1),
-  ('visage', '02', 'Soins du Visage', 'Sérums, nettoyants et crèmes pour un teint radieux et éclatant.', 2),
-  ('maquillage', '03', 'Maquillage & Eclat', 'Sublimez votre beauté naturelle avec nos essentiels teint et lèvres.', 3),
-  ('accessoires', '04', 'Accessoires & Rituals', 'Pinceaux, outils de massage et accessoires pour perfectionner votre routine.', 4),
-  ('bienetre', '05', 'Bien-être & Wellness', 'Brumes d ambiance, bougies et soins relaxants pour l esprit.', 5)
+  ('skincare', '01', 'SKINCARE', 'Sérums, nettoyants, crèmes et soins ciblés du visage pour une peau éclatante.', 1),
+  ('corps', '02', 'SOIN CORPS', 'Lotions, gommages, huiles et rituels hydratation pour le corps.', 2),
+  ('dentaire', '03', 'SOIN DENTAIRE', 'Dentifrices, bains de bouche et accessoires d hygiène bucco-dentaire.', 3),
+  ('levres', '04', 'SOIN DES LEVRES', 'Baumes, masques, exfoliants et soins nourrissants pour les lèvres.', 4),
+  ('bienetre', '05', 'SOIN ET BIEN ETRE', 'Soins et produits pour votre bien-être au quotidien.', 5)
 ON CONFLICT (slug) DO NOTHING;

@@ -37,7 +37,7 @@ export default function BeautyManifesto() {
         </p>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <a
-            href="#corps"
+            href="#skincare"
             style={{
               display: 'inline-flex',
               alignItems: 'center',

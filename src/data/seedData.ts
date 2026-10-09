@@ -2,32 +2,39 @@ import type { Product, Category } from './types';
 
 export const SEED_CATEGORIES: Category[] = [
   {
-    "slug": "corps",
+    "slug": "skincare",
     "number": "01",
-    "title": "Corps",
-    "description": "Lotions, gommages et rituels hydratation pour le corps.",
+    "title": "SKINCARE",
+    "description": "Sérums, nettoyants, crèmes et soins ciblés du visage pour une peau éclatante.",
     "order": 1
   },
   {
-    "slug": "visage",
+    "slug": "corps",
     "number": "02",
-    "title": "Visage",
-    "description": "Sérums, masques et soins ciblés pour un teint lumineux.",
+    "title": "SOIN CORPS",
+    "description": "Lotions, gommages, huiles et rituels hydratation pour le corps.",
     "order": 2
   },
   {
-    "slug": "accessoires",
+    "slug": "dentaire",
     "number": "03",
-    "title": "Accessoires",
-    "description": "Les outils indispensables pour votre routine.",
+    "title": "SOIN DENTAIRE",
+    "description": "Dentifrices, bains de bouche et accessoires d'hygiène bucco-dentaire.",
     "order": 3
   },
   {
-    "slug": "bienetre",
+    "slug": "levres",
     "number": "04",
-    "title": "Bien-être",
-    "description": "Soins et produits pour votre bien-être au quotidien.",
+    "title": "SOIN DES LEVRES",
+    "description": "Baumes, masques, exfoliants et soins nourrissants pour les lèvres.",
     "order": 4
+  },
+  {
+    "slug": "bienetre",
+    "number": "05",
+    "title": "SOIN ET BIEN ETRE",
+    "description": "Soins et produits pour votre bien-être au quotidien.",
+    "order": 5
   }
 ];
 

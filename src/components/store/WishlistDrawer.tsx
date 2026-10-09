@@ -5,15 +5,15 @@ import { useToast } from '../../store/ToastContext';
 
 export default function WishlistDrawer() {
   const { wishlist, isWishlistOpen, setIsWishlistOpen, removeFromWishlist } = useWishlist();
-  const { addItem, setIsCartOpen } = useCart();
-  const { addToast } = useToast();
+  const { addToCart, setIsCartOpen } = useCart();
+  const { showToast } = useToast();
 
   if (!isWishlistOpen) return null;
 
   const handleMoveToCart = (product: any) => {
-    addItem(product);
+    addToCart(product);
     removeFromWishlist(product.id);
-    addToast(`${product.name} ajouté à votre sac !`, 'success');
+    showToast(`${product.name} ajouté à votre sac !`, 'success');
   };
 
   return (
@@ -101,10 +101,10 @@ export default function WishlistDrawer() {
             <div className="p-6 bg-white border-t border-[var(--line)] space-y-3">
               <button
                 onClick={() => {
-                  wishlist.forEach(item => addItem(item));
+                  wishlist.forEach(item => addToCart(item));
                   setIsWishlistOpen(false);
                   setIsCartOpen(true);
-                  addToast('Tous les articles ont été ajoutés à votre sac !', 'success');
+                  showToast('Tous les articles ont été ajoutés à votre sac !', 'success');
                 }}
                 className="btn-primary w-full py-3.5 text-xs tracking-widest uppercase"
               >

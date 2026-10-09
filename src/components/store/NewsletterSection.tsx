@@ -3,15 +3,15 @@ import { useToast } from '../../store/ToastContext';
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState('');
-  const { addToast } = useToast();
+  const { showToast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes('@')) {
-      addToast('Veuillez entrer une adresse email valide.', 'error');
+      showToast('Veuillez entrer une adresse email valide.', 'error');
       return;
     }
-    addToast('Merci pour votre inscription à la communauté Clean Girls Era !', 'success');
+    showToast('Merci pour votre inscription à la communauté Clean Girls Era !', 'success');
     setEmail('');
   };
 
