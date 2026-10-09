@@ -30,13 +30,13 @@ export default function Header() {
       <header
         style={{
           position: 'absolute',
-          top: 0,
+          top: '36px',
           left: 0,
           right: 0,
           zIndex: 50,
           background: 'transparent',
           borderBottom: 'none',
-          padding: '18px 0 10px 0',
+          padding: '16px 0 10px 0',
         }}
       >
         <div
