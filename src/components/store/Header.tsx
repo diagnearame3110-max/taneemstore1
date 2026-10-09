@@ -72,12 +72,13 @@ export default function Header() {
               style={{
                 color: '#FFFFFF',
                 fontWeight: 600,
-                fontSize: 'clamp(1.8rem, 4vw, 2.35rem)',
+                fontSize: 'clamp(1.15rem, 2.5vw, 1.65rem)',
                 fontFamily: "'Cormorant Garamond', 'Cinzel', serif",
-                letterSpacing: '0.15em',
+                letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                textShadow: '0 3px 14px rgba(0, 0, 0, 0.65)',
+                textShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
                 lineHeight: 1,
+                whiteSpace: 'nowrap',
               }}
             >
               TANEEM’STORE
@@ -90,7 +91,7 @@ export default function Header() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              gap: '12px',
+              gap: '8px',
             }}
           >
             {/* Search Icon Button */}
@@ -99,31 +100,31 @@ export default function Header() {
               aria-label="Rechercher un produit"
               title="Rechercher"
               style={{
-                background: 'rgba(255, 255, 255, 0.12)',
+                background: 'rgba(255, 255, 255, 0.14)',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
                 border: '1px solid rgba(255, 255, 255, 0.25)',
                 cursor: 'pointer',
-                width: '40px',
-                height: '40px',
+                width: '36px',
+                height: '36px',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#FFFFFF',
                 transition: 'all 0.2s ease',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
-                e.currentTarget.style.transform = 'scale(1.08)';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.28)';
+                e.currentTarget.style.transform = 'scale(1.06)';
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.14)';
                 e.currentTarget.style.transform = 'scale(1)';
               }}
             >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
@@ -142,18 +143,18 @@ export default function Header() {
                 WebkitBackdropFilter: 'blur(8px)',
                 border: '1px solid rgba(255, 255, 255, 0.25)',
                 cursor: 'pointer',
-                padding: '8px 16px',
+                padding: '6px 12px',
                 borderRadius: '100px',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '7px',
+                gap: '5px',
                 color: '#FFFFFF',
-                fontSize: '0.84rem',
+                fontSize: '0.8rem',
                 fontWeight: 600,
                 letterSpacing: '0.02em',
                 textDecoration: 'none',
                 transition: 'all 0.2s ease',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
                 textShadow: '0 1px 3px rgba(0,0,0,0.4)',
               }}
               onMouseEnter={e => {
@@ -165,10 +166,10 @@ export default function Header() {
                 (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(0)';
               }}
             >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
               </svg>
-              <span>Contact</span>
+              <span className="nav-text-label">Contact</span>
             </a>
 
             {/* Cart Icon Button */}
@@ -178,31 +179,31 @@ export default function Header() {
               title="Mon Panier"
               style={{
                 position: 'relative',
-                background: 'rgba(255, 255, 255, 0.12)',
+                background: 'rgba(255, 255, 255, 0.14)',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
                 border: '1px solid rgba(255, 255, 255, 0.25)',
                 cursor: 'pointer',
-                width: '40px',
-                height: '40px',
+                width: '36px',
+                height: '36px',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#FFFFFF',
                 transition: 'all 0.2s ease',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
-                e.currentTarget.style.transform = 'scale(1.08)';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.28)';
+                e.currentTarget.style.transform = 'scale(1.06)';
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.14)';
                 e.currentTarget.style.transform = 'scale(1)';
               }}
             >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="9" cy="21" r="1" />
                 <circle cx="20" cy="21" r="1" />
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
@@ -215,15 +216,15 @@ export default function Header() {
                     right: '-3px',
                     background: '#E11D48',
                     color: '#ffffff',
-                    fontSize: '0.72rem',
+                    fontSize: '0.68rem',
                     fontWeight: 800,
-                    width: '18px',
-                    height: '18px',
+                    width: '16px',
+                    height: '16px',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '2px solid rgba(0,0,0,0.3)',
+                    border: '1.5px solid rgba(0,0,0,0.3)',
                     boxShadow: '0 2px 6px rgba(225, 29, 72, 0.5)',
                   }}
                 >
