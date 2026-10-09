@@ -674,8 +674,8 @@ footer {
     gap: 4px !important;
   }
   .hero-section {
-    min-height: 280px !important;
-    padding: 85px 16px 28px !important;
+    min-height: 350px !important;
+    padding: 105px 16px 36px !important;
     background-position: center center !important;
   }
   .hero-bg-img {
@@ -683,13 +683,13 @@ footer {
     object-fit: cover !important;
   }
   .hero-h1 {
-    font-size: 1.65rem !important;
-    margin-bottom: 8px !important;
+    font-size: 1.85rem !important;
+    margin-bottom: 10px !important;
   }
   .hero-p {
-    font-size: 0.82rem !important;
-    line-height: 1.45 !important;
-    margin-bottom: 16px !important;
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 18px !important;
   }
   .foot-grid { grid-template-columns: 1fr; gap: 32px; }
   .wa-float { bottom: 18px; right: 18px; width: 46px; height: 46px; }
