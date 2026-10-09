@@ -30,17 +30,17 @@ export default function TopAnnouncementBar() {
       style={{
         position: 'relative',
         zIndex: 60,
-        background: '#1B1420',
-        borderBottom: '1px solid rgba(230, 198, 117, 0.3)',
-        padding: '7px 24px',
-        fontSize: '0.82rem',
+        background: 'linear-gradient(90deg, var(--pink) 0%, var(--pink-deep) 100%)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+        padding: '8px 24px',
+        fontSize: '0.84rem',
         fontWeight: 600,
         color: '#FFFFFF',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         userSelect: 'none',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+        boxShadow: '0 2px 10px rgba(169, 144, 132, 0.35)',
       }}
     >
       <button
