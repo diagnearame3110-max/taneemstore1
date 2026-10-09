@@ -71,12 +71,12 @@ export default function Header() {
             <span
               style={{
                 color: '#FFFFFF',
-                fontWeight: 500,
-                fontSize: '1.65rem',
+                fontWeight: 600,
+                fontSize: 'clamp(1.8rem, 4vw, 2.35rem)',
                 fontFamily: "'Cormorant Garamond', 'Cinzel', serif",
-                letterSpacing: '0.14em',
+                letterSpacing: '0.15em',
                 textTransform: 'uppercase',
-                textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                textShadow: '0 3px 14px rgba(0, 0, 0, 0.65)',
                 lineHeight: 1,
               }}
             >
