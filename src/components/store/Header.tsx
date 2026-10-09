@@ -154,6 +154,17 @@ export default function Header() {
             </button>
           </div>
         </div>
+
+        {/* Horizontal Category Bar (1 single line everywhere, responsive scroll on mobile) */}
+        <div className="cat-subnav-bar">
+          <div className="wrap cat-subnav-track">
+            {sorted.map(cat => (
+              <a key={cat.slug} href={`#${cat.slug}`} className="cat-subnav-pill">
+                {formatCategoryTitle(cat.title, cat.slug)}
+              </a>
+            ))}
+          </div>
+        </div>
       </header>
 
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
