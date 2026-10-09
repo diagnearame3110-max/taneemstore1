@@ -640,6 +640,9 @@ footer {
 }
 
 @media (max-width: 640px) {
+  .nav-text-label {
+    display: none !important;
+  }
   .wrap { padding: 0 12px; }
   .grid-4 {
     grid-template-columns: repeat(2, 1fr) !important;
