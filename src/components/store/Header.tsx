@@ -26,19 +26,26 @@ export default function Header() {
 
   return (
     <>
-      <TopAnnouncementBar />
-      <header
+      <div
         style={{
           position: 'absolute',
-          top: '38px',
+          top: 0,
           left: 0,
           right: 0,
           zIndex: 50,
-          background: 'transparent',
-          borderBottom: 'none',
-          padding: '12px 0',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
         }}
       >
+        <TopAnnouncementBar />
+        <header
+          style={{
+            background: 'transparent',
+            borderBottom: 'none',
+            padding: '4px 0 10px 0',
+          }}
+        >
         <div
           className="wrap navrow"
           style={{
@@ -246,6 +253,7 @@ export default function Header() {
           </div>
         </div>
       </header>
+      </div>
 
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
