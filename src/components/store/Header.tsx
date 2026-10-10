@@ -76,12 +76,12 @@ export default function Header() {
             onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
           >
             <span
+              className="brand-logo-text"
               style={{
                 color: '#FFFFFF',
                 fontWeight: 600,
-                fontSize: 'clamp(1.15rem, 2.5vw, 1.65rem)',
                 fontFamily: "'Cormorant Garamond', 'Cinzel', serif",
-                letterSpacing: '0.12em',
+                letterSpacing: '0.1em',
                 textTransform: 'uppercase',
                 textShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
                 lineHeight: 1,
@@ -94,11 +94,12 @@ export default function Header() {
 
           {/* RIGHT SEPARATE TRANSPARENT ICONS */}
           <div
+            className="header-actions-right"
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              gap: '8px',
+              gap: '6px',
             }}
           >
             {/* Search Icon Button */}
@@ -121,6 +122,7 @@ export default function Header() {
                 color: '#FFFFFF',
                 transition: 'all 0.2s ease',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                flexShrink: 0,
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.background = 'rgba(255, 255, 255, 0.28)';
@@ -144,6 +146,7 @@ export default function Header() {
               rel="noopener noreferrer"
               aria-label="Contact WhatsApp"
               title="Contactez-nous sur WhatsApp"
+              className="nav-contact-btn"
               style={{
                 background: 'rgba(255, 255, 255, 0.14)',
                 backdropFilter: 'blur(8px)',
@@ -154,6 +157,7 @@ export default function Header() {
                 borderRadius: '100px',
                 display: 'inline-flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '5px',
                 color: '#FFFFFF',
                 fontSize: '0.8rem',
@@ -163,6 +167,7 @@ export default function Header() {
                 transition: 'all 0.2s ease',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
                 textShadow: '0 1px 3px rgba(0,0,0,0.4)',
+                flexShrink: 0,
               }}
               onMouseEnter={e => {
                 (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255, 255, 255, 0.28)';

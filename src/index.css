@@ -639,13 +639,36 @@ footer {
   .checkout-grid { grid-template-columns: 1fr !important; }
 }
 
+.brand-logo-text {
+  font-size: clamp(1.15rem, 2.5vw, 1.65rem);
+}
+
 @media (max-width: 768px) {
   .nav-text-label {
     display: none !important;
   }
+  .nav-contact-btn {
+    width: 34px !important;
+    height: 34px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    justify-content: center !important;
+  }
 }
 
 @media (max-width: 640px) {
+  .brand-logo-text {
+    font-size: 1.05rem !important;
+    letter-spacing: 0.08em !important;
+  }
+  .header-actions-right {
+    gap: 4px !important;
+  }
+  .header-actions-right button,
+  .header-actions-right a {
+    width: 32px !important;
+    height: 32px !important;
+  }
   .wrap { padding: 0 12px; }
   .grid-4 {
     grid-template-columns: repeat(2, 1fr) !important;
