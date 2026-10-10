@@ -147,28 +147,37 @@ nav.links a:hover {
 .burger {
   display: none;
   flex-direction: column;
-  justify-content: space-between;
-  width: 26px;
-  height: 20px;
-  background: transparent;
-  border: none;
+  justify-content: center;
+  align-items: center;
+  gap: 3.5px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   cursor: pointer;
   padding: 0;
   z-index: 60;
   position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
 .burger span {
-  width: 100%;
+  width: 15px;
   height: 2px;
-  background-color: var(--text);
+  background-color: #ffffff;
   border-radius: 2px;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
   transform-origin: center;
+  display: block;
 }
 
 .burger.is-open span:nth-child(1) {
-  transform: translateY(9px) rotate(45deg);
+  transform: translateY(5.5px) rotate(45deg);
 }
 
 .burger.is-open span:nth-child(2) {
@@ -176,7 +185,7 @@ nav.links a:hover {
 }
 
 .burger.is-open span:nth-child(3) {
-  transform: translateY(-9px) rotate(-45deg);
+  transform: translateY(-5.5px) rotate(-45deg);
 }
 
 @media (max-width: 880px) {
