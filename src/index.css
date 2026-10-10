@@ -648,11 +648,7 @@ footer {
     display: none !important;
   }
   .nav-contact-btn {
-    width: 34px !important;
-    height: 34px !important;
-    padding: 0 !important;
-    border-radius: 50% !important;
-    justify-content: center !important;
+    display: none !important;
   }
 }
 

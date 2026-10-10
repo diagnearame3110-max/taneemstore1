@@ -49,16 +49,14 @@ export default function Header() {
         <div
           className="wrap navrow"
           style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr auto 1fr',
+            display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
             padding: 0,
+            width: '100%',
           }}
         >
-          {/* Left Empty Balance Spacer */}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            {/* Can hold subtle back link or remains clean for true symmetry */}
-          </div>
+          {/* LOGO ALIGNED TO FAR LEFT */}
 
           {/* CENTERED LOGO */}
           <a
