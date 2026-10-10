@@ -52,13 +52,13 @@ export default function Header() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: 0,
+            padding: '0 16px',
             width: '100%',
           }}
         >
-          {/* LOGO ALIGNED TO FAR LEFT */}
+          {/* LOGO ALIGNED TO FAR LEFT WITH MARGIN */}
 
-          {/* CENTERED LOGO */}
+          {/* BRAND LOGO */}
           <a
             href="/"
             className="brand"
@@ -97,7 +97,7 @@ export default function Header() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              gap: '6px',
+              gap: '10px',
             }}
           >
             {/* Search Icon Button */}

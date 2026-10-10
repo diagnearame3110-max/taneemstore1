@@ -667,7 +667,7 @@ footer {
     letter-spacing: 0.08em !important;
   }
   .header-actions-right {
-    gap: 4px !important;
+    gap: 10px !important;
   }
   .header-actions-right button,
   .header-actions-right a {
