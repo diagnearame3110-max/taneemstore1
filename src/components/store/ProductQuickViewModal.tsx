@@ -180,39 +180,31 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
           )}
         </div>
 
-        {/* Details Column: Consistently left-aligned, ordered, clean margins */}
-        <div className="flex-1 flex flex-col justify-center text-left items-start p-6 sm:p-7 md:p-8 md:pr-12 overflow-y-auto">
-          {/* Eyebrow Category */}
-          <span className="inline-block text-[11px] uppercase font-bold tracking-[0.25em] text-[var(--pink-deep)] mb-2">
-            {product.categorySlug}
-          </span>
-
-          {/* Title: Refined, elegant */}
-          <h2 className="text-lg sm:text-xl md:text-2xl font-serif font-bold text-stone-900 leading-snug mb-2.5 max-w-sm">
+        {/* Details Column: Pure, uncluttered luxury layout */}
+        <div className="flex-1 flex flex-col justify-center text-left items-start p-6 sm:p-8 md:p-10 md:pr-14 overflow-y-auto">
+          {/* Title: Refined serif */}
+          <h2 className="text-xl sm:text-2xl font-serif font-bold text-stone-900 leading-snug mb-2 max-w-sm">
             {product.name}
           </h2>
 
-          {/* Price & Stock Badge: Left aligned */}
-          <div className="flex items-center justify-start gap-3 mb-3.5">
-            <span className="text-xl sm:text-2xl font-extrabold text-[var(--pink-deep)]">
+          {/* Price & Stock Status: Clean and subtle */}
+          <div className="flex items-center gap-2.5 mb-3">
+            <span className="text-xl sm:text-2xl font-bold text-[var(--pink-deep)]">
               {product.priceFormatted || formatPrice(product.price)}
             </span>
-            <span className="text-stone-300">•</span>
-            <span className={`inline-flex items-center text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
-              product.inStock ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
-            }`}>
-              {product.inStock ? 'En stock' : 'Rupture'}
-            </span>
+            {product.inStock ? (
+              <span className="text-xs text-emerald-600 font-medium flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                En stock
+              </span>
+            ) : (
+              <span className="text-xs text-rose-500 font-medium">Épuisé</span>
+            )}
           </div>
-
-          {/* Description */}
-          <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-5 max-w-sm line-clamp-3">
-            {product.description || "Soin d'exception sélectionné pour votre routine quotidienne."}
-          </p>
 
           {/* Color Selector (if present) */}
           {Array.isArray(product.colors) && product.colors.length > 0 && (
-            <div className="w-full mb-5">
+            <div className="w-full mb-4">
               <div className="flex items-center justify-start gap-2 mb-2 text-xs">
                 <span className="text-stone-400 uppercase tracking-wider text-[10px] font-bold">Teinte :</span>
                 <span className="font-semibold text-stone-800">{selectedColor?.name || 'Choisir'}</span>
@@ -244,8 +236,8 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
             </div>
           )}
 
-          {/* Actions Row: Left-aligned, matching left edge of title and price */}
-          <div className="w-full pt-4 border-t border-stone-100 flex items-center justify-start gap-3">
+          {/* Actions Row: Stepper and Add to Cart Button */}
+          <div className="w-full flex items-center justify-start gap-3 mt-2">
             {/* Quantity Stepper */}
             <div className="flex items-center bg-stone-100 rounded-full h-11 px-1.5 shrink-0">
               <button
