@@ -100,14 +100,14 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
       onClick={onClose}
     >
       <div
-        className="bg-[var(--bg)] w-full max-w-[390px] md:max-w-[720px] max-h-[88vh] rounded-3xl border border-[var(--line)] shadow-2xl overflow-hidden flex flex-col md:flex-row relative transition-all"
+        className="bg-[var(--bg)] w-full max-w-[390px] md:max-w-[760px] max-h-[90vh] rounded-3xl border border-[var(--line)] shadow-2xl overflow-hidden flex flex-col md:flex-row relative transition-all"
         onClick={e => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={onClose}
           aria-label="Fermer"
-          className="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-[var(--text)] border border-[var(--line)] shadow-sm flex items-center justify-center transition-transform hover:scale-105 cursor-pointer"
+          className="absolute top-3.5 right-3.5 z-40 w-8 h-8 rounded-full bg-white/95 hover:bg-white text-[var(--text)] border border-[var(--line)] shadow-sm flex items-center justify-center transition-transform hover:scale-105 cursor-pointer"
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18" />
@@ -193,39 +193,39 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
           )}
         </div>
 
-        {/* Details Column: Centered, Decompressed & Balanced */}
-        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left p-5 sm:p-6 pb-6 sm:pb-7 overflow-y-auto">
-          {/* Category Tag */}
-          <div className="text-[11px] uppercase font-bold tracking-[0.2em] text-[var(--pink-deep)] mb-1.5">
+        {/* Details Column: Centered on mobile, Left-aligned on desktop, Airy & Generously Spaced */}
+        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left p-6 sm:p-7 md:p-8 md:pr-14 pb-7 sm:pb-8 overflow-y-auto">
+          {/* Category Pill with Breathing Room */}
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[var(--blush)] text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--pink-deep)] mb-3.5">
             {product.categorySlug}
           </div>
 
-          {/* Title */}
-          <h2 className="text-lg sm:text-xl font-serif font-bold text-[var(--text)] leading-snug mb-2 max-w-xs md:max-w-none">
+          {/* Title with Proper Margins, Centered on mobile, never overlapping close button */}
+          <h2 className="text-lg sm:text-xl md:text-2xl font-serif font-bold text-[var(--text)] leading-snug mb-3.5 max-w-sm px-1">
             {product.name}
           </h2>
 
-          {/* Price & Stock Badge */}
-          <div className="flex items-center justify-center md:justify-start gap-2.5 mb-2.5">
-            <span className="text-lg font-extrabold text-[var(--pink-deep)]">
+          {/* Price & Stock Badge with Generous Margins */}
+          <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+            <span className="text-xl font-extrabold text-[var(--pink-deep)]">
               {product.priceFormatted || formatPrice(product.price)}
             </span>
-            <span className={`inline-flex items-center text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+            <span className={`inline-flex items-center text-[11px] font-semibold px-3 py-0.5 rounded-full ${
               product.inStock ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'
             }`}>
               {product.inStock ? '● En stock' : '○ Rupture'}
             </span>
           </div>
 
-          {/* Description */}
-          <p className="text-xs sm:text-sm text-[var(--text-soft)] leading-relaxed mb-4 max-w-xs md:max-w-none">
+          {/* Description with Comfortable Line-Height and Spacing */}
+          <p className="text-xs sm:text-sm text-[var(--text-soft)] leading-relaxed mb-6 max-w-sm px-2">
             {product.description || "Soin d'exception sélectionné pour votre routine quotidienne."}
           </p>
 
-          {/* Color / Teinte Selection (if available) */}
+          {/* Color Selector (if present) with Proper Spacing */}
           {Array.isArray(product.colors) && product.colors.length > 0 && (
-            <div className="w-full mb-4 p-2.5 rounded-xl bg-[#FAF7F5] border border-[var(--line)]">
-              <div className="flex items-center justify-between text-xs mb-1.5">
+            <div className="w-full mb-6 p-3 rounded-2xl bg-[#FAF7F5] border border-[var(--line)]">
+              <div className="flex items-center justify-between text-xs mb-2">
                 <span className="font-bold text-[var(--text)] uppercase tracking-wider text-[10px]">
                   Teinte :
                 </span>
@@ -233,7 +233,7 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
                   {selectedColor?.name || 'Choisir une teinte'}
                 </span>
               </div>
-              <div className="flex flex-wrap gap-1.5 items-center justify-center md:justify-start">
+              <div className="flex flex-wrap gap-2 items-center justify-center md:justify-start">
                 {product.colors.map(c => {
                   const isSelected = selectedColor?.id === c.id || (!selectedColor && product.colors?.[0]?.id === c.id);
                   return (
@@ -242,9 +242,9 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
                       type="button"
                       onClick={() => handleSelectColor(c)}
                       title={c.name}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs border transition-all cursor-pointer ${
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs border transition-all cursor-pointer ${
                         isSelected
-                          ? 'border-[var(--pink-deep)] bg-white font-bold text-[var(--text)] shadow-xs'
+                          ? 'border-[var(--pink-deep)] bg-white font-bold text-[var(--text)] shadow-xs scale-105'
                           : 'border-[var(--line)] bg-[#FAF8F4] text-[var(--text-soft)] hover:bg-white'
                       }`}
                     >
@@ -260,10 +260,10 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
             </div>
           )}
 
-          {/* Bottom Actions Row: Spaced away from bottom edge */}
-          <div className="w-full mt-auto pt-4 border-t border-[var(--line)] flex items-center gap-3">
+          {/* Bottom Actions Row: Spaced, Border Separator, Full Width */}
+          <div className="w-full mt-auto pt-5 border-t border-[var(--line)] flex items-center justify-center gap-3">
             {/* Quantity Stepper */}
-            <div className="flex items-center border border-[var(--line)] rounded-full bg-white h-11 px-1 shrink-0 shadow-xs">
+            <div className="flex items-center border border-[var(--line)] rounded-full bg-white h-11 px-1.5 shrink-0 shadow-xs">
               <button
                 type="button"
                 onClick={() => setQuantity(q => Math.max(1, q - 1))}
@@ -272,7 +272,7 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
               >
                 -
               </button>
-              <span className="w-7 text-center font-bold text-sm text-[var(--text)]">
+              <span className="w-8 text-center font-bold text-sm text-[var(--text)]">
                 {quantity}
               </span>
               <button
@@ -290,13 +290,13 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
               type="button"
               onClick={handleAddToCart}
               disabled={!product.inStock}
-              className={`flex-1 h-11 px-5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+              className={`flex-1 h-11 px-6 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                 product.inStock
                   ? 'bg-[var(--pink)] hover:bg-[var(--pink-deep)] text-white shadow-sm hover:shadow cursor-pointer'
                   : 'bg-stone-300 text-stone-500 cursor-not-allowed'
               }`}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
                 <line x1="3" y1="6" x2="21" y2="6" />
                 <path d="M16 10a4 4 0 0 1-8 0" />
