@@ -180,10 +180,10 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
           )}
         </div>
 
-        {/* Details Column: Ordered, properly aligned on both desktop & mobile */}
-        <div className="flex-1 flex flex-col justify-center items-center md:items-start text-center md:text-left p-6 sm:p-7 md:p-8 md:pr-12 overflow-y-auto">
+        {/* Details Column: Consistently left-aligned, ordered, clean margins */}
+        <div className="flex-1 flex flex-col justify-center text-left items-start p-6 sm:p-7 md:p-8 md:pr-12 overflow-y-auto">
           {/* Eyebrow Category */}
-          <span className="inline-block text-[11px] uppercase font-bold tracking-[0.25em] text-[var(--pink-deep)] mb-1.5">
+          <span className="inline-block text-[11px] uppercase font-bold tracking-[0.25em] text-[var(--pink-deep)] mb-2">
             {product.categorySlug}
           </span>
 
@@ -192,8 +192,8 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
             {product.name}
           </h2>
 
-          {/* Price & Stock Badge */}
-          <div className="flex items-center justify-center md:justify-start gap-3 mb-3">
+          {/* Price & Stock Badge: Left aligned */}
+          <div className="flex items-center justify-start gap-3 mb-3.5">
             <span className="text-xl sm:text-2xl font-extrabold text-[var(--pink-deep)]">
               {product.priceFormatted || formatPrice(product.price)}
             </span>
@@ -206,18 +206,18 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
           </div>
 
           {/* Description */}
-          <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-4 max-w-sm line-clamp-3">
+          <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-5 max-w-sm line-clamp-3">
             {product.description || "Soin d'exception sélectionné pour votre routine quotidienne."}
           </p>
 
           {/* Color Selector (if present) */}
           {Array.isArray(product.colors) && product.colors.length > 0 && (
-            <div className="w-full mb-4">
-              <div className="flex items-center justify-center md:justify-start gap-2 mb-1.5 text-xs">
+            <div className="w-full mb-5">
+              <div className="flex items-center justify-start gap-2 mb-2 text-xs">
                 <span className="text-stone-400 uppercase tracking-wider text-[10px] font-bold">Teinte :</span>
                 <span className="font-semibold text-stone-800">{selectedColor?.name || 'Choisir'}</span>
               </div>
-              <div className="flex flex-wrap gap-2 items-center justify-center md:justify-start">
+              <div className="flex flex-wrap gap-2 items-center justify-start">
                 {product.colors.map(c => {
                   const isSelected = selectedColor?.id === c.id || (!selectedColor && product.colors?.[0]?.id === c.id);
                   return (
@@ -244,8 +244,8 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
             </div>
           )}
 
-          {/* Actions Row: Properly aligned (centered on mobile, left-aligned on desktop) */}
-          <div className="w-full pt-4 border-t border-stone-100 flex items-center justify-center md:justify-start gap-3 mb-3">
+          {/* Actions Row: Left-aligned, matching left edge of title and price */}
+          <div className="w-full pt-4 border-t border-stone-100 flex items-center justify-start gap-3">
             {/* Quantity Stepper */}
             <div className="flex items-center bg-stone-100 rounded-full h-11 px-1.5 shrink-0">
               <button
@@ -274,7 +274,7 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
               type="button"
               onClick={handleAddToCart}
               disabled={!product.inStock}
-              className={`flex-1 md:flex-initial md:px-7 h-11 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+              className={`flex-1 md:flex-initial md:px-8 h-11 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                 product.inStock
                   ? 'bg-[var(--pink)] hover:bg-[var(--pink-deep)] text-white shadow-xs hover:shadow cursor-pointer'
                   : 'bg-stone-200 text-stone-400 cursor-not-allowed'
@@ -287,28 +287,6 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
               </svg>
               <span>{product.inStock ? 'Ajouter au panier' : 'Rupture'}</span>
             </button>
-          </div>
-
-          {/* Reassurance Badges */}
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-3.5 gap-y-1 text-[11px] text-stone-500">
-            <span className="inline-flex items-center gap-1">
-              <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              100% Authentique
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              Livraison Dakar
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              Paiement à la livraison
-            </span>
           </div>
         </div>
       </div>
