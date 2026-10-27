@@ -117,8 +117,8 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
 
         {/* Media Column (Image + Thumbnails) */}
         <div className="w-full md:w-[320px] md:shrink-0 bg-[#FAF7F5] flex flex-col md:border-r border-[var(--line)]">
-          {/* Main Display Image Container: full-bleed cover for cohesive visual alignment */}
-          <div className="relative w-full h-[220px] sm:h-[240px] md:h-[320px] flex items-center justify-center overflow-hidden bg-white/40">
+          {/* Main Display Image Container: full-bleed cover with slightly increased length */}
+          <div className="relative w-full h-[240px] sm:h-[260px] md:h-[340px] flex items-center justify-center overflow-hidden bg-white/40">
             <img
               src={selectedImage || product.image || allImages[0]}
               alt={product.name}
@@ -193,20 +193,20 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
           )}
         </div>
 
-        {/* Details Column with Generous, Aligned Spacing */}
-        <div className="flex-1 flex flex-col p-5 sm:p-6 overflow-y-auto">
+        {/* Details Column: Centered, Decompressed & Balanced */}
+        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left p-5 sm:p-6 pb-6 sm:pb-7 overflow-y-auto">
           {/* Category Tag */}
-          <div className="text-[11px] uppercase font-bold tracking-[0.16em] text-[var(--pink-deep)] mb-1.5">
+          <div className="text-[11px] uppercase font-bold tracking-[0.2em] text-[var(--pink-deep)] mb-1.5">
             {product.categorySlug}
           </div>
 
           {/* Title */}
-          <h2 className="text-lg sm:text-xl font-serif font-bold text-[var(--text)] leading-snug mb-2">
+          <h2 className="text-lg sm:text-xl font-serif font-bold text-[var(--text)] leading-snug mb-2 max-w-xs md:max-w-none">
             {product.name}
           </h2>
 
           {/* Price & Stock Badge */}
-          <div className="flex items-center gap-3 mb-2.5">
+          <div className="flex items-center justify-center md:justify-start gap-2.5 mb-2.5">
             <span className="text-lg font-extrabold text-[var(--pink-deep)]">
               {product.priceFormatted || formatPrice(product.price)}
             </span>
@@ -218,13 +218,13 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
           </div>
 
           {/* Description */}
-          <p className="text-xs sm:text-sm text-[var(--text-soft)] leading-relaxed mb-4">
+          <p className="text-xs sm:text-sm text-[var(--text-soft)] leading-relaxed mb-4 max-w-xs md:max-w-none">
             {product.description || "Soin d'exception sélectionné pour votre routine quotidienne."}
           </p>
 
           {/* Color / Teinte Selection (if available) */}
           {Array.isArray(product.colors) && product.colors.length > 0 && (
-            <div className="mb-4 p-2.5 rounded-xl bg-[#FAF7F5] border border-[var(--line)]">
+            <div className="w-full mb-4 p-2.5 rounded-xl bg-[#FAF7F5] border border-[var(--line)]">
               <div className="flex items-center justify-between text-xs mb-1.5">
                 <span className="font-bold text-[var(--text)] uppercase tracking-wider text-[10px]">
                   Teinte :
@@ -233,7 +233,7 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
                   {selectedColor?.name || 'Choisir une teinte'}
                 </span>
               </div>
-              <div className="flex flex-wrap gap-1.5 items-center">
+              <div className="flex flex-wrap gap-1.5 items-center justify-center md:justify-start">
                 {product.colors.map(c => {
                   const isSelected = selectedColor?.id === c.id || (!selectedColor && product.colors?.[0]?.id === c.id);
                   return (
@@ -260,8 +260,8 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
             </div>
           )}
 
-          {/* Bottom Actions Row: Docked naturally at the bottom */}
-          <div className="mt-auto pt-4 border-t border-[var(--line)] flex items-center gap-3">
+          {/* Bottom Actions Row: Spaced away from bottom edge */}
+          <div className="w-full mt-auto pt-4 border-t border-[var(--line)] flex items-center gap-3">
             {/* Quantity Stepper */}
             <div className="flex items-center border border-[var(--line)] rounded-full bg-white h-11 px-1 shrink-0 shadow-xs">
               <button
