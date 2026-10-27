@@ -100,9 +100,8 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-[28px] border border-stone-200/70 shadow-[0_25px_60px_rgba(0,0,0,0.18)] overflow-hidden flex flex-col md:flex-row relative transition-all"
+        className="bg-white rounded-[28px] border border-stone-200/70 shadow-[0_25px_60px_rgba(0,0,0,0.18)] overflow-y-auto md:overflow-hidden flex flex-col md:flex-row relative transition-all w-[min(94vw,460px)] md:w-[780px] md:max-w-[94vw]"
         style={{
-          width: 'min(94vw, 460px)',
           maxHeight: '92vh',
         }}
         onClick={e => e.stopPropagation()}
@@ -191,15 +190,15 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
           )}
         </div>
 
-        {/* Details Column: Pure, uncluttered luxury layout */}
+        {/* Details Column: Ordered: Title → Price + Stock → Description → Actions */}
         <div
-          className="flex-1 flex flex-col justify-center text-left items-start overflow-y-auto"
+          className="flex-1 min-h-0 flex flex-col justify-start text-left items-start md:overflow-y-auto"
           style={{
             padding: '24px 22px 28px',
             gap: '16px',
           }}
         >
-          {/* Title: font-size 1.35rem */}
+          {/* 1. Title: font-size 1.35rem */}
           <h2
             className="font-serif font-bold text-stone-900 leading-snug max-w-sm m-0"
             style={{ fontSize: '1.35rem' }}
@@ -207,7 +206,7 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
             {product.name}
           </h2>
 
-          {/* Price & Stock Status: font-size 1.5rem / 0.85rem */}
+          {/* 2. Price & Stock Status: font-size 1.5rem / 0.85rem */}
           <div className="flex items-center gap-2.5 flex-wrap m-0">
             <span
               className="font-bold text-[var(--pink-deep)] leading-none"
@@ -233,7 +232,21 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
             )}
           </div>
 
-          {/* Color Selector (if present) */}
+          {/* 3. Product Description: margin 0; font-size 0.95rem; line-height 1.6; color text-soft; overflow-wrap anywhere */}
+          <p
+            className="m-0"
+            style={{
+              margin: 0,
+              fontSize: '0.95rem',
+              lineHeight: 1.6,
+              color: 'var(--text-soft, #6E6272)',
+              overflowWrap: 'anywhere',
+            }}
+          >
+            {product.description || "Soin d'exception sélectionné pour votre routine quotidienne."}
+          </p>
+
+          {/* 4. Color Selector (if present) */}
           {Array.isArray(product.colors) && product.colors.length > 0 && (
             <div className="w-full">
               <div className="flex items-center justify-start gap-2 mb-2 text-xs">
@@ -267,8 +280,11 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
             </div>
           )}
 
-          {/* Actions Row: Stepper (height: 52px, buttons min-width: 36px) & Button (height: 56px, font-size: 0.95rem) */}
-          <div className="w-full flex items-center justify-start gap-2.5 sm:gap-3">
+          {/* 5. Actions Row: Stepper (height: 52px, min-width: 36px) & Button (height: 56px, font-size: 0.95rem) */}
+          <div
+            className="w-full flex items-center justify-start gap-2.5 sm:gap-3 md:sticky md:bottom-0 bg-white shrink-0 z-10"
+            style={{ paddingTop: '12px' }}
+          >
             {/* Quantity Stepper */}
             <div
               className="flex items-center bg-stone-100 rounded-full px-1.5 shrink-0"
