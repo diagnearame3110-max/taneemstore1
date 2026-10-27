@@ -56,33 +56,11 @@ export default function SearchModal({ isOpen, onClose }: Props) {
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 100,
-        background: 'rgba(15, 8, 12, 0.65)',
-        backdropFilter: 'blur(6px)',
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        padding: '60px 16px 20px',
-        animation: 'fadeIn 0.2s ease-out',
-      }}
+      className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-start justify-center p-3 pt-8 sm:pt-14 sm:p-4 animate-fadeIn"
       onClick={onClose}
     >
       <div
-        style={{
-          background: 'var(--bg)',
-          width: '100%',
-          maxWidth: '680px',
-          borderRadius: '16px',
-          border: '1px solid var(--line)',
-          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          maxHeight: '80vh',
-        }}
+        className="bg-[var(--bg)] w-full max-w-[560px] rounded-2xl border border-[var(--line)] shadow-2xl overflow-hidden flex flex-col max-h-[78vh]"
         onClick={e => e.stopPropagation()}
       >
         {/* Search Header Bar */}
@@ -90,8 +68,8 @@ export default function SearchModal({ isOpen, onClose }: Props) {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '12px',
-            padding: '16px 20px',
+            gap: '10px',
+            padding: '12px 16px',
             borderBottom: '1px solid var(--line)',
             background: 'var(--card)',
           }}

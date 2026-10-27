@@ -25,6 +25,12 @@ CREATE TABLE IF NOT EXISTS products (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Note: Multiple images (gallery) and product color variants are automatically
+-- embedded into the product description metadata (zero migration required),
+-- and can also be queried if these optional columns are added in the future:
+-- ALTER TABLE products ADD COLUMN IF NOT EXISTS gallery TEXT[] DEFAULT '{}';
+-- ALTER TABLE products ADD COLUMN IF NOT EXISTS colors JSONB DEFAULT '[]';
+
 -- 3. Create ORDERS Table
 CREATE TABLE IF NOT EXISTS orders (
   id TEXT PRIMARY KEY,

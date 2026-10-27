@@ -20,7 +20,7 @@ interface ConfirmedOrder {
   deliveryMethod: 'dakar' | 'hors_region';
   deliveryFee: number;
   paymentMethod: 'orange_money' | 'wave';
-  cartItems: { product: Product; quantity: number }[];
+  cartItems: { product: Product; quantity: number; selectedColor?: string; selectedImage?: string }[];
   totalPrice: number;
   discountAmount: number;
   finalTotal: number;
@@ -143,9 +143,13 @@ export default function CheckoutPage() {
     cart.forEach(item => {
       const linePrice = formatPrice(item.product.price * item.quantity);
       text += `• Produit : ${item.quantity > 1 ? item.quantity + 'x ' : ''}${item.product.name}\n`;
+      if (item.selectedColor) {
+        text += `• Couleur : ${item.selectedColor}\n`;
+      }
       text += `• Prix : ${linePrice}\n`;
-      if (item.product.image && item.product.image.startsWith('http')) {
-        text += `• Image : ${item.product.image}\n`;
+      const photo = item.selectedImage || item.product.image;
+      if (photo && photo.startsWith('http')) {
+        text += `• Image : ${photo}\n`;
       }
       text += `\n`;
     });
@@ -392,49 +396,58 @@ export default function CheckoutPage() {
             
             {/* Ordered Items List */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', marginBottom: '28px' }}>
-              {confirmedOrder.cartItems.map(({ product, quantity }) => (
-                <div key={product.id} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{ position: 'relative', width: '64px', height: '64px', flexShrink: 0 }}>
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px', border: '1px solid #E5E7EB', background: '#FFFFFF' }}
-                    />
-                    <span
-                      style={{
-                        position: 'absolute',
-                        top: '-8px',
-                        right: '-8px',
-                        background: '#000000',
-                        color: '#FFFFFF',
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        width: '20px',
-                        height: '20px',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      {quantity}
-                    </span>
-                  </div>
-
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {product.name}
+              {confirmedOrder.cartItems.map((item) => {
+                const { product, quantity, selectedColor, selectedImage } = item;
+                const itemKey = `${product.id}__${selectedColor || ''}`;
+                return (
+                  <div key={itemKey} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <div style={{ position: 'relative', width: '64px', height: '64px', flexShrink: 0 }}>
+                      <img
+                        src={selectedImage || product.image}
+                        alt={product.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px', border: '1px solid #E5E7EB', background: '#FFFFFF' }}
+                      />
+                      <span
+                        style={{
+                          position: 'absolute',
+                          top: '-8px',
+                          right: '-8px',
+                          background: '#000000',
+                          color: '#FFFFFF',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          width: '20px',
+                          height: '20px',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {quantity}
+                      </span>
                     </div>
-                    <div style={{ fontSize: '0.78rem', color: '#6B7280' }}>
-                      {product.description.slice(0, 30)}...
+
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {product.name}
+                      </div>
+                      {selectedColor && (
+                        <div style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 600, marginTop: '2px' }}>
+                          Teinte : {selectedColor}
+                        </div>
+                      )}
+                      <div style={{ fontSize: '0.78rem', color: '#6B7280' }}>
+                        {product.description.slice(0, 30)}...
+                      </div>
+                    </div>
+
+                    <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827', whiteSpace: 'nowrap' }}>
+                      {formatPrice(product.price * quantity)}
                     </div>
                   </div>
-
-                  <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827', whiteSpace: 'nowrap' }}>
-                    {formatPrice(product.price * quantity)}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Totals Breakdown */}
@@ -833,49 +846,58 @@ export default function CheckoutPage() {
           
           {/* Cart Items */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '28px' }}>
-            {cart.map(({ product, quantity }) => (
-              <div key={product.id} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ position: 'relative', width: '64px', height: '64px', flexShrink: 0 }}>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px', border: '1px solid #E5E7EB', background: '#FFFFFF' }}
-                  />
-                  <span
-                    style={{
-                      position: 'absolute',
-                      top: '-8px',
-                      right: '-8px',
-                      background: '#6B7280',
-                      color: '#FFFFFF',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      width: '20px',
-                      height: '20px',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {quantity}
-                  </span>
-                </div>
-
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {product.name}
+            {cart.map((item) => {
+              const { product, quantity, selectedColor, selectedImage } = item;
+              const itemKey = `${product.id}__${selectedColor || ''}`;
+              return (
+                <div key={itemKey} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ position: 'relative', width: '64px', height: '64px', flexShrink: 0 }}>
+                    <img
+                      src={selectedImage || product.image}
+                      alt={product.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px', border: '1px solid #E5E7EB', background: '#FFFFFF' }}
+                    />
+                    <span
+                      style={{
+                        position: 'absolute',
+                        top: '-8px',
+                        right: '-8px',
+                        background: '#6B7280',
+                        color: '#FFFFFF',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        width: '20px',
+                        height: '20px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {quantity}
+                    </span>
                   </div>
-                  <div style={{ fontSize: '0.78rem', color: '#6B7280' }}>
-                    {product.description.slice(0, 30)}...
+
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {product.name}
+                    </div>
+                    {selectedColor && (
+                      <div style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 600, marginTop: '2px' }}>
+                        Teinte : {selectedColor}
+                      </div>
+                    )}
+                    <div style={{ fontSize: '0.78rem', color: '#6B7280' }}>
+                      {product.description.slice(0, 30)}...
+                    </div>
+                  </div>
+
+                  <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827', whiteSpace: 'nowrap' }}>
+                    {formatPrice(product.price * quantity)}
                   </div>
                 </div>
-
-                <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827', whiteSpace: 'nowrap' }}>
-                  {formatPrice(product.price * quantity)}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* PROMO CODE INPUT */}

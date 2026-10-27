@@ -94,11 +94,11 @@ export default function TaneemJournal() {
 
       {/* Article Modal */}
       {activeArticle !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl p-8 relative max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl p-4 sm:p-6 relative max-h-[85vh] overflow-y-auto">
             <button
               onClick={() => setActiveArticle(null)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[var(--ivoire)] hover:bg-[var(--rose-poudre)] flex items-center justify-center text-[var(--espresso)] transition-colors"
+              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[var(--blush)] hover:bg-[var(--pink-deep)] hover:text-white flex items-center justify-center text-[var(--text)] transition-colors cursor-pointer"
             >
               ✕
             </button>

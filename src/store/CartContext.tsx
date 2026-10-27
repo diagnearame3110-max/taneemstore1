@@ -3,15 +3,18 @@ import type { Product } from '../data/types';
 import { formatPrice } from '../utils/format';
 
 export interface CartItem {
+  id?: string;
   product: Product;
   quantity: number;
+  selectedColor?: string;
+  selectedImage?: string;
 }
 
 interface CartContextValue {
   cart: CartItem[];
-  addToCart: (product: Product, quantity?: number) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  addToCart: (product: Product, quantity?: number, selectedColor?: string, selectedImage?: string) => void;
+  removeFromCart: (cartItemIdOrProductId: string) => void;
+  updateQuantity: (cartItemIdOrProductId: string, quantity: number) => void;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
@@ -28,6 +31,11 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 const LS_KEY = 'taneem_store_cart_v1';
 const WHATSAPP_PHONE = '221781734994';
+
+function getItemKey(item: { product: { id: string }; selectedColor?: string; id?: string }): string {
+  if (item.id) return item.id;
+  return `${item.product.id}__${item.selectedColor || ''}`;
+}
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -53,11 +61,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [cart]);
 
-  const addToCart = (product: Product, quantity = 1) => {
+  const addToCart = (product: Product, quantity = 1, selectedColor?: string, selectedImage?: string) => {
     if (!product || !product.inStock) return;
+    const key = `${product.id}__${selectedColor || ''}`;
     setCart(prev => {
       const validPrev = Array.isArray(prev) ? prev.filter(i => i && i.product) : [];
-      const existingIndex = validPrev.findIndex(item => item.product.id === product.id);
+      const existingIndex = validPrev.findIndex(item => getItemKey(item) === key);
       if (existingIndex > -1) {
         const updated = [...validPrev];
         updated[existingIndex] = {
@@ -66,23 +75,45 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         };
         return updated;
       }
-      return [...validPrev, { product, quantity }];
+      return [
+        ...validPrev,
+        {
+          id: key,
+          product,
+          quantity,
+          selectedColor,
+          selectedImage: selectedImage || product.image,
+        },
+      ];
     });
   };
 
-  const removeFromCart = (productId: string) => {
-    setCart(prev => (Array.isArray(prev) ? prev.filter(item => item && item.product && item.product.id !== productId) : []));
+  const removeFromCart = (cartKeyOrProductId: string) => {
+    setCart(prev =>
+      (Array.isArray(prev) ? prev : []).filter(item => {
+        if (!item || !item.product) return false;
+        const key = getItemKey(item);
+        return key !== cartKeyOrProductId && item.product.id !== cartKeyOrProductId;
+      })
+    );
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (cartKeyOrProductId: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(cartKeyOrProductId);
       return;
     }
     setCart(prev =>
-      (Array.isArray(prev) ? prev : []).map(item =>
-        item && item.product && item.product.id === productId ? { ...item, quantity } : item
-      ).filter(item => item && item.product)
+      (Array.isArray(prev) ? prev : [])
+        .map(item => {
+          if (!item || !item.product) return item;
+          const key = getItemKey(item);
+          if (key === cartKeyOrProductId || item.product.id === cartKeyOrProductId) {
+            return { ...item, quantity };
+          }
+          return item;
+        })
+        .filter(item => item && item.product)
     );
   };
 
@@ -124,12 +155,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const linePrice = formatPrice(item.product.price * item.quantity);
       text += `📦 *ARTICLE ${idx + 1} :*\n`;
       text += `• Produit : ${item.quantity > 1 ? item.quantity + 'x ' : ''}${item.product.name}\n`;
+      if (item.selectedColor) {
+        text += `• Couleur / Teinte : ${item.selectedColor}\n`;
+      }
       text += `• Prix : ${linePrice}\n`;
       if (item.product.description) {
         text += `• Info : ${item.product.description}\n`;
       }
-      if (item.product.image && item.product.image.startsWith('http')) {
-        text += `• Photo : ${item.product.image}\n`;
+      const photoToUse = item.selectedImage || item.product.image;
+      if (photoToUse && photoToUse.startsWith('http')) {
+        text += `• Photo : ${photoToUse}\n`;
       }
       text += `\n`;
     });

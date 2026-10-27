@@ -15,6 +15,7 @@ type Action =
   | { type: 'ADD_PRODUCT'; payload: Product }
   | { type: 'UPDATE_PRODUCT'; payload: { id: string; data: Partial<Omit<Product, 'id'>> } }
   | { type: 'DELETE_PRODUCT'; payload: string }
+  | { type: 'DELETE_PRODUCTS'; payload: string[] }
   | { type: 'TOGGLE_STOCK'; payload: string }
   | { type: 'UPDATE_CATEGORY'; payload: { slug: CategorySlug; data: Partial<Category> } }
   | { type: 'REORDER_CATEGORIES'; payload: CategorySlug[] };
@@ -25,17 +26,71 @@ interface ProductsContextValue extends State {
   addProduct: (data: Omit<Product, 'id' | 'priceFormatted' | 'updatedAt'>) => Promise<void>;
   updateProduct: (id: string, data: Partial<Omit<Product, 'id'>>) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
+  deleteProducts: (ids: string[]) => Promise<void>;
   toggleStock: (id: string) => Promise<void>;
   updateCategory: (slug: CategorySlug, data: Partial<Category>) => Promise<void>;
   reorderCategories: (slugs: CategorySlug[]) => Promise<void>;
   syncSeedToSupabase: () => Promise<void>;
 }
 
-const LS_KEY = 'taneem_store_data_v3';
+const LS_KEY = 'taneem_store_data_v5';
 
 function cleanText(str?: unknown): string {
   if (typeof str !== 'string' || !str) return '';
   return str.replace(/&amp;/g, '&');
+}
+
+export function extractProductMetadata(rawDesc?: unknown): { cleanDescription: string; gallery: string[]; colors: any[] } {
+  if (typeof rawDesc !== 'string' || !rawDesc) return { cleanDescription: '', gallery: [], colors: [] };
+  const metaMatch = rawDesc.match(/<!--taneem_meta:([\s\S]*?)-->/);
+  if (!metaMatch) {
+    return { cleanDescription: rawDesc.trim(), gallery: [], colors: [] };
+  }
+  const cleanDescription = rawDesc.replace(/<!--taneem_meta:[\s\S]*?-->/, '').trim();
+  try {
+    const parsed = JSON.parse(metaMatch[1]);
+    return {
+      cleanDescription,
+      gallery: Array.isArray(parsed.gallery) ? parsed.gallery : [],
+      colors: Array.isArray(parsed.colors) ? parsed.colors : [],
+    };
+  } catch (e) {
+    return { cleanDescription, gallery: [], colors: [] };
+  }
+}
+
+export function buildProductDescriptionWithMeta(cleanDesc: string, gallery?: string[], colors?: any[]): string {
+  const clean = (cleanDesc || '').replace(/<!--taneem_meta:[\s\S]*?-->/, '').trim();
+  const hasMeta = (Array.isArray(gallery) && gallery.length > 0) || (Array.isArray(colors) && colors.length > 0);
+  if (!hasMeta) return clean;
+  const meta = {
+    gallery: gallery || [],
+    colors: colors || [],
+  };
+  return `${clean} <!--taneem_meta:${JSON.stringify(meta)}-->`;
+}
+
+function mapProductFromDb(p: any): Product {
+  const rawSlug = p.category_slug || p.categorySlug;
+  const categorySlug: CategorySlug = normalizeCategorySlug(rawSlug);
+  const priceNum = typeof p.price === 'number' && !isNaN(p.price) ? p.price : (Number(p.price) || 0);
+  const { cleanDescription, gallery, colors } = extractProductMetadata(p.description);
+  const productGallery = Array.isArray(p.gallery) ? p.gallery : gallery;
+  const productColors = Array.isArray(p.colors) ? p.colors : colors;
+
+  return {
+    id: String(p.id || generateId()),
+    name: cleanText(p.name) || 'Produit sans nom',
+    description: cleanDescription,
+    gallery: productGallery,
+    colors: productColors,
+    price: priceNum,
+    priceFormatted: formatPrice(priceNum),
+    image: p.image || 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format',
+    categorySlug,
+    inStock: p.in_stock ?? p.inStock ?? true,
+    updatedAt: p.updated_at || p.updatedAt || new Date().toISOString(),
+  };
 }
 
 
@@ -58,18 +113,16 @@ function reducer(state: State, action: Action): State {
       });
       const categories = Array.from(catMap.values()).sort((a, b) => (a.order || 0) - (b.order || 0));
 
-      const prodMap = new Map<string, Product>();
-      // 1. Add current state products first (excluding legacy demo products)
-      state.products.filter(p => !p.id.startsWith('prod_')).forEach(p => prodMap.set(p.id, p));
-      // 2. Override/add Supabase DB products (excluding legacy demo products)
-      (action.payload.products || []).filter(p => !p.id.startsWith('prod_')).forEach(p => prodMap.set(p.id, p));
-
-      // 3. Keep products sorted newest first
-      const products = Array.from(prodMap.values()).sort((a, b) => {
-        const timeA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
-        const timeB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
-        return timeB - timeA;
-      });
+      // Supabase is the source of truth for remote data:
+      // Products returned from Supabase form the authoritative catalog.
+      // We do NOT resurrect products from state.products that were deleted from Supabase.
+      const products = (action.payload.products || [])
+        .filter(p => p && p.id && !p.id.startsWith('prod_'))
+        .sort((a, b) => {
+          const timeA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+          const timeB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+          return timeB - timeA;
+        });
 
       return { categories, products };
     }
@@ -96,6 +149,10 @@ function reducer(state: State, action: Action): State {
       };
     case 'DELETE_PRODUCT':
       return { ...state, products: state.products.filter(p => p.id !== action.payload) };
+    case 'DELETE_PRODUCTS': {
+      const delSet = new Set(action.payload);
+      return { ...state, products: state.products.filter(p => !delSet.has(p.id)) };
+    }
     case 'TOGGLE_STOCK':
       return {
         ...state,
@@ -164,14 +221,19 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
             return {
               products: parsed.products
                 .filter(p => p && !p.id.startsWith('prod_'))
-                .map(p => ({
-                  ...p,
-                  name: cleanText(p.name) || 'Produit',
-                  description: cleanText(p.description),
-                  price: typeof p.price === 'number' && !isNaN(p.price) ? p.price : Number(p.price) || 0,
-                  priceFormatted: formatPrice(p.price),
-                  categorySlug: normalizeCategorySlug(p.categorySlug || (p as any).category_slug)
-                })),
+                .map(p => {
+                  const { cleanDescription, gallery, colors } = extractProductMetadata(p.description);
+                  return {
+                    ...p,
+                    name: cleanText(p.name) || 'Produit',
+                    description: cleanDescription || cleanText(p.description),
+                    gallery: Array.isArray(p.gallery) ? p.gallery : gallery,
+                    colors: Array.isArray(p.colors) ? p.colors : colors,
+                    price: typeof p.price === 'number' && !isNaN(p.price) ? p.price : Number(p.price) || 0,
+                    priceFormatted: formatPrice(p.price),
+                    categorySlug: normalizeCategorySlug(p.categorySlug || (p as any).category_slug)
+                  };
+                }),
               categories: categories.map(c => ({
                 ...c,
                 title: formatCategoryTitle(c.title, c.slug),
@@ -210,42 +272,64 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
       }
 
       try {
-        const { data: dbCategories, error: catErr } = await supabase
-          .from('categories')
-          .select('*')
-          .order('order', { ascending: true });
+        const [catRes, prodRes] = await Promise.all([
+          supabase.from('categories').select('*').order('order', { ascending: true }),
+          supabase.from('products').select('*').order('created_at', { ascending: false }),
+        ]);
 
-        const { data: dbProducts, error: prodErr } = await supabase
-          .from('products')
-          .select('*')
-          .order('created_at', { ascending: false });
+        const dbCategories = catRes.data;
+        const dbProducts = prodRes.data;
 
-        if (!catErr && !prodErr && (dbCategories || dbProducts)) {
-          // Build categories map seeded with default 5 categories
-          const catMap = new Map<string, Category>();
-          SEED_CATEGORIES.forEach(c => catMap.set(c.slug, c));
+        // Build categories seeded with default 5 categories
+        const catMap = new Map<string, Category>();
+        SEED_CATEGORIES.forEach(c => catMap.set(c.slug, c));
 
-          if (dbCategories && dbCategories.length > 0) {
-            dbCategories.forEach(c => {
-              if (c && c.slug) {
-                const normSlug = normalizeCategorySlug(c.slug);
-                if (catMap.has(normSlug)) {
-                  const defaultCat = catMap.get(normSlug)!;
-                  catMap.set(normSlug, {
-                    ...defaultCat,
-                    title: formatCategoryTitle(c.title, normSlug),
-                    description: cleanText(c.description) || defaultCat.description,
-                    order: Number(c.order) || defaultCat.order,
-                  });
-                }
+        if (dbCategories && dbCategories.length > 0) {
+          dbCategories.forEach(c => {
+            if (c && c.slug) {
+              const normSlug = normalizeCategorySlug(c.slug);
+              if (catMap.has(normSlug)) {
+                const defaultCat = catMap.get(normSlug)!;
+                catMap.set(normSlug, {
+                  ...defaultCat,
+                  title: formatCategoryTitle(c.title, normSlug),
+                  description: cleanText(c.description) || defaultCat.description,
+                  order: Number(c.order) || defaultCat.order,
+                });
               }
-            });
-          }
+            }
+          });
+        }
 
-          const categoriesToUse = Array.from(catMap.values())
-            .sort((a, b) => (a.order || 0) - (b.order || 0));
+        const categoriesToUse = Array.from(catMap.values())
+          .sort((a, b) => (a.order || 0) - (b.order || 0));
 
-          // Auto-upsert canonical categories to Supabase to update DB table
+        // Build authoritative products list strictly from Supabase
+        const dbMapped: Product[] = (dbProducts || [])
+          .filter(p => p && p.id && !String(p.id).startsWith('prod_'))
+          .map(mapProductFromDb);
+
+        // DISPATCH IMMEDIATELY - Do not block UI rendering!
+        dispatch({
+          type: 'MERGE_SUPABASE_DATA',
+          payload: {
+            categories: categoriesToUse,
+            products: dbMapped,
+          },
+        });
+
+        // Immediately update localStorage so a deleted product never revives on refresh
+        try {
+          localStorage.setItem(LS_KEY, JSON.stringify({
+            categories: categoriesToUse,
+            products: dbMapped,
+          }));
+        } catch (e) {
+          console.warn('LocalStorage immediate sync warning:', e);
+        }
+
+        // Background non-blocking maintenance for categories & legacy data
+        (async () => {
           try {
             const categoriesPayload = categoriesToUse.map((c, i) => ({
               slug: c.slug,
@@ -256,7 +340,6 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
             }));
             await supabase.from('categories').upsert(categoriesPayload, { onConflict: 'slug' });
 
-            // Delete legacy categories from Supabase (e.g., 'visage', 'accessoires', 'maquillage')
             const validSlugs = new Set(['skincare', 'corps', 'dentaire', 'levres', 'bienetre']);
             if (dbCategories && dbCategories.length > 0) {
               for (const cat of dbCategories) {
@@ -265,44 +348,18 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
                 }
               }
             }
-          } catch (e) {
-            console.warn('Supabase categories auto-sync warning:', e);
-          }
 
-          let dbMapped: Product[] = [];
-          if (dbProducts && dbProducts.length > 0) {
-            dbMapped = dbProducts.map(p => {
-              const rawSlug = p.category_slug || p.categorySlug;
-              const categorySlug: CategorySlug = normalizeCategorySlug(rawSlug);
-              const priceNum = typeof p.price === 'number' && !isNaN(p.price) ? p.price : (Number(p.price) || 0);
-
-              // Update legacy product category_slug in Supabase if needed
-              if (rawSlug !== categorySlug && supabase) {
-                supabase.from('products').update({ category_slug: categorySlug }).eq('id', p.id).then();
+            if (dbProducts && dbProducts.length > 0) {
+              for (const prod of dbProducts) {
+                if (prod && prod.id && String(prod.id).startsWith('prod_')) {
+                  await supabase.from('products').delete().eq('id', prod.id);
+                }
               }
-
-              return {
-                id: String(p.id || generateId()),
-                name: cleanText(p.name) || 'Produit sans nom',
-                description: cleanText(p.description) || '',
-                price: priceNum,
-                priceFormatted: formatPrice(priceNum),
-                image: p.image || 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format',
-                categorySlug,
-                inStock: p.in_stock ?? p.inStock ?? true,
-                updatedAt: p.updated_at || p.updatedAt || new Date().toISOString(),
-              };
-            });
+            }
+          } catch (e) {
+            console.warn('Background cleanup warning:', e);
           }
-
-          dispatch({
-            type: 'MERGE_SUPABASE_DATA',
-            payload: {
-              categories: categoriesToUse,
-              products: dbMapped,
-            },
-          });
-        }
+        })();
       } catch (err) {
         console.warn('Supabase fetch warning, using local state fallback:', err);
       } finally {
@@ -311,6 +368,54 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
     }
 
     loadFromSupabase();
+  }, []);
+
+  // Supabase Realtime synchronization for instant database deletions & updates
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) return;
+
+    const channel = supabase
+      .channel('products-realtime-sync')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'products' },
+        (payload) => {
+          if (payload.eventType === 'DELETE') {
+            const deletedId = payload.old?.id;
+            if (deletedId) {
+              const strId = String(deletedId);
+              dispatch({ type: 'DELETE_PRODUCT', payload: strId });
+              try {
+                const saved = localStorage.getItem(LS_KEY);
+                if (saved) {
+                  const parsed = JSON.parse(saved);
+                  if (parsed && Array.isArray(parsed.products)) {
+                    parsed.products = parsed.products.filter((p: any) => p && p.id !== strId);
+                    localStorage.setItem(LS_KEY, JSON.stringify(parsed));
+                  }
+                }
+              } catch {}
+            }
+          } else if (payload.eventType === 'INSERT') {
+            const p = payload.new as any;
+            if (p && p.id && !String(p.id).startsWith('prod_')) {
+              const mapped = mapProductFromDb(p);
+              dispatch({ type: 'ADD_PRODUCT', payload: mapped });
+            }
+          } else if (payload.eventType === 'UPDATE') {
+            const p = payload.new as any;
+            if (p && p.id) {
+              const mapped = mapProductFromDb(p);
+              dispatch({ type: 'UPDATE_PRODUCT', payload: { id: String(p.id), data: mapped } });
+            }
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   // Save to local storage backup
@@ -356,9 +461,17 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
   const addProduct = async (data: Omit<Product, 'id' | 'priceFormatted' | 'updatedAt'>) => {
     const id = generateId();
     const normalizedSlug = normalizeCategorySlug(data.categorySlug);
+    const { cleanDescription, gallery, colors } = extractProductMetadata(data.description);
+    const finalGallery = Array.isArray(data.gallery) && data.gallery.length > 0 ? data.gallery : gallery;
+    const finalColors = Array.isArray(data.colors) && data.colors.length > 0 ? data.colors : colors;
+    const packedDescription = buildProductDescriptionWithMeta(data.description || cleanDescription, finalGallery, finalColors);
+
     const product: Product = {
       ...data,
       id,
+      description: cleanDescription || data.description || '',
+      gallery: finalGallery,
+      colors: finalColors,
       categorySlug: normalizedSlug,
       priceFormatted: formatPrice(data.price),
       updatedAt: new Date().toISOString(),
@@ -371,7 +484,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
         const { error } = await supabase.from('products').insert({
           id,
           name: data.name,
-          description: data.description,
+          description: packedDescription,
           price: data.price,
           image: data.image,
           category_slug: normalizedSlug,
@@ -388,17 +501,38 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateProduct = async (id: string, data: Partial<Omit<Product, 'id'>>) => {
+    const existing = state.products.find(p => p.id === id);
     const updatedData = { ...data };
     if (updatedData.categorySlug) {
       updatedData.categorySlug = normalizeCategorySlug(updatedData.categorySlug);
     }
-    dispatch({ type: 'UPDATE_PRODUCT', payload: { id, data: updatedData } });
+
+    const cleanDesc = updatedData.description !== undefined
+      ? extractProductMetadata(updatedData.description).cleanDescription
+      : (existing?.description || '');
+    const currentGallery = updatedData.gallery !== undefined
+      ? (updatedData.gallery || [])
+      : (existing?.gallery || []);
+    const currentColors = updatedData.colors !== undefined
+      ? (updatedData.colors || [])
+      : (existing?.colors || []);
+
+    const packedDescription = buildProductDescriptionWithMeta(cleanDesc, currentGallery, currentColors);
+
+    const productPayload = {
+      ...updatedData,
+      description: cleanDesc,
+      gallery: currentGallery,
+      colors: currentColors,
+    };
+
+    dispatch({ type: 'UPDATE_PRODUCT', payload: { id, data: productPayload } });
 
     if (supabase) {
       try {
         const dbPayload: Record<string, any> = {};
         if (updatedData.name !== undefined) dbPayload.name = updatedData.name;
-        if (updatedData.description !== undefined) dbPayload.description = updatedData.description;
+        dbPayload.description = packedDescription;
         if (updatedData.price !== undefined) dbPayload.price = updatedData.price;
         if (updatedData.image !== undefined) dbPayload.image = updatedData.image;
         if (updatedData.categorySlug !== undefined) dbPayload.category_slug = updatedData.categorySlug;
@@ -416,9 +550,71 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const deleteProduct = async (id: string) => {
-    dispatch({ type: 'DELETE_PRODUCT', payload: id });
+    // 1. Delete from Supabase FIRST and await database confirmation
     if (supabase) {
-      await supabase.from('products').delete().eq('id', id);
+      try {
+        const { error } = await supabase.from('products').delete().eq('id', id);
+        if (error) {
+          console.error('Supabase delete error:', error);
+          throw new Error(error.message || 'Impossible de supprimer le produit dans la base de données');
+        }
+      } catch (err) {
+        console.error('Supabase delete exception:', err);
+        throw err;
+      }
+    }
+
+    // 2. Once Supabase confirmed deletion, update React state
+    dispatch({ type: 'DELETE_PRODUCT', payload: id });
+
+    // 3. Proactively clean localStorage so it never lingers
+    try {
+      const saved = localStorage.getItem(LS_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && Array.isArray(parsed.products)) {
+          parsed.products = parsed.products.filter((p: Product) => p && p.id !== id);
+          localStorage.setItem(LS_KEY, JSON.stringify(parsed));
+        }
+      }
+    } catch (e) {
+      console.warn('LocalStorage delete cleanup error:', e);
+    }
+  };
+
+  const deleteProducts = async (ids: string[]) => {
+    if (!ids || ids.length === 0) return;
+    const idSet = new Set(ids);
+
+    // 1. Delete from Supabase FIRST and await database confirmation
+    if (supabase) {
+      try {
+        const { error } = await supabase.from('products').delete().in('id', ids);
+        if (error) {
+          console.error('Supabase batch delete error:', error);
+          throw new Error(error.message || 'Impossible de supprimer les produits sélectionnés dans la base de données');
+        }
+      } catch (err) {
+        console.error('Supabase batch delete exception:', err);
+        throw err;
+      }
+    }
+
+    // 2. Once Supabase confirmed batch deletion, update React state
+    dispatch({ type: 'DELETE_PRODUCTS', payload: ids });
+
+    // 3. Proactively clean localStorage
+    try {
+      const saved = localStorage.getItem(LS_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && Array.isArray(parsed.products)) {
+          parsed.products = parsed.products.filter((p: Product) => p && !idSet.has(p.id));
+          localStorage.setItem(LS_KEY, JSON.stringify(parsed));
+        }
+      }
+    } catch (e) {
+      console.warn('LocalStorage bulk delete cleanup error:', e);
     }
   };
 
@@ -456,6 +652,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
     addProduct,
     updateProduct,
     deleteProduct,
+    deleteProducts,
     toggleStock,
     updateCategory,
     reorderCategories,

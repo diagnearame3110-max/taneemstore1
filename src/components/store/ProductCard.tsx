@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import type { Product } from '../../data/types';
 import { useCart } from '../../store/CartContext';
 import { useToast } from '../../store/ToastContext';
@@ -15,15 +16,25 @@ const BEST_SELLER_IDS = new Set(['prod_1', 'prod_3', 'prod_6', 'prod_12', 'prod_
 export default function ProductCard({ product, preview = false, onOpenQuickView }: Props) {
   const { addToCart } = useCart();
   const { showToast } = useToast();
+  const [activeColorIndex, setActiveColorIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    setActiveColorIndex(null);
+  }, [product?.id, product?.image]);
 
   const isBestSeller = product?.id ? BEST_SELLER_IDS.has(product.id) : false;
+  const colors = Array.isArray(product?.colors) ? product.colors : [];
+  const gallery = Array.isArray(product?.gallery) ? product.gallery : [];
+  const activeColor = activeColorIndex !== null && colors[activeColorIndex] ? colors[activeColorIndex] : null;
+  const displayedImage = activeColor?.image || product?.image || 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format';
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (preview || !product?.inStock) return;
-    addToCart(product);
-    showToast(`"${product.name || 'Produit'}" ajouté au panier !`, 'success');
+    addToCart(product, 1, activeColor?.name, displayedImage);
+    const colorNote = activeColor ? ` (${activeColor.name})` : '';
+    showToast(`"${product.name || 'Produit'}${colorNote}" ajouté au panier !`, 'success');
   };
 
   const handleCardClick = () => {
@@ -66,8 +77,34 @@ export default function ProductCard({ product, preview = false, onOpenQuickView 
           </div>
         )}
 
+        {/* Gallery Multi-photo indicator if more than 1 image */}
+        {gallery.length > 0 && (
+          <div
+            title={`${1 + gallery.length} photos disponibles`}
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              background: 'rgba(27, 20, 32, 0.75)',
+              backdropFilter: 'blur(4px)',
+              color: '#FFFFFF',
+              fontSize: '0.7rem',
+              fontWeight: 600,
+              padding: '2px 8px',
+              borderRadius: '100px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              zIndex: 2,
+            }}
+          >
+            <span>📷</span>
+            <span>+{gallery.length}</span>
+          </div>
+        )}
+
         <img
-          src={product.image || 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop&auto=format'}
+          src={displayedImage}
           alt={product.name || 'Produit'}
           onError={e => {
             e.currentTarget.onerror = null;
@@ -103,9 +140,58 @@ export default function ProductCard({ product, preview = false, onOpenQuickView 
           <span style={{ fontSize: '0.72rem', color: 'var(--text-soft)', fontWeight: 600, marginLeft: '3px' }}>5.0</span>
         </div>
 
-        <h3 style={{ fontSize: '0.98rem', fontWeight: 700, marginBottom: '12px', lineHeight: 1.3 }}>
+        <h3 style={{ fontSize: '0.98rem', fontWeight: 700, marginBottom: '6px', lineHeight: 1.3 }}>
           {product.name || 'Produit'}
         </h3>
+
+        {/* Color swatches preview if colors exist */}
+        {colors.length > 0 && (
+          <div
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}
+            onClick={e => e.stopPropagation()}
+          >
+            {colors.slice(0, 5).map((col, idx) => {
+              const isSelected = activeColorIndex === idx;
+              return (
+                <button
+                  key={col.id || idx}
+                  type="button"
+                  title={col.name}
+                  onClick={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setActiveColorIndex(idx);
+                  }}
+                  onMouseEnter={() => {
+                    if (col.image) setActiveColorIndex(idx);
+                  }}
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '50%',
+                    background: col.hex || '#E8A598',
+                    border: isSelected ? '2px solid var(--pink-deep)' : '1.5px solid rgba(0,0,0,0.18)',
+                    padding: 0,
+                    cursor: 'pointer',
+                    boxShadow: isSelected ? '0 0 0 2px rgba(169, 144, 132, 0.4)' : 'none',
+                    transform: isSelected ? 'scale(1.15)' : 'scale(1)',
+                    transition: 'all 0.15s ease',
+                  }}
+                />
+              );
+            })}
+            {colors.length > 5 && (
+              <span style={{ fontSize: '0.72rem', color: 'var(--text-soft)', fontWeight: 600 }}>
+                +{colors.length - 5}
+              </span>
+            )}
+            {activeColor && (
+              <span style={{ fontSize: '0.72rem', color: 'var(--pink-deep)', fontWeight: 600, marginLeft: '4px' }}>
+                {activeColor.name}
+              </span>
+            )}
+          </div>
+        )}
         
         <div 
           className="row" 

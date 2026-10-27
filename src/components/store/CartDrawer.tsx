@@ -115,117 +115,143 @@ export default function CartDrawer() {
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {(cart || []).filter(item => item && item.product).map(({ product, quantity }) => (
-                <div
-                  key={product.id}
-                  style={{
-                    display: 'flex',
-                    gap: '12px',
-                    paddingBottom: '16px',
-                    borderBottom: '1px solid var(--line)',
-                    alignItems: 'center',
-                  }}
-                >
-                  <img
-                    src={product.image}
-                    alt={product.name}
+              {(cart || []).filter(item => item && item.product).map((item) => {
+                const { product, quantity, selectedColor, selectedImage } = item;
+                const itemKey = item.id || `${product.id}__${selectedColor || ''}`;
+                return (
+                  <div
+                    key={itemKey}
                     style={{
-                      width: '64px',
-                      height: '64px',
-                      objectFit: 'cover',
-                      borderRadius: '5px',
-                      background: 'var(--blush-soft)',
-                      flexShrink: 0,
+                      display: 'flex',
+                      gap: '12px',
+                      paddingBottom: '16px',
+                      borderBottom: '1px solid var(--line)',
+                      alignItems: 'center',
                     }}
-                  />
-
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <h4
+                  >
+                    <img
+                      src={selectedImage || product.image}
+                      alt={product.name}
                       style={{
-                        fontFamily: 'Fraunces, serif',
-                        fontStyle: 'italic',
-                        fontSize: '0.95rem',
-                        fontWeight: 600,
-                        color: 'var(--text)',
-                        marginBottom: '4px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
+                        width: '64px',
+                        height: '64px',
+                        objectFit: 'cover',
+                        borderRadius: '5px',
+                        background: 'var(--blush-soft)',
+                        flexShrink: 0,
                       }}
-                    >
-                      {product.name}
-                    </h4>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--pink-deep)', fontWeight: 700 }}>
-                      {formatPrice(product.price * quantity)}
-                    </div>
+                    />
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
-                      <div
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <h4
                         style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          border: '1px solid var(--line)',
-                          borderRadius: '100px',
+                          fontFamily: 'Fraunces, serif',
+                          fontStyle: 'italic',
+                          fontSize: '0.95rem',
+                          fontWeight: 600,
+                          color: 'var(--text)',
+                          marginBottom: '2px',
                           overflow: 'hidden',
-                          background: 'var(--bg)',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
                         }}
                       >
-                        <button
-                          onClick={() => updateQuantity(product.id, quantity - 1)}
-                          style={{
-                            border: 'none',
-                            background: 'none',
-                            padding: '2px 8px',
-                            cursor: 'pointer',
-                            fontSize: '0.9rem',
-                            fontWeight: 600,
-                            color: 'var(--text)',
-                          }}
-                        >
-                          -
-                        </button>
-                        <span style={{ fontSize: '0.82rem', padding: '0 4px', fontWeight: 600 }}>
-                          {quantity}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(product.id, quantity + 1)}
-                          style={{
-                            border: 'none',
-                            background: 'none',
-                            padding: '2px 8px',
-                            cursor: 'pointer',
-                            fontSize: '0.9rem',
-                            fontWeight: 600,
-                            color: 'var(--text)',
-                          }}
-                        >
-                          +
-                        </button>
+                        {product.name}
+                      </h4>
+
+                      {selectedColor && (
+                        <div style={{ marginBottom: '4px' }}>
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              fontSize: '0.72rem',
+                              color: 'var(--pink-deep)',
+                              background: 'var(--blush)',
+                              padding: '2px 8px',
+                              borderRadius: '100px',
+                              fontWeight: 600,
+                            }}
+                          >
+                            <span style={{ fontSize: '0.65rem' }}>●</span>
+                            {selectedColor}
+                          </span>
+                        </div>
+                      )}
+
+                      <div style={{ fontSize: '0.82rem', color: 'var(--pink-deep)', fontWeight: 700 }}>
+                        {formatPrice(product.price * quantity)}
                       </div>
 
-                      <button
-                        onClick={() => removeFromCart(product.id)}
-                        title="Supprimer"
-                        aria-label="Supprimer l'article"
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: 'var(--text-soft)',
-                          cursor: 'pointer',
-                          padding: '4px',
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <polyline points="3 6 5 6 21 6" />
-                          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
-                        </svg>
-                      </button>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+                        <div
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            border: '1px solid var(--line)',
+                            borderRadius: '100px',
+                            overflow: 'hidden',
+                            background: 'var(--bg)',
+                          }}
+                        >
+                          <button
+                            onClick={() => updateQuantity(itemKey, quantity - 1)}
+                            style={{
+                              border: 'none',
+                              background: 'none',
+                              padding: '2px 8px',
+                              cursor: 'pointer',
+                              fontSize: '0.9rem',
+                              fontWeight: 600,
+                              color: 'var(--text)',
+                            }}
+                          >
+                            -
+                          </button>
+                          <span style={{ fontSize: '0.82rem', padding: '0 4px', fontWeight: 600 }}>
+                            {quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(itemKey, quantity + 1)}
+                            style={{
+                              border: 'none',
+                              background: 'none',
+                              padding: '2px 8px',
+                              cursor: 'pointer',
+                              fontSize: '0.9rem',
+                              fontWeight: 600,
+                              color: 'var(--text)',
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <button
+                          onClick={() => removeFromCart(itemKey)}
+                          title="Supprimer"
+                          aria-label="Supprimer l'article"
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--text-soft)',
+                            cursor: 'pointer',
+                            padding: '4px',
+                            display: 'flex',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

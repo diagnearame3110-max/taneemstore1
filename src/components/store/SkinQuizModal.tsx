@@ -36,23 +36,23 @@ export default function SkinQuizModal({ isOpen, onClose }: SkinQuizModalProps) {
   const recommendedProducts = products.filter(p => p.categorySlug === 'skincare').slice(0, 3);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-[var(--ivoire)] rounded-3xl max-w-xl w-full p-8 relative border border-[var(--line)] shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-[var(--bg)] rounded-2xl max-w-lg w-full p-4 sm:p-6 relative border border-[var(--line)] shadow-2xl max-h-[88vh] overflow-y-auto">
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white hover:bg-[var(--rose-poudre)] flex items-center justify-center text-[var(--espresso)] transition-colors"
+          className="absolute top-3 right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white hover:bg-[var(--blush)] flex items-center justify-center text-[var(--text)] transition-colors border border-[var(--line)] shadow-xs cursor-pointer"
         >
           ✕
         </button>
 
-        <div className="text-center mb-6">
-          <span className="text-[10px] font-sans font-bold tracking-[0.25em] text-[var(--rose-vieilli)] uppercase block mb-1">
+        <div className="text-center mb-4 pr-6 pl-6">
+          <span className="text-[9px] font-sans font-bold tracking-[0.25em] text-[var(--pink-deep)] uppercase block mb-0.5">
             TANEEM'STORE BEAUTY CONSULTANT
           </span>
-          <h2 className="text-2xl md:text-3xl font-serif text-[var(--espresso)]">
+          <h2 className="text-xl sm:text-2xl font-serif text-[var(--text)]">
             YOUR CUSTOM SKINCARE ROUTINE
           </h2>
-          <p className="text-xs text-[var(--text-soft)] mt-1 font-sans">
+          <p className="text-[11px] text-[var(--text-soft)] mt-0.5 font-sans">
             Étape {step} sur 3 — Répondez à 3 questions rapides
           </p>
         </div>
@@ -71,7 +71,7 @@ export default function SkinQuizModal({ isOpen, onClose }: SkinQuizModalProps) {
                     setSkinType(opt);
                     setStep(2);
                   }}
-                  className="p-4 bg-white border border-[var(--line)] hover:border-[var(--rose-vieilli)] hover:bg-[var(--rose-poudre)]/20 rounded-2xl text-xs font-sans text-[var(--espresso)] font-medium text-center transition-all"
+                  className="p-2.5 sm:p-3 bg-white border border-[var(--line)] hover:border-[var(--pink-deep)] hover:bg-[var(--blush)]/40 rounded-xl text-xs font-sans text-[var(--text)] font-medium text-center transition-all cursor-pointer"
                 >
                   {opt}
                 </button>
@@ -94,7 +94,7 @@ export default function SkinQuizModal({ isOpen, onClose }: SkinQuizModalProps) {
                     setMainConcern(opt);
                     setStep(3);
                   }}
-                  className="p-4 bg-white border border-[var(--line)] hover:border-[var(--rose-vieilli)] hover:bg-[var(--rose-poudre)]/20 rounded-2xl text-xs font-sans text-[var(--espresso)] font-medium text-center transition-all"
+                  className="p-2.5 sm:p-3 bg-white border border-[var(--line)] hover:border-[var(--pink-deep)] hover:bg-[var(--blush)]/40 rounded-xl text-xs font-sans text-[var(--text)] font-medium text-center transition-all cursor-pointer"
                 >
                   {opt}
                 </button>
@@ -117,7 +117,7 @@ export default function SkinQuizModal({ isOpen, onClose }: SkinQuizModalProps) {
                     setPreferredGoal(opt);
                     setStep(4); // Results
                   }}
-                  className="p-4 bg-white border border-[var(--line)] hover:border-[var(--rose-vieilli)] hover:bg-[var(--rose-poudre)]/20 rounded-2xl text-xs font-sans text-[var(--espresso)] font-medium text-center transition-all"
+                  className="p-2.5 sm:p-3 bg-white border border-[var(--line)] hover:border-[var(--pink-deep)] hover:bg-[var(--blush)]/40 rounded-xl text-xs font-sans text-[var(--text)] font-medium text-center transition-all cursor-pointer"
                 >
                   {opt}
                 </button>

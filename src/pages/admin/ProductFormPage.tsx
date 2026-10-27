@@ -18,7 +18,7 @@ const PLACEHOLDER = 'https://images.unsplash.com/photo-1620916566398-39f1143ab7b
 
 export default function ProductFormPage() {
   const { id } = useParams<{ id: string }>();
-  const { products, addProduct, updateProduct } = useProducts();
+  const { products, addProduct, updateProduct, deleteProduct } = useProducts();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const existing = id ? products.find(p => p.id === id) : null;
@@ -30,6 +30,8 @@ export default function ProductFormPage() {
   const [image, setImage] = useState(existing?.image ?? '');
   const [inStock, setInStock] = useState(existing?.inStock ?? true);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const priceNum = parseFloat(price) || 0;
@@ -91,6 +93,20 @@ export default function ProductFormPage() {
       img.src = src;
     };
     reader.readAsDataURL(file);
+  }
+
+  async function handleDelete() {
+    if (!existing) return;
+    setIsDeleting(true);
+    try {
+      await deleteProduct(existing.id);
+      showToast(`Produit "${existing.name}" supprimé avec succès.`);
+      navigate('/admin/products');
+    } catch (err: any) {
+      showToast(`Erreur lors de la suppression : ${err?.message || 'Erreur réseau'}`, 'error');
+      setIsDeleting(false);
+      setConfirmDelete(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -343,45 +359,75 @@ export default function ProductFormPage() {
           </div>
 
           {/* Actions */}
-          <div style={{ display: 'flex', gap: '14px', paddingTop: '12px', borderTop: '1px solid var(--line)' }}>
-            <button
-              type="submit"
-              style={{
-                background: 'var(--pink)',
-                color: '#FFFFFF',
-                padding: '14px 32px',
-                borderRadius: '100px',
-                fontSize: '0.9rem',
-                fontWeight: 700,
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 4px 15px rgba(169, 144, 132, 0.35)',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'var(--pink-deep)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'var(--pink)')}
-            >
-              {existing ? 'Enregistrer les Modifications' : 'Créer le Produit'}
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/admin/products')}
-              style={{
-                background: 'transparent',
-                color: 'var(--text)',
-                padding: '14px 28px',
-                borderRadius: '100px',
-                fontSize: '0.9rem',
-                fontWeight: 600,
-                border: '1.5px solid var(--line)',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'var(--blush-soft)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-            >
-              Annuler
-            </button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '14px', paddingTop: '16px', borderTop: '1px solid var(--line)', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <button
+                type="submit"
+                style={{
+                  background: 'var(--pink)',
+                  color: '#FFFFFF',
+                  padding: '14px 32px',
+                  borderRadius: '100px',
+                  fontSize: '0.9rem',
+                  fontWeight: 700,
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 15px rgba(169, 144, 132, 0.35)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'var(--pink-deep)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'var(--pink)')}
+              >
+                {existing ? 'Enregistrer les Modifications' : 'Créer le Produit'}
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/admin/products')}
+                style={{
+                  background: 'transparent',
+                  color: 'var(--text)',
+                  padding: '14px 28px',
+                  borderRadius: '100px',
+                  fontSize: '0.9rem',
+                  fontWeight: 600,
+                  border: '1.5px solid var(--line)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'var(--blush-soft)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+              >
+                Annuler
+              </button>
+            </div>
+
+            {existing && (
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(true)}
+                style={{
+                  background: '#FEE2E2',
+                  color: '#DC2626',
+                  padding: '12px 22px',
+                  borderRadius: '100px',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  border: '1.5px solid #FCA5A5',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = '#FCA5A5')}
+                onMouseLeave={e => (e.currentTarget.style.background = '#FEE2E2')}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                </svg>
+                Supprimer ce produit
+              </button>
+            )}
           </div>
         </div>
 
@@ -414,6 +460,94 @@ export default function ProductFormPage() {
           </div>
         </div>
       </form>
+
+      {/* Delete Confirmation Modal */}
+      {confirmDelete && existing && (
+        <div
+          onClick={() => !isDeleting && setConfirmDelete(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 90,
+            background: 'rgba(21, 15, 24, 0.65)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: '#FFFFFF',
+              borderRadius: '16px',
+              padding: '32px 36px',
+              maxWidth: '440px',
+              width: '100%',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
+              border: '1px solid var(--line)',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#FEE2E2', color: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', margin: '0 auto 16px auto' }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </div>
+
+            <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.7rem', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
+              Supprimer le produit ?
+            </h3>
+
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-soft)', marginBottom: '24px', lineHeight: 1.5 }}>
+              Êtes-vous sûr de vouloir supprimer définitivement <strong>"{existing.name}"</strong> ? Cette opération est immédiate et irréversible.
+            </p>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => setConfirmDelete(false)}
+                style={{
+                  padding: '11px 24px',
+                  borderRadius: '100px',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  border: '1.5px solid var(--line)',
+                  background: '#FFFFFF',
+                  color: 'var(--text)',
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  opacity: isDeleting ? 0.6 : 1,
+                }}
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleDelete}
+                style={{
+                  padding: '11px 26px',
+                  borderRadius: '100px',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  background: '#DC2626',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 4px 14px rgba(220, 38, 38, 0.35)',
+                  opacity: isDeleting ? 0.6 : 1,
+                }}
+              >
+                {isDeleting ? 'Suppression…' : 'Confirmer la suppression'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }

@@ -27,7 +27,7 @@ const CAT_COLORS: Record<string, { bg: string; text: string; border: string }> =
 };
 
 export default function ProductsPage() {
-  const { products, deleteProduct, toggleStock, addProduct } = useProducts();
+  const { products, deleteProduct, deleteProducts, toggleStock, addProduct } = useProducts();
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -37,8 +37,11 @@ export default function ProductsPage() {
   const [sortKey, setSortKey] = useState<'name' | 'price'>('name');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
 
-  // Modals state
+  // Modals & Selection state
   const [confirmDelete, setConfirmDelete] = useState<Product | null>(null);
+  const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [previewProduct, setPreviewProduct] = useState<Product | null>(null);
 
   // Statistics
@@ -70,10 +73,49 @@ export default function ProductsPage() {
     else { setSortKey(key); setSortDir('asc'); }
   }
 
+  function toggleSelectAll() {
+    if (filtered.length === 0) return;
+    if (selectedIds.length === filtered.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filtered.map(p => p.id));
+    }
+  }
+
+  function toggleSelectOne(id: string) {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+  }
+
   async function handleDelete(p: Product) {
-    await deleteProduct(p.id);
-    showToast(`Produit "${p.name}" supprimé.`);
-    setConfirmDelete(null);
+    setIsDeleting(true);
+    try {
+      await deleteProduct(p.id);
+      showToast(`Produit "${p.name}" supprimé avec succès.`);
+      setSelectedIds(prev => prev.filter(id => id !== p.id));
+    } catch (err: any) {
+      showToast(`Erreur lors de la suppression : ${err?.message || 'Erreur réseau'}`, 'error');
+    } finally {
+      setIsDeleting(false);
+      setConfirmDelete(null);
+    }
+  }
+
+  async function handleBulkDelete() {
+    if (selectedIds.length === 0) return;
+    setIsDeleting(true);
+    try {
+      const count = selectedIds.length;
+      await deleteProducts(selectedIds);
+      showToast(`${count} produit${count > 1 ? 's' : ''} supprimé${count > 1 ? 's' : ''} avec succès.`);
+      setSelectedIds([]);
+    } catch (err: any) {
+      showToast(`Erreur lors de la suppression groupée : ${err?.message || 'Erreur réseau'}`, 'error');
+    } finally {
+      setIsDeleting(false);
+      setConfirmBulkDelete(false);
+    }
   }
 
   async function handleDuplicate(p: Product) {
@@ -378,10 +420,82 @@ export default function ProductsPage() {
           overflow: 'hidden',
         }}
       >
+        {/* Bulk Action Bar */}
+        {selectedIds.length > 0 && (
+          <div
+            style={{
+              marginBottom: '16px',
+              padding: '14px 20px',
+              background: '#FEF2F2',
+              border: '1px solid #FECACA',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '16px',
+              boxShadow: '0 4px 12px rgba(220, 38, 38, 0.08)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#991B1B' }}>
+                ✓ {selectedIds.length} produit{selectedIds.length > 1 ? 's' : ''} sélectionné{selectedIds.length > 1 ? 's' : ''}
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <button
+                type="button"
+                onClick={() => setSelectedIds([])}
+                style={{
+                  padding: '7px 14px',
+                  borderRadius: '8px',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  background: '#FFFFFF',
+                  border: '1px solid #E5E7EB',
+                  color: 'var(--text)',
+                  cursor: 'pointer',
+                }}
+              >
+                Désélectionner tout
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmBulkDelete(true)}
+                style={{
+                  padding: '7px 18px',
+                  borderRadius: '8px',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  background: '#DC2626',
+                  border: 'none',
+                  color: '#FFFFFF',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 2px 8px rgba(220, 38, 38, 0.25)',
+                }}
+              >
+                <Icon icon="lucide:trash-2" /> Supprimer la sélection ({selectedIds.length})
+              </button>
+            </div>
+          </div>
+        )}
+
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
             <thead>
               <tr style={{ background: '#FAF7F5', borderBottom: '1px solid var(--line)' }}>
+                <th style={{ width: '40px', padding: '16px 12px 16px 20px', textAlign: 'center' }}>
+                  <input
+                    type="checkbox"
+                    title="Tout sélectionner / désélectionner"
+                    checked={filtered.length > 0 && selectedIds.length === filtered.length}
+                    onChange={toggleSelectAll}
+                    style={{ width: '16px', height: '16px', cursor: 'pointer', accentColor: '#DC2626' }}
+                  />
+                </th>
                 <th style={{ width: '70px', padding: '16px 20px' }}>Visuel</th>
                 <th
                   onClick={() => toggleSort('name')}
@@ -432,11 +546,26 @@ export default function ProductsPage() {
                     key={p.id}
                     style={{
                       borderBottom: '1px solid var(--line)',
+                      background: selectedIds.includes(p.id) ? '#FFF5F5' : 'transparent',
                       transition: 'background 0.15s ease',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.background = '#FAF8F4')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                    onMouseEnter={e => {
+                      if (!selectedIds.includes(p.id)) e.currentTarget.style.background = '#FAF8F4';
+                    }}
+                    onMouseLeave={e => {
+                      if (!selectedIds.includes(p.id)) e.currentTarget.style.background = 'transparent';
+                    }}
                   >
+                    {/* Checkbox */}
+                    <td style={{ width: '40px', padding: '14px 12px 14px 20px', textAlign: 'center' }}>
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.includes(p.id)}
+                        onChange={() => toggleSelectOne(p.id)}
+                        style={{ width: '16px', height: '16px', cursor: 'pointer', accentColor: '#DC2626' }}
+                      />
+                    </td>
+
                     {/* Thumbnail */}
                     <td style={{ padding: '14px 20px' }}>
                       <div
@@ -678,14 +807,14 @@ export default function ProductsPage() {
             style={{
               background: '#FFFFFF',
               borderRadius: '16px',
-              maxWidth: '560px',
+              maxWidth: '420px',
               width: '100%',
               overflow: 'hidden',
               boxShadow: '0 25px 60px rgba(0,0,0,0.25)',
               border: '1px solid var(--line)',
             }}
           >
-            <div style={{ position: 'relative', height: '240px', background: '#FAF8F4' }}>
+            <div style={{ position: 'relative', height: '160px', background: '#FAF8F4' }}>
               <img
                 src={previewProduct.image}
                 alt={previewProduct.name}
@@ -695,16 +824,16 @@ export default function ProductsPage() {
                 onClick={() => setPreviewProduct(null)}
                 style={{
                   position: 'absolute',
-                  top: '16px',
-                  right: '16px',
-                  width: '36px',
-                  height: '36px',
+                  top: '12px',
+                  right: '12px',
+                  width: '30px',
+                  height: '30px',
                   borderRadius: '50%',
                   background: 'rgba(255,255,255,0.9)',
                   border: 'none',
                   fontWeight: 700,
                   cursor: 'pointer',
-                  fontSize: '1rem',
+                  fontSize: '0.9rem',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -714,38 +843,38 @@ export default function ProductsPage() {
               </button>
             </div>
 
-            <div style={{ padding: '28px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <div style={{ padding: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span
                   style={{
-                    padding: '4px 12px',
+                    padding: '3px 8px',
                     borderRadius: '6px',
-                    fontSize: '0.78rem',
+                    fontSize: '0.72rem',
                     fontWeight: 700,
                     background: previewProduct.inStock ? '#DCFCE7' : '#FEE2E2',
                     color: previewProduct.inStock ? '#166534' : '#991B1B',
                   }}
                 >
-                  {previewProduct.inStock ? '● En stock' : '○ Rupture de stock'}
+                  {previewProduct.inStock ? '● En stock' : '○ Rupture'}
                 </span>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
                   Catégorie: {CAT_LABELS[previewProduct.categorySlug]}
                 </span>
               </div>
 
-              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.3rem', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>
                 {previewProduct.name}
               </h2>
 
-              <p style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--pink-deep)', marginBottom: '16px' }}>
+              <p style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--pink-deep)', marginBottom: '10px' }}>
                 {previewProduct.priceFormatted}
               </p>
 
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-soft)', lineHeight: 1.6, marginBottom: '24px' }}>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-soft)', lineHeight: 1.5, marginBottom: '16px' }}>
                 {previewProduct.description || "Aucune description détaillée renseignée pour ce produit."}
               </p>
 
-              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                 <button
                   onClick={() => setPreviewProduct(null)}
                   style={{
@@ -760,6 +889,28 @@ export default function ProductsPage() {
                   }}
                 >
                   Fermer
+                </button>
+                <button
+                  onClick={() => {
+                    const toDelete = previewProduct;
+                    setPreviewProduct(null);
+                    setConfirmDelete(toDelete);
+                  }}
+                  style={{
+                    padding: '10px 20px',
+                    borderRadius: '100px',
+                    fontSize: '0.85rem',
+                    fontWeight: 600,
+                    border: '1.5px solid #FCA5A5',
+                    background: '#FEE2E2',
+                    color: '#DC2626',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                  }}
+                >
+                  <Icon icon="lucide:trash-2" /> Supprimer
                 </button>
                 <button
                   onClick={() => {
@@ -793,7 +944,7 @@ export default function ProductsPage() {
       {/* Delete Confirmation Modal */}
       {confirmDelete && (
         <div
-          onClick={() => setConfirmDelete(null)}
+          onClick={() => !isDeleting && setConfirmDelete(null)}
           style={{
             position: 'fixed',
             inset: 0,
@@ -833,6 +984,8 @@ export default function ProductsPage() {
 
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
               <button
+                type="button"
+                disabled={isDeleting}
                 onClick={() => setConfirmDelete(null)}
                 style={{
                   padding: '11px 24px',
@@ -842,12 +995,15 @@ export default function ProductsPage() {
                   border: '1.5px solid var(--line)',
                   background: '#FFFFFF',
                   color: 'var(--text)',
-                  cursor: 'pointer',
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  opacity: isDeleting ? 0.6 : 1,
                 }}
               >
                 Annuler
               </button>
               <button
+                type="button"
+                disabled={isDeleting}
                 onClick={() => handleDelete(confirmDelete)}
                 style={{
                   padding: '11px 26px',
@@ -857,11 +1013,96 @@ export default function ProductsPage() {
                   background: '#DC2626',
                   color: '#FFFFFF',
                   border: 'none',
-                  cursor: 'pointer',
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
                   boxShadow: '0 4px 14px rgba(220, 38, 38, 0.35)',
+                  opacity: isDeleting ? 0.6 : 1,
                 }}
               >
-                Confirmer la suppression
+                {isDeleting ? 'Suppression…' : 'Confirmer la suppression'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Delete Confirmation Modal */}
+      {confirmBulkDelete && (
+        <div
+          onClick={() => !isDeleting && setConfirmBulkDelete(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 80,
+            background: 'rgba(21, 15, 24, 0.65)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: '#FFFFFF',
+              borderRadius: '16px',
+              padding: '32px 36px',
+              maxWidth: '460px',
+              width: '100%',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
+              border: '1px solid var(--line)',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#FEE2E2', color: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', margin: '0 auto 16px auto' }}>
+              <Icon icon="lucide:alert-triangle" />
+            </div>
+
+            <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.7rem', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
+              Supprimer {selectedIds.length} produit{selectedIds.length > 1 ? 's' : ''} ?
+            </h3>
+
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-soft)', marginBottom: '24px', lineHeight: 1.5 }}>
+              Êtes-vous sûr de vouloir supprimer définitivement ces <strong>{selectedIds.length} produits</strong> sélectionnés ? Cette action est immédiate et irréversible.
+            </p>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => setConfirmBulkDelete(false)}
+                style={{
+                  padding: '11px 24px',
+                  borderRadius: '100px',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  border: '1.5px solid var(--line)',
+                  background: '#FFFFFF',
+                  color: 'var(--text)',
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  opacity: isDeleting ? 0.6 : 1,
+                }}
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleBulkDelete}
+                style={{
+                  padding: '11px 26px',
+                  borderRadius: '100px',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  background: '#DC2626',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 4px 14px rgba(220, 38, 38, 0.35)',
+                  opacity: isDeleting ? 0.6 : 1,
+                }}
+              >
+                {isDeleting ? 'Suppression…' : `Confirmer la suppression (${selectedIds.length})`}
               </button>
             </div>
           </div>
