@@ -100,7 +100,7 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
       onClick={onClose}
     >
       <div
-        className="bg-white w-full max-w-[340px] sm:max-w-[360px] md:max-w-[680px] rounded-[26px] border border-stone-200/70 shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col md:flex-row relative transition-all"
+        className="bg-white w-full max-w-[360px] sm:max-w-[380px] md:max-w-[740px] min-h-[580px] sm:min-h-[620px] md:min-h-[460px] max-h-[92vh] rounded-[28px] border border-stone-200/70 shadow-[0_25px_60px_rgba(0,0,0,0.18)] overflow-hidden flex flex-col md:flex-row relative transition-all"
         onClick={e => e.stopPropagation()}
       >
         {/* Subtle, Minimalist Close button */}
@@ -116,8 +116,8 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
         </button>
 
         {/* Media Column: Soft luxury studio backdrop, object-contain so any product shape looks balanced and elegant */}
-        <div className="w-full md:w-[280px] md:shrink-0 bg-[#FAF8F5] flex flex-col justify-between items-center relative md:border-r border-stone-100">
-          <div className="relative w-full h-[180px] sm:h-[200px] md:h-[300px] flex items-center justify-center p-4 sm:p-5">
+        <div className="w-full md:w-[300px] md:shrink-0 bg-[#FAF8F5] flex flex-col justify-between items-center relative md:border-r border-stone-100">
+          <div className="relative w-full h-[220px] sm:h-[240px] md:h-[340px] flex items-center justify-center p-4 sm:p-6">
             <img
               src={selectedImage || product.image || allImages[0]}
               alt={product.name}
@@ -180,44 +180,44 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
           )}
         </div>
 
-        {/* Details Column: Light, Airy, Minimalist, De-cluttered */}
-        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left p-5 sm:p-6 md:p-7 md:pr-12">
-          {/* Eyebrow Category: Pure typography, no heavy box */}
-          <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-[#9A8F87] mb-1.5">
+        {/* Details Column: Generous Height, Airy Spacing, Elements have room to breathe */}
+        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left p-6 sm:p-7 pt-5 pb-7 sm:pb-8 md:pr-12">
+          {/* Eyebrow Category */}
+          <span className="text-[11px] uppercase font-bold tracking-[0.25em] text-[#9A8F87] mb-2.5">
             {product.categorySlug}
           </span>
 
-          {/* Title: Refined, elegant, comfortable font size */}
-          <h2 className="text-base sm:text-lg md:text-xl font-serif font-bold text-stone-900 leading-snug mb-2 max-w-[280px] sm:max-w-sm">
+          {/* Title: Refined, elegant, with comfortable spacing */}
+          <h2 className="text-lg sm:text-xl font-serif font-bold text-stone-900 leading-snug mb-3 max-w-xs px-1">
             {product.name}
           </h2>
 
-          {/* Price & Stock Badge: Clean inline row */}
-          <div className="flex items-center justify-center md:justify-start gap-2.5 mb-2.5">
-            <span className="text-lg sm:text-xl font-bold text-[var(--pink-deep)]">
+          {/* Price & Stock Badge: Generously spaced */}
+          <div className="flex items-center justify-center md:justify-start gap-3 mb-3.5">
+            <span className="text-xl sm:text-2xl font-bold text-[var(--pink-deep)]">
               {product.priceFormatted || formatPrice(product.price)}
             </span>
             <span className="text-stone-300">•</span>
-            <span className={`inline-flex items-center text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+            <span className={`inline-flex items-center text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
               product.inStock ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
             }`}>
               {product.inStock ? 'En stock' : 'Rupture'}
             </span>
           </div>
 
-          {/* Description: Light, concise, uncluttered */}
-          <p className="text-xs text-stone-500 leading-relaxed mb-4 max-w-[280px] sm:max-w-xs line-clamp-2">
+          {/* Description: Light, concise, comfortable margin */}
+          <p className="text-xs sm:text-sm text-stone-500 leading-relaxed mb-6 max-w-xs px-1 line-clamp-2">
             {product.description || "Soin d'exception sélectionné pour votre routine quotidienne."}
           </p>
 
           {/* Color Selector (if present): Elegant, compact pills */}
           {Array.isArray(product.colors) && product.colors.length > 0 && (
-            <div className="w-full mb-4">
-              <div className="flex items-center justify-center md:justify-start gap-2 mb-1.5 text-[11px]">
-                <span className="text-stone-400 uppercase tracking-wider text-[9px] font-bold">Teinte :</span>
+            <div className="w-full mb-5">
+              <div className="flex items-center justify-center md:justify-start gap-2 mb-2 text-xs">
+                <span className="text-stone-400 uppercase tracking-wider text-[10px] font-bold">Teinte :</span>
                 <span className="font-semibold text-stone-800">{selectedColor?.name || 'Choisir'}</span>
               </div>
-              <div className="flex flex-wrap gap-1.5 items-center justify-center md:justify-start">
+              <div className="flex flex-wrap gap-2 items-center justify-center md:justify-start">
                 {product.colors.map(c => {
                   const isSelected = selectedColor?.id === c.id || (!selectedColor && product.colors?.[0]?.id === c.id);
                   return (
@@ -226,17 +226,17 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
                       type="button"
                       onClick={() => handleSelectColor(c)}
                       title={c.name}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs border transition-all cursor-pointer ${
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs border transition-all cursor-pointer ${
                         isSelected
                           ? 'border-[var(--pink-deep)] bg-white font-bold text-stone-900 shadow-xs'
                           : 'border-stone-200 bg-stone-50 text-stone-600 hover:bg-white'
                       }`}
                     >
                       <span
-                        className="w-2.5 h-2.5 rounded-full border border-black/10 shrink-0"
+                        className="w-3 h-3 rounded-full border border-black/10 shrink-0"
                         style={{ background: c.hex || '#E8A598' }}
                       />
-                      <span className="text-[11px]">{c.name}</span>
+                      <span className="text-xs">{c.name}</span>
                     </button>
                   );
                 })}
@@ -244,43 +244,43 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
             </div>
           )}
 
-          {/* Bottom Actions Row: Streamlined, Sleek & Airy */}
-          <div className="w-full mt-auto pt-2 flex items-center justify-center gap-2.5">
-            {/* Quantity Stepper: Lightweight rounded pill */}
-            <div className="flex items-center bg-stone-100 rounded-full h-10 px-1 shrink-0">
+          {/* Bottom Actions Row: Generously spaced from content with top border */}
+          <div className="w-full mt-auto pt-4 border-t border-stone-100 flex items-center justify-center gap-3">
+            {/* Quantity Stepper */}
+            <div className="flex items-center bg-stone-100 rounded-full h-11 px-1.5 shrink-0">
               <button
                 type="button"
                 onClick={() => setQuantity(q => Math.max(1, q - 1))}
                 aria-label="Diminuer la quantité"
-                className="w-7 h-7 flex items-center justify-center font-bold text-sm text-stone-600 hover:text-stone-900 cursor-pointer"
+                className="w-8 h-8 flex items-center justify-center font-bold text-sm text-stone-600 hover:text-stone-900 cursor-pointer"
               >
                 -
               </button>
-              <span className="w-6 text-center font-bold text-xs text-stone-800">
+              <span className="w-7 text-center font-bold text-sm text-stone-800">
                 {quantity}
               </span>
               <button
                 type="button"
                 onClick={() => setQuantity(q => q + 1)}
                 aria-label="Augmenter la quantité"
-                className="w-7 h-7 flex items-center justify-center font-bold text-sm text-stone-600 hover:text-stone-900 cursor-pointer"
+                className="w-8 h-8 flex items-center justify-center font-bold text-sm text-stone-600 hover:text-stone-900 cursor-pointer"
               >
                 +
               </button>
             </div>
 
-            {/* Add to Cart Button: Elegant, chic, responsive */}
+            {/* Add to Cart Button */}
             <button
               type="button"
               onClick={handleAddToCart}
               disabled={!product.inStock}
-              className={`flex-1 h-10 px-4 rounded-full text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+              className={`flex-1 h-11 px-5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                 product.inStock
                   ? 'bg-[var(--pink)] hover:bg-[var(--pink-deep)] text-white shadow-xs hover:shadow cursor-pointer'
                   : 'bg-stone-200 text-stone-400 cursor-not-allowed'
               }`}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
                 <line x1="3" y1="6" x2="21" y2="6" />
                 <path d="M16 10a4 4 0 0 1-8 0" />
