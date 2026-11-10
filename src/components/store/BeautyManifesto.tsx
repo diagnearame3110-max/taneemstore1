@@ -21,7 +21,7 @@ export default function BeautyManifesto() {
             marginBottom: '14px',
           }}
         >
-          LA BEAUTÉ DOIT ÊTRE SIMPLE.
+          LE PLAISIR DE PRENDRE SOIN DE SOI.
         </h2>
         <p
           style={{
