@@ -21,7 +21,7 @@ export default function BeautyManifesto() {
             marginBottom: '14px',
           }}
         >
-          LE PLAISIR DE PRENDRE SOIN DE SOI.
+          Le plaisir de prendre soin de soi
         </h2>
         <p
           style={{
