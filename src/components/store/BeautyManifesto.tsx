@@ -9,16 +9,17 @@ export default function BeautyManifesto() {
         borderBottom: '1px solid var(--line)',
       }}
     >
-      <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
         <h2
           style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: '2.1rem',
+            fontSize: 'clamp(1.1rem, 3.4vw, 2.1rem)',
             fontWeight: 600,
-            letterSpacing: '0.1em',
+            letterSpacing: '0.06em',
             textTransform: 'uppercase',
             color: 'var(--text)',
             marginBottom: '14px',
+            whiteSpace: 'nowrap',
           }}
         >
           Le plaisir de prendre soin de soi
