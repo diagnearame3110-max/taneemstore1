@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../store/AuthContext';
-import { ADMIN_USER } from '../../data/adminUser';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -15,12 +15,6 @@ export default function LoginPage() {
     const ok = login(email, password);
     if (ok) navigate('/admin');
     else setError('Email ou mot de passe incorrect.');
-  }
-
-  function handleFillDemo() {
-    setEmail(ADMIN_USER.email);
-    setPassword(ADMIN_USER.password);
-    setError('');
   }
 
   return (
@@ -122,7 +116,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+        <form onSubmit={handleSubmit} autoComplete="off" style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <label style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text)' }}>
               Adresse Email *
@@ -146,7 +140,7 @@ export default function LoginPage() {
               onBlur={e => (e.currentTarget.style.borderColor = 'var(--line)')}
               placeholder="admin@taneemstore.sn"
               required
-              autoComplete="email"
+              autoComplete="off"
             />
           </div>
 
@@ -154,27 +148,66 @@ export default function LoginPage() {
             <label style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text)' }}>
               Mot de Passe *
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => { setPassword(e.target.value); setError(''); }}
-              style={{
-                width: '100%',
-                padding: '14px 18px',
-                borderRadius: '10px',
-                border: '1.5px solid var(--line)',
-                fontSize: '0.95rem',
-                outline: 'none',
-                transition: 'all 0.2s ease',
-                background: '#FAF8F4',
-                boxSizing: 'border-box',
-              }}
-              onFocus={e => (e.currentTarget.style.borderColor = 'var(--pink)')}
-              onBlur={e => (e.currentTarget.style.borderColor = 'var(--line)')}
-              placeholder="••••••••"
-              required
-              autoComplete="current-password"
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={e => { setPassword(e.target.value); setError(''); }}
+                style={{
+                  width: '100%',
+                  padding: '14px 48px 14px 18px',
+                  borderRadius: '10px',
+                  border: '1.5px solid var(--line)',
+                  fontSize: '0.95rem',
+                  outline: 'none',
+                  transition: 'all 0.2s ease',
+                  background: '#FAF8F4',
+                  boxSizing: 'border-box',
+                }}
+                onFocus={e => (e.currentTarget.style.borderColor = 'var(--pink)')}
+                onBlur={e => (e.currentTarget.style.borderColor = 'var(--line)')}
+                placeholder="••••••••"
+                required
+                autoComplete="off"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(prev => !prev)}
+                aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                title={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                style={{
+                  position: 'absolute',
+                  right: '14px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  padding: '4px',
+                  cursor: 'pointer',
+                  color: 'var(--text-soft)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'color 0.2s ease',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--text)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-soft)')}
+              >
+                {showPassword ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+                    <line x1="2" x2="22" y1="2" y2="22" />
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
 
           {error && (
@@ -214,27 +247,6 @@ export default function LoginPage() {
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
           >
             Se Connecter
-          </button>
-
-          <button
-            type="button"
-            onClick={handleFillDemo}
-            style={{
-              width: '100%',
-              padding: '12px 18px',
-              borderRadius: '100px',
-              fontWeight: 600,
-              fontSize: '0.84rem',
-              color: 'var(--pink-deep)',
-              background: 'var(--blush-soft)',
-              border: '1px solid var(--line)',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'var(--blush)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'var(--blush-soft)')}
-          >
-            ✨ Remplir avec les identifiants démo
           </button>
         </form>
       </div>
