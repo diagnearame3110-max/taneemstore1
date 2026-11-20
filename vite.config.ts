@@ -24,6 +24,7 @@ react(),
       figmaErrorOverlayReplay(),
       figmaReactRefreshBoundaryFallback(),
       figmaMakeKitPlugin({ storiesGlob: '/src/**/*.stories.{ts,tsx,js,jsx}' }),
+      productImageLocalPlugin(),
     ],
     resolve: {
       alias: {
@@ -358,4 +359,60 @@ function figmaMakeKitPlugin(options: { storiesGlob: string | string[] }): Plugin
       })
     },
   }
+}
+
+function productImageLocalPlugin(): Plugin {
+  return {
+    name: 'product-image-local-api',
+    configureServer(server) {
+      server.middlewares.use('/api/product-image', async (req, res) => {
+        const FALLBACK = 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&h=600&fit=crop&auto=format';
+        try {
+          const parsed = new URL(req.url || '', 'http://localhost');
+          const id = parsed.searchParams.get('id');
+          if (!id) {
+            res.statusCode = 302;
+            res.setHeader('Location', FALLBACK);
+            return res.end();
+          }
+
+          const { createClient } = await import('@supabase/supabase-js');
+          const supabase = createClient('https://bxuouzgqgzvygqwypsvr.supabase.co', 'sb_publishable_7tPa4PHngIR4mF_-A95fDg_c33x872e');
+          const { data, error } = await supabase.from('products').select('image').eq('id', id).single();
+
+          if (error || !data || !data.image) {
+            res.statusCode = 302;
+            res.setHeader('Location', FALLBACK);
+            return res.end();
+          }
+
+          const imgStr = String(data.image);
+          if (imgStr.startsWith('http://') || imgStr.startsWith('https://')) {
+            res.statusCode = 302;
+            res.setHeader('Location', imgStr);
+            return res.end();
+          }
+
+          const match = imgStr.match(/^data:(image\/[a-zA-Z0-9+.-]+);base64,(.+)$/);
+          if (match) {
+            const mime = match[1];
+            const buf = Buffer.from(match[2], 'base64');
+            res.statusCode = 200;
+            res.setHeader('Content-Type', mime);
+            res.setHeader('Content-Length', buf.length);
+            res.setHeader('Cache-Control', 'public, max-age=86400');
+            return res.end(buf);
+          }
+
+          res.statusCode = 302;
+          res.setHeader('Location', FALLBACK);
+          return res.end();
+        } catch {
+          res.statusCode = 302;
+          res.setHeader('Location', FALLBACK);
+          return res.end();
+        }
+      });
+    },
+  };
 }

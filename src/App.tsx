@@ -8,6 +8,7 @@ import ErrorBoundary from './components/common/ErrorBoundary';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import StorePage from './pages/StorePage';
 import CheckoutPage from './pages/CheckoutPage';
+import ProductImageViewPage from './pages/ProductImageViewPage';
 import LoginPage from './pages/admin/LoginPage';
 import DashboardPage from './pages/admin/DashboardPage';
 import ProductsPage from './pages/admin/ProductsPage';
@@ -27,6 +28,8 @@ export default function App() {
                   <Routes>
                     <Route path="/" element={<StorePage />} />
                     <Route path="/checkout" element={<CheckoutPage />} />
+                    <Route path="/product/:id" element={<ProductImageViewPage />} />
+                    <Route path="/product-image/:id" element={<ProductImageViewPage />} />
 
                     <Route path="/admin/login" element={<LoginPage />} />
 

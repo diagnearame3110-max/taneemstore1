@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../store/CartContext';
 import { formatPrice } from '../utils/format';
-import { buildWhatsAppLink } from '../utils/whatsapp';
+import { buildWhatsAppLink, getProductImageUrl, getProductPageUrl } from '../utils/whatsapp';
 import type { Product } from '../data/types';
 
 const WHATSAPP_PHONE = '221781734994';
@@ -148,8 +148,12 @@ export default function CheckoutPage() {
       }
       text += `• Prix : ${linePrice}\n`;
       const photo = item.selectedImage || item.product.image;
-      if (photo && photo.startsWith('http')) {
-        text += `• Image : ${photo}\n`;
+      const photoUrl = getProductImageUrl(item.product.id, photo);
+      if (photoUrl) {
+        text += `• 📸 Photo : ${photoUrl}\n`;
+      }
+      if (item.product.id) {
+        text += `• 🔗 Fiche produit : ${getProductPageUrl(item.product.id)}\n`;
       }
       text += `\n`;
     });

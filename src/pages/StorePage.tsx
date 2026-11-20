@@ -22,6 +22,19 @@ export default function StorePage() {
   const validCategories = Array.isArray(categories) && categories.length > 0 ? categories : SEED_CATEGORIES;
   const sorted = [...validCategories].sort((a, b) => (a.order || 0) - (b.order || 0));
 
+  React.useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const prodId = params.get('product') || params.get('p');
+      if (prodId && Array.isArray(products) && products.length > 0) {
+        const found = products.find(p => p && p.id === prodId);
+        if (found) {
+          setQuickViewProduct(found);
+        }
+      }
+    } catch {}
+  }, [products]);
+
   return (
     <div style={{ background: 'var(--bg)' }}>
       <div style={{ position: 'relative' }}>

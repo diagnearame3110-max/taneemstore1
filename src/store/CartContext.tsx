@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import type { Product } from '../data/types';
 import { formatPrice } from '../utils/format';
+import { getProductImageUrl, getProductPageUrl } from '../utils/whatsapp';
 
 export interface CartItem {
   id?: string;
@@ -163,8 +164,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         text += `• Info : ${item.product.description}\n`;
       }
       const photoToUse = item.selectedImage || item.product.image;
-      if (photoToUse && photoToUse.startsWith('http')) {
-        text += `• Photo : ${photoToUse}\n`;
+      const photoUrl = getProductImageUrl(item.product.id, photoToUse);
+      if (photoUrl) {
+        text += `• 📸 Photo : ${photoUrl}\n`;
+      }
+      if (item.product.id) {
+        text += `• 🔗 Fiche produit : ${getProductPageUrl(item.product.id)}\n`;
       }
       text += `\n`;
     });

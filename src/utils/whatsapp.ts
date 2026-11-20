@@ -1,11 +1,39 @@
 const PHONE = '221781734994';
 
 export interface ProductInfo {
+  id?: string;
   name: string;
   description?: string;
   priceFormatted?: string;
   image?: string;
   categorySlug?: string;
+}
+
+export function getPublicBaseUrl(): string {
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'https://taneemstore1.vercel.app';
+    }
+    return window.location.origin;
+  }
+  return 'https://taneemstore1.vercel.app';
+}
+
+export function getProductImageUrl(productId?: string, imageStr?: string): string {
+  if (imageStr && (imageStr.startsWith('http://') || imageStr.startsWith('https://'))) {
+    return imageStr;
+  }
+  if (productId) {
+    const base = getPublicBaseUrl();
+    return `${base}/api/product-image?id=${encodeURIComponent(productId)}`;
+  }
+  return '';
+}
+
+export function getProductPageUrl(productId?: string): string {
+  if (!productId) return '';
+  const base = getPublicBaseUrl();
+  return `${base}/product/${encodeURIComponent(productId)}`;
 }
 
 export function buildWhatsAppLink(productOrMessage?: string | ProductInfo): string {
@@ -28,8 +56,13 @@ export function buildWhatsAppLink(productOrMessage?: string | ProductInfo): stri
   if (productOrMessage.description) {
     text += `📝 *INFO :* ${productOrMessage.description}\n`;
   }
-  if (productOrMessage.image && productOrMessage.image.startsWith('http')) {
-    text += `🖼️ *PHOTO :* ${productOrMessage.image}\n`;
+
+  const photoUrl = getProductImageUrl(productOrMessage.id, productOrMessage.image);
+  if (photoUrl) {
+    text += `📸 *PHOTO :* ${photoUrl}\n`;
+  }
+  if (productOrMessage.id) {
+    text += `🔗 *FICHE PRODUIT :* ${getProductPageUrl(productOrMessage.id)}\n`;
   }
   text += `\nMerci de me recontacter pour confirmer la disponibilité et la livraison !`;
 
