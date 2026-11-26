@@ -12,11 +12,11 @@ export interface ProductInfo {
 export function getPublicBaseUrl(): string {
   if (typeof window !== 'undefined') {
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return 'https://taneemstore1.vercel.app';
+      return 'https://tanneemstore.com';
     }
     return window.location.origin;
   }
-  return 'https://taneemstore1.vercel.app';
+  return 'https://tanneemstore.com';
 }
 
 export function getProductImageUrl(productId?: string, imageStr?: string): string {

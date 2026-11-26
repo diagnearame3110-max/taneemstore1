@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/
 
-Sitemap: https://taneemstore1.vercel.app/sitemap.xml
+Sitemap: https://tanneemstore.com/sitemap.xml
