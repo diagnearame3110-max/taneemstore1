@@ -1,7 +1,8 @@
 {
-  "description": "Creates customized websites quickly and easily, enabling users to build professional online presence without coding skills.",
+  "title": "Taneem'Store — Beauté, Soins & Cosmétiques à Dakar",
+  "description": "Découvrez des soins du visage, corps, lèvres et compléments d'exception importés à Dakar, Sénégal. Commande rapide via WhatsApp.",
   "robots": {
-    "index": false
+    "index": true
   },
   "accessibility": {
     "addBypassLinks": false,
