@@ -16,6 +16,59 @@ export default function ProductImageViewPage() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+    if (!id) {
+      setLoading(false);
+      return;
+    }
+
+    const found = products?.find(p => p.id === id);
+    if (found) {
+      setProduct(found);
+      setActiveImage(found.image || '');
+      setLoading(false);
+      return;
+    }
+
+    async function fetchFromDb() {
+      try {
+        if (!supabase) {
+          setLoading(false);
+          return;
+        }
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (!error && data) {
+          const mapped: Product = {
+            id: String(data.id),
+            name: data.name || 'Produit Taneem\'Store',
+            description: data.description || '',
+            price: Number(data.price) || 0,
+            priceFormatted: formatPrice(Number(data.price) || 0),
+            image: data.image || '',
+            categorySlug: data.category_slug || data.categorySlug || 'skincare',
+            inStock: data.in_stock ?? data.inStock ?? true,
+            gallery: Array.isArray(data.gallery) ? data.gallery : [],
+            colors: Array.isArray(data.colors) ? data.colors : [],
+            updatedAt: data.updated_at || new Date().toISOString(),
+          };
+          setProduct(mapped);
+          setActiveImage(mapped.image);
+        }
+      } catch (e) {
+        console.error('Error fetching product details:', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchFromDb();
+  }, [id, products]);
+
+  useEffect(() => {
     if (!product) return;
     document.title = `${product.name} — Taneem'Store Dakar | tanneemstore.com`;
 
@@ -92,47 +145,6 @@ export default function ProductImageViewPage() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-
-    // Otherwise fetch directly from Supabase
-    async function fetchFromDb() {
-      try {
-        if (!supabase) {
-          setLoading(false);
-          return;
-        }
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .eq('id', id)
-          .single();
-
-        if (!error && data) {
-          const mapped: Product = {
-            id: String(data.id),
-            name: data.name || 'Produit Taneem\'Store',
-            description: data.description || '',
-            price: Number(data.price) || 0,
-            priceFormatted: formatPrice(Number(data.price) || 0),
-            image: data.image || '',
-            categorySlug: data.category_slug || data.categorySlug || 'skincare',
-            inStock: data.in_stock ?? data.inStock ?? true,
-            gallery: Array.isArray(data.gallery) ? data.gallery : [],
-            colors: Array.isArray(data.colors) ? data.colors : [],
-            updatedAt: data.updated_at || new Date().toISOString(),
-          };
-          setProduct(mapped);
-          setActiveImage(mapped.image);
-          document.title = `${mapped.name} — Taneem'Store`;
-        }
-      } catch (e) {
-        console.error('Error fetching product details:', e);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchFromDb();
-  }, [id, products]);
 
   if (loading) {
     return (
