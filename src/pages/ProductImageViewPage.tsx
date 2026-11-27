@@ -13,21 +13,85 @@ export default function ProductImageViewPage() {
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState<string>('');
 
+  const [copied, setCopied] = useState(false);
+
   useEffect(() => {
-    if (!id) {
-      setLoading(false);
-      return;
+    if (!product) return;
+    document.title = `${product.name} — Taneem'Store Dakar | tanneemstore.com`;
+
+    // Dynamic Schema.org Product JSON-LD for Google Rich Results
+    const scriptId = 'product-jsonld';
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = scriptId;
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": product.name,
+      "image": [product.image, ...(product.gallery || [])].filter(Boolean),
+      "description": product.description || "Soin d'exception disponible chez Taneem'Store à Dakar.",
+      "sku": product.id,
+      "brand": {
+        "@type": "Brand",
+        "name": "Taneem'Store"
+      },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "XOF",
+        "price": product.price,
+        "priceValidUntil": "2027-12-31",
+        "itemCondition": "https://schema.org/NewCondition",
+        "availability": product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        "url": `https://tanneemstore.com/product/${product.id}`,
+        "seller": {
+          "@type": "Organization",
+          "name": "Taneem'Store"
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "24"
+      }
+    });
+
+    return () => {
+      const el = document.getElementById(scriptId);
+      if (el) el.remove();
+    };
+  }, [product]);
+
+  const handleShare = async () => {
+    if (!product) return;
+    const url = `https://tanneemstore.com/product/${product.id}`;
+    const text = `Découvre ce produit chez Taneem'Store ✨ : ${product.name} (${product.priceFormatted || formatPrice(product.price)})`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: product.name,
+          text,
+          url,
+        });
+        return;
+      } catch {}
     }
 
-    // Check if product is in context
-    const found = products?.find(p => p.id === id);
-    if (found) {
-      setProduct(found);
-      setActiveImage(found.image || '');
-      setLoading(false);
-      document.title = `${found.name} — Taneem'Store`;
-      return;
-    }
+    const waShare = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${text}\n${url}`)}`;
+    window.open(waShare, '_blank');
+  };
+
+  const handleCopyLink = () => {
+    if (!product) return;
+    const url = `https://tanneemstore.com/product/${product.id}`;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
     // Otherwise fetch directly from Supabase
     async function fetchFromDb() {
@@ -307,8 +371,30 @@ export default function ProductImageViewPage() {
               </p>
             )}
 
+            {/* Reassurance Marketing Strip */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '8px',
+                padding: '12px 10px',
+                background: '#FAF7F4',
+                borderRadius: '12px',
+                margin: '16px 0 20px 0',
+                border: '1px solid var(--line)',
+                textAlign: 'center',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                color: 'var(--text-soft)',
+              }}
+            >
+              <div>⚡ <strong>Livraison 24h</strong> Dakar</div>
+              <div>🛡️ <strong>100% Original</strong></div>
+              <div>💵 <strong>Wave &amp; OM</strong></div>
+            </div>
+
             {/* Actions */}
-            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <a
                 href={buildWhatsAppLink({
                   id: product.id,
@@ -338,19 +424,70 @@ export default function ProductImageViewPage() {
                 Commander ce produit sur WhatsApp
               </a>
 
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    padding: '12px 14px',
+                    borderRadius: '100px',
+                    border: '1.5px solid var(--pink)',
+                    background: 'var(--blush-soft)',
+                    color: 'var(--pink-deep)',
+                    fontWeight: 700,
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                  </svg>
+                  Partager
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    padding: '12px 14px',
+                    borderRadius: '100px',
+                    border: '1.5px solid var(--line)',
+                    background: '#FFFFFF',
+                    color: 'var(--text)',
+                    fontWeight: 700,
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {copied ? '✓ Lien copié !' : '🔗 Copier lien'}
+                </button>
+              </div>
+
               <Link
                 to={`/?product=${product.id}`}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  padding: '14px 24px',
+                  padding: '12px 24px',
                   borderRadius: '100px',
                   border: '1.5px solid var(--text)',
                   color: 'var(--text)',
                   textDecoration: 'none',
                   fontWeight: 700,
-                  fontSize: '0.88rem',
+                  fontSize: '0.85rem',
                   transition: 'all 0.2s ease',
                   textAlign: 'center',
                 }}

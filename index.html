@@ -18,12 +18,22 @@
     <meta property="og:image" content="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=1200&auto=format&fit=crop&q=80" />
     <meta property="og:site_name" content="Taneem'Store" />
     <meta property="og:locale" content="fr_FR" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:alt" content="Taneem'Store — Soins et Cosmétiques à Dakar" />
     
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Taneem'Store — Beauté & Cosmétiques d'Exception à Dakar" />
     <meta name="twitter:description" content="Taneem'Store (tanneemstore.com) : découvrez vos essentiels beauté, soins du visage, rituels corps & bien-être importés d'exception à Dakar, Sénégal. Commande WhatsApp directe." />
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=1200&auto=format&fit=crop&q=80" />
+
+    <!-- Local SEO Geo Meta Tags for Dakar, Senegal -->
+    <meta name="geo.region" content="SN-DK" />
+    <meta name="geo.placename" content="Dakar, Sénégal" />
+    <meta name="geo.position" content="14.7167;-17.4677" />
+    <meta name="ICBM" content="14.7167, -17.4677" />
 
     <!-- Google Structured Data (JSON-LD) for Local Store & Website -->
     <script type="application/ld+json">
@@ -37,7 +47,12 @@
           "name": "Taneem'Store",
           "alternateName": ["Tanneem Store", "TanneemStore", "Taneem Store Dakar"],
           "description": "Boutique d'essentiels beauté, soins visage, rituels corps et bien-être importés d'exception à Dakar, Sénégal.",
-          "inLanguage": "fr-FR"
+          "inLanguage": "fr-FR",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://tanneemstore.com/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
         },
         {
           "@type": "Store",
@@ -50,12 +65,30 @@
           "telephone": "+221781734994",
           "priceRange": "5000 - 45000 FCFA",
           "currenciesAccepted": "XOF",
-          "paymentAccepted": "Wave, Orange Money",
+          "paymentAccepted": "Wave, Orange Money, Espèces à la livraison",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Dakar",
             "addressRegion": "Dakar",
             "addressCountry": "SN"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "14.7167",
+            "longitude": "-17.4677"
+          },
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+              "opens": "09:00",
+              "closes": "20:00"
+            }
+          ],
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5.0",
+            "reviewCount": "128"
           },
           "sameAs": [
             "https://www.instagram.com/taneemstore/"

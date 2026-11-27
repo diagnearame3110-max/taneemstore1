@@ -94,6 +94,20 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
     openCart();
   };
 
+  const handleShare = async () => {
+    if (!product) return;
+    const url = `https://tanneemstore.com/product/${product.id}`;
+    const text = `Découvre ce produit chez Taneem'Store ✨ : ${product.name} (${product.priceFormatted || formatPrice(product.price)})`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: product.name, text, url });
+        return;
+      } catch {}
+    }
+    const waShare = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${text}\n${url}`)}`;
+    window.open(waShare, '_blank');
+  };
+
   return (
     <div
       className="fixed inset-0 z-[110] bg-black/45 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fadeIn"
@@ -106,6 +120,24 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
         }}
         onClick={e => e.stopPropagation()}
       >
+        {/* Share Button (40px x 40px) */}
+        <button
+          onClick={handleShare}
+          type="button"
+          aria-label="Partager ce produit"
+          title="Partager ce produit"
+          style={{ width: '40px', height: '40px' }}
+          className="absolute top-3.5 right-16 z-40 rounded-full bg-white/95 hover:bg-white text-stone-500 hover:text-[var(--pink-deep)] border border-stone-200/80 shadow-xs flex items-center justify-center transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </button>
+
         {/* Subtle, Minimalist Close button (40px x 40px) */}
         <button
           onClick={onClose}
@@ -332,6 +364,13 @@ export default function ProductQuickViewModal({ product, onClose }: Props) {
               </svg>
               <span>{product.inStock ? 'Ajouter au panier' : 'Rupture'}</span>
             </button>
+          </div>
+
+          {/* Marketing & Conversion Reassurance Strip */}
+          <div className="w-full flex items-center justify-between text-[11px] text-stone-500 pt-3 border-t border-stone-100 mt-2 font-medium">
+            <span>⚡ Livraison 24h Dakar</span>
+            <span>🛡️ 100% Authentique</span>
+            <span>💬 Suivi WhatsApp</span>
           </div>
         </div>
       </div>
